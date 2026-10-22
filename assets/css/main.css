@@ -61,6 +61,16 @@ button { font: inherit; color: inherit; border: 0; background: none; cursor: poi
   padding-inline: var(--gutter);
 }
 
+/* 横屏刘海机：viewport-fit=cover 之后内容会顶到圆角/刘海下面，
+   两侧让出安全区。桌面与普通浏览器 env() 为 0，max() 取到的仍是 --gutter，
+   所以这一条在非刘海设备上等于没写。 */
+@supports (padding: max(0px)) {
+  .container {
+    padding-left: max(var(--gutter), env(safe-area-inset-left));
+    padding-right: max(var(--gutter), env(safe-area-inset-right));
+  }
+}
+
 /* 2K / 超宽屏的容器宽度：
    1280 封顶在 1920（1080p）上刚好吃满观感，到 2560 就只占屏宽一半、
    两侧各剩 640px —— 边带装饰填得再满，内容本身没长大，整体还是缩在中间。
@@ -1233,6 +1243,8 @@ body::before {
 .foot {
   border-top: 1px solid var(--line);
   padding-block: 28px 40px;
+  /* 全面屏底部那条小横条会压住最后一行字 */
+  padding-bottom: calc(40px + env(safe-area-inset-bottom, 0px));
 }
 .foot__inner {
   display: flex;
@@ -1264,6 +1276,11 @@ body::before {
   .hero__copy { max-width: 32rem; }
   .daily { max-width: 440px; }
 
+  /* 单栏之后右列不存在了，那枚 300px 大环失去依托：位置是按 --w-max 算的，
+     窄屏上它会被推到视口左侧、只露一道贴在卡片边上的弧 —— 读作残留。
+     宽度够的双栏下它才成立，这里直接收掉。 */
+  .hero::after { display: none; }
+
   /* 概念图在窄屏是按中心裁切的：左边那列来源块会被切掉一半，直接收起来 */
   .cover__art .art-chip,
   .cover__art .art-line { display: none; }
@@ -1284,6 +1301,16 @@ body::before {
 @media (max-width: 700px) {
   .card__flow { display: none; }
   .card__peek { --peek-w: 210px; }
+
+  /* 「查看详情」原本绝对定位在卡片右下角：标签行一换行就会被它压住
+     （390 宽下 03 号卡上的「ComfyUI 出图」正好和它叠在一起）。
+     卡片窄到 300 出头时改成流内右对齐 —— 永远排在标签行下面，不再抢位置。 */
+  .card__go {
+    position: static;
+    align-self: flex-end;
+    margin-top: 2px;
+  }
+  .card__tags { padding-top: 6px; }
 }
 
 @media (max-width: 560px) {
@@ -1307,6 +1334,82 @@ body::before {
   .daily__mini { height: 88px; }
 
   .foot__inner { flex-direction: column; align-items: flex-start; }
+}
+
+/* ============================================================
+   触屏与手机（增量补丁）
+   ------------------------------------------------------------
+   下面两段全部包在媒体查询里：用鼠标的桌面宽度一个像素都不变。
+   ============================================================ */
+
+/* ---------- 触屏：hover 状态会「粘」在手指上 ----------
+   手机点一下卡片，:hover 的 translateY(-5px) 会一直挂着不落回来，
+   直到点别处 —— 看起来像卡片被点歪了。这里把位移类的悬停收掉，
+   换成按下（:active）反馈：手指按着才有，抬手即恢复。 */
+@media (hover: none) {
+
+  .card:hover,
+  .daily:hover,
+  .tool:hover,
+  .dbtn:hover,
+  .pager a:hover,
+  .theme-toggle:hover { transform: none; }
+
+  .card:hover .card__cover::before,
+  .card:hover .card__cover::after,
+  .card:hover .card__cover--app .app__back,
+  .card:hover .card__go i,
+  .card:hover .card__go,
+  .daily:hover .daily__go { transform: none; }
+
+  .card:hover .card__go,
+  .daily:hover .daily__go { color: var(--ink-3); }
+
+  .brand:hover .brand__mark { box-shadow: 8px 8px 0 -3px var(--pop-a); }
+
+  /* 按下反馈：只动描边与文字色，不做位移，免得整块跳一下 */
+  .card:active { border-color: color-mix(in srgb, var(--c1) 42%, var(--line)); }
+  .card:active .card__title { color: var(--c1); }
+  [data-theme="dark"] .card:active .card__title { color: var(--c2); }
+  .daily:active { border-color: var(--line-strong); }
+  .tool:active { border-color: var(--line-strong); }
+  .dbtn:active { background: var(--sunken); }
+  .dbtn--solid:active { background: var(--c1); border-color: var(--c1); color: #fff; }
+  .theme-toggle:active { color: var(--ink); border-color: var(--ink-3); }
+  .toc__list a:active { background: var(--sunken); color: var(--ink); }
+}
+
+/* ---------- 手机竖屏（≤640）---------- */
+@media (max-width: 640px) {
+
+  /* 触摸目标：导航那枚主题按钮 36px 偏小，44 是各家指南的下限 */
+  .theme-toggle { width: 44px; height: 44px; }
+  .nav__inner { gap: 10px; }
+  /* 品牌名只有 26px 高（文字高度），撑到 44 才好点 */
+  .brand { padding-block: 9px; margin-block: -9px; }
+
+  /* 小程序卡里的手机 110px 宽、在 208px 高的封面上几乎顶到上沿，
+     缩一号才回到「从底部长出来」的比例 */
+  .app__phone { left: 14px; bottom: -30px; width: 92px; }
+
+  /* 三处装饰：位置都是按 1280 版心 / 双栏算的，
+     单栏之后不是被视口切掉一半，就是压在字上 */
+  .hero::before,
+  .statement::before,
+  .statement::after { display: none; }
+
+  /* 描述在 390 宽下 14px 偏碎，提一档 */
+  .card__desc { font-size: .9375rem; }
+
+  /* 主张那行正好卡在「换行后剩一个字」的位置（"…变成界" / "面。"），
+     均分一下两行长度，别留孤字 */
+  .statement p { text-wrap: balance; }
+}
+
+/* ---------- 窄机（≤380，含 320 / 360）---------- */
+@media (max-width: 380px) {
+  .hero h1 { font-size: clamp(2rem, 9.4vw, 2.35rem); }
+  .card__peek { --peek-w: 150px; }
 }
 
 /* ---------- 无障碍 / 省电 ---------- */

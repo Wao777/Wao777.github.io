@@ -2,7 +2,7 @@
 <html lang="zh-CN" data-theme="light">
 <head>
 <meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>页面走丢了 · 404</title>
 <meta name="robots" content="noindex">
 <meta name="color-scheme" content="light dark">
@@ -20,8 +20,11 @@
   }
   * { box-sizing: border-box; }
   body {
-    margin: 0; min-height: 100vh; display: grid; place-items: center;
-    padding: 24px; background: var(--bg); color: var(--ink);
+    margin: 0; min-height: 100vh; min-height: 100svh; display: grid; place-items: center;
+    /* 全面屏：让开顶部状态栏与底部横条，横屏时让开两侧刘海 */
+    padding: max(24px, env(safe-area-inset-top)) max(24px, env(safe-area-inset-right))
+             max(24px, env(safe-area-inset-bottom)) max(24px, env(safe-area-inset-left));
+    background: var(--bg); color: var(--ink);
     font-family: "Inter", "PingFang SC", "Microsoft YaHei", system-ui, sans-serif;
     -webkit-font-smoothing: antialiased;
   }
@@ -45,6 +48,13 @@
   a:hover { transform: translateY(-2px); border-color: var(--ink); }
   a.solid { background: var(--ink); color: var(--bg); border-color: var(--ink); }
   a.solid:hover { background: var(--brand); border-color: var(--brand); color: #fff; }
+
+  /* 手机：两个按钮撑到 44 高，够拇指点；悬停位移在触屏上会粘住，收掉 */
+  @media (max-width: 640px) {
+    a { min-height: 44px; }
+    .acts { gap: 12px; }
+    a:hover { transform: none; }
+  }
 </style>
 <link rel="icon" href="./assets/img/favicon.svg" type="image/svg+xml">
 <link rel="icon" href="./assets/img/favicon.ico" sizes="32x32">

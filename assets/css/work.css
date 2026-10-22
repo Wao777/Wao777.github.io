@@ -531,15 +531,124 @@
   .doc__card { padding: clamp(22px, 3vw, 34px); }
 }
 
-/* 窄屏先隐藏目录，正文占满（移动端后续单独细调） */
+/* 窄屏先隐藏目录，正文占满 */
 @media (max-width: 900px) {
   .doc__grid { grid-template-columns: minmax(0, 1fr); }
   .toc { display: none; }
+
+  /* 工具条不再吸附：手机上一枚悬浮药丸会盖在正文上（吸附时还有实底和阴影），
+     而它只有两个按钮，跟着页头滚走更干净。is-stuck 的实底规则同步失效。 */
+  .doc__actions {
+    position: static;
+    margin-right: 0;
+  }
+  .doc__actions.is-stuck {
+    background: transparent;
+    box-shadow: none;
+  }
+  .doc__actions.is-stuck .dbtn {
+    height: 40px;
+    padding: 0 18px;
+    font-size: .86rem;
+  }
 }
 
 @media (max-width: 560px) {
-  .shot { aspect-ratio: 4 / 3; }
+  /* 只给「占位图」定比例。原来这条是 .shot，同权重、又排在 .shot--img 之后，
+     把真实截图的 aspect-ratio:auto 一起盖掉了：
+       ① 380×99 的弹窗图下面多出一块空白（框被撑成 4:3）；
+       ② 600×1200 的手机截图被 overflow:hidden 裁掉三分之二。
+     加 :not(.shot--img) 之后，真截图恢复按自身比例排版。 */
+  .shot:not(.shot--img) { aspect-ratio: 4 / 3; }
   .doc__card { padding: 20px 18px 24px; border-radius: var(--r-md); }
   .pager .next { text-align: left; align-items: flex-start; }
   .code pre { font-size: .79rem; padding: 14px; }
+}
+
+/* ---------- 手机（≤640）----------
+   同样只做增量：>640 的视口一个像素都不动。 */
+@media (max-width: 640px) {
+
+  /* 工具条改成一整行等宽按钮：拇指够得着，也不再和正文抢位置 */
+  .doc__actions {
+    justify-self: stretch;
+    display: flex;
+  }
+  .dbtn {
+    flex: 1 1 0;
+    justify-content: center;
+    height: 44px;
+    padding: 0 12px;
+    font-size: .84rem;
+  }
+  /* 面包屑是行内小字，撑不出 44px，靠上下内边距把可点区域提上来 */
+  .crumbs a { padding-block: 9px; }
+  .crumbs { gap: 4px 8px; }
+
+  /* 三列表格在 358px 里会被挤成一字一行（「12 家 RSS 并发」竖着排），
+     与其压扁不如给个下限让它横向滚动，列宽回到能读的程度 */
+  .tbl { -webkit-overflow-scrolling: touch; overscroll-behavior-x: contain; }
+  .tbl table { min-width: 520px; }
+  .tbl th, .tbl td { padding: 9px 12px; }
+
+  /* 滚动影子：右缘一道渐隐，说明「右边还有一列」。
+     两层「遮挡」(local，随内容滚) + 两层「影子」(scroll，贴在框边)，
+     所以只在真的还有内容可滑时出现，滑到头影子自然被遮掉。
+     四个色值都取 --surface，深浅主题自动跟随。 */
+  .tbl {
+    background:
+      linear-gradient(to right, var(--surface) 30%, transparent) left center local,
+      linear-gradient(to left, var(--surface) 30%, transparent) right center local,
+      radial-gradient(farthest-side at 0 50%,
+        color-mix(in srgb, var(--ink) 14%, transparent), transparent) left center scroll,
+      radial-gradient(farthest-side at 100% 50%,
+        color-mix(in srgb, var(--ink) 14%, transparent), transparent) right center scroll;
+    background-repeat: no-repeat;
+    background-size: 26px 100%, 26px 100%, 12px 100%, 12px 100%;
+  }
+
+  /* 代码块：横滑时别把整页一起带走；右侧留一点呼吸 */
+  .code pre {
+    overscroll-behavior-x: contain;
+    padding-right: 20px;
+    scrollbar-width: thin;
+    /* 右缘一段渐隐，暗示「这一行还有后半截，往左滑」；
+       没有它，被裁掉的半行读起来像渲染坏了 */
+    -webkit-mask-image: linear-gradient(to right, #000 calc(100% - 20px), transparent 100%);
+    mask-image: linear-gradient(to right, #000 calc(100% - 20px), transparent 100%);
+  }
+  /* 复制按钮原本 20×22 左右，手指点不准 */
+  .code__copy {
+    min-height: 34px;
+    padding: 6px 12px;
+  }
+
+  /* 正文：390 宽下整段偏挤，行高松一档，段距不变 */
+  .md { line-height: 1.78; }
+  .md ul, .md ol { padding-left: 18px; }
+  .md h2 { margin-top: 2em; }
+}
+
+/* ---------- 触屏：hover 会粘在手指上（同 main.css 那段）----------
+   work.css 在 main.css 之后加载，同权重下由这里接管，
+   所以位移/阴影类的悬停效果必须在本文件里再收一次。 */
+@media (hover: none) {
+  .dbtn:hover,
+  .pager a:hover { transform: none; }
+
+  .dbtn:hover {
+    box-shadow: none;
+    border-color: var(--line-strong);
+  }
+  .dbtn--solid:hover {
+    background: var(--ink);
+    border-color: var(--ink);
+    color: var(--bg);
+  }
+  .dbtn--off:hover { border-color: var(--line-strong); }
+  .pager a:hover { box-shadow: none; border-color: var(--line); }
+  .code__copy:hover { background: transparent; color: var(--ink-3); }
+  .toc__list a:hover { background: transparent; color: var(--ink-2); }
+  .crumbs a:hover { color: var(--ink-3); }
+  .md a:hover { text-decoration-color: color-mix(in srgb, var(--c1) 40%, transparent); }
 }

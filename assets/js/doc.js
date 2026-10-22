@@ -73,9 +73,12 @@
     ticking = false;
     var active = 0;
 
-    // 工具条吸附到导航下方后浮现阴影，静止时保持贴合
+    // 工具条吸附到导航下方后浮现阴影，静止时保持贴合。
+    // 窄屏（≤900）它被改成 static，吸附没有意义，别再加 is-stuck —— 否则
+    // 窗口从桌面拖窄时那个实底药丸会一直留着。
     if (bar) {
-      bar.classList.toggle('is-stuck', bar.getBoundingClientRect().top <= navH + 15);
+      var sticky = getComputedStyle(bar).position === 'sticky';
+      bar.classList.toggle('is-stuck', sticky && bar.getBoundingClientRect().top <= navH + 15);
     }
 
     heads.forEach(function (h, i) {

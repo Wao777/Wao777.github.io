@@ -105,7 +105,7 @@
 <div class="callout"><svg width="16" height="16" aria-hidden="true"><use href="#i-info"/></svg><p>扫描阶段是<strong>只读</strong>的：遍历检查项时不改动任何系统设置，只有你勾选并确认后才执行修复动作。</p></div>
 
         <h2 id="ui">界面</h2>
-<figure class="shot shot--img"><img src="./img/01-main.png" alt="网络健康时的主界面：顶部判定横幅、左侧原因列表、右侧处理方案、底部执行日志" width="1016" height="769"><figcaption>网络健康时：横幅直接给结论，配置类条目只以「提示」级列出，不打扰</figcaption></figure>
+<figure class="shot shot--img"><img src="./img/01-main.png" alt="网络健康时的主界面：顶部判定横幅、左侧原因列表、右侧处理方案、底部执行日志" width="1016" height="769" loading="lazy" decoding="async"><figcaption>网络健康时：横幅直接给结论，配置类条目只以「提示」级列出，不打扰</figcaption></figure>
 <p>窗口分三块：顶部是判定横幅，颜色即结论（绿＝网络健康、橙＝能连网但上网受限、红＝完全断网），右侧标出故障范围；中部左列是「疑似断网原因」清单，带级别、分类与问题描述，勾选即代表要处理；右列「问题详情与处理方案」写判定依据、分步处理建议和仍可用的应用；底部执行日志按时间线记下每一层探针的结果。</p>
 <figure class="shot shot--img"><img src="./img/02-diagnose.png" alt="判定为域名解析故障时的界面：橙色横幅、DNS 相关条目被勾选、右侧给出分步处理建议" width="1016" height="769" loading="lazy"><figcaption>判定为域名解析故障：横幅点明「能上 QQ，却打不开网页」，并给出该形态专属的步骤</figcaption></figure>
 <p>判定到真实故障时，界面会指出断在哪一环，并给出该形态专属的处理步骤与建议勾选的修复动作——比如域名解析故障只需刷新缓存、切公共 DNS、还原 hosts，不必去动网卡。</p>
