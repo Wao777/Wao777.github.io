@@ -1,0 +1,71 @@
+/* ============================================================
+   tokens.css — 设计令牌（颜色 / 尺寸 / 动效）
+   改配色只需改这里，全站跟随。
+   ============================================================ */
+
+:root {
+  color-scheme: light;
+
+  /* 底层 */
+  --bg: #F6F4EF;
+  --surface: #FFFFFF;
+  --sunken: #EFECE4;
+  --line: #E3DFD7;
+  --line-strong: #D2CDC2;
+
+  /* 文字 */
+  --ink: #14161A;
+  --ink-2: #50555F;
+  --ink-3: #8A8F99;
+
+  /* 品牌主色 + 撞色（全站只用这 4 个色） */
+  --brand: #1B4DFF;
+  --pop-a: #FF4D2E;
+  --pop-b: #FFD400;
+  --pop-c: #12D6A0;
+
+  /* 字体 */
+  --mono: ui-monospace, SFMono-Regular, "SF Mono", Menlo, Consolas,
+          "Liberation Mono", "Courier New", monospace;
+
+  /* 尺寸 */
+  --w-max: 1280px;
+  --gutter: clamp(16px, 4vw, 48px);
+  --nav-h: 64px;
+
+  --r-sm: 8px;
+  --r-md: 14px;
+  --r-lg: 22px;
+  --r-pill: 999px;
+
+  /* 层级 */
+  --shadow-1: 0 1px 2px rgba(20, 22, 26, .05), 0 8px 24px -12px rgba(20, 22, 26, .16);
+  --shadow-2: 0 2px 4px rgba(20, 22, 26, .06), 0 20px 44px -18px rgba(20, 22, 26, .26);
+
+  /* 动效 */
+  --ease: cubic-bezier(.22, .61, .36, 1);
+  --dur: .42s;
+}
+
+/* 深色为可选模式，默认以米白设计为准 */
+[data-theme="dark"] {
+  color-scheme: dark;
+
+  --bg: #0F1116;
+  --surface: #171A21;
+  --sunken: #12141A;
+  --line: #262A33;
+  --line-strong: #363C49;
+
+  --ink: #EDEFF4;
+  --ink-2: #A7AEBC;
+  --ink-3: #6E7684;
+
+  --brand: #6C8CFF;
+  --pop-a: #FF6A4D;
+  --pop-b: #FFD84D;
+  --pop-c: #2BE3AE;
+
+  --shadow-1: 0 1px 2px rgba(0, 0, 0, .5), 0 8px 24px -12px rgba(0, 0, 0, .8);
+  --shadow-2: 0 2px 4px rgba(0, 0, 0, .5), 0 20px 44px -18px rgba(0, 0, 0, .9);
+}

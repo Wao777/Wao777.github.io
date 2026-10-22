@@ -1,0 +1,314 @@
+<!DOCTYPE html>
+<html lang="zh-CN" data-theme="light">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>个人作品集 · 数据工具 / 桌面应用 / 三维场景</title>
+<meta name="description" content="一个集中展示个人作品的入口：数据看板、桌面工具、三维场景与 AI 工作流。">
+<meta name="theme-color" content="#F6F4EF" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#0F1116" media="(prefers-color-scheme: dark)">
+
+<meta property="og:type" content="website">
+<meta property="og:title" content="个人作品集">
+<meta property="og:description" content="数据工具 / 桌面应用 / 三维场景 / AI 工作流">
+
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='8' fill='%231B4DFF'/%3E%3Crect x='8' y='8' width='16' height='16' rx='4' fill='%23FFD400'/%3E%3C/svg%3E">
+<link rel="stylesheet" href="./assets/css/tokens.css">
+<link rel="stylesheet" href="./assets/css/main.css">
+</head>
+<body>
+
+<a class="skip" href="#works">跳到作品区</a>
+
+<!-- 图标集 -->
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <symbol id="i-moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8Z"/>
+  </symbol>
+  <symbol id="i-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+    <circle cx="12" cy="12" r="4"/>
+    <path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"/>
+  </symbol>
+  <symbol id="i-news" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M4 5.5A1.5 1.5 0 0 1 5.5 4H17a1 1 0 0 1 1 1v14H6a2 2 0 0 1-2-2V5.5Z"/>
+    <path d="M18 8.5h1.5A1.5 1.5 0 0 1 21 10v7a2 2 0 0 1-2 2h-1"/>
+    <path d="M7.5 8.5h6M7.5 12h6M7.5 15.5h3.5"/>
+  </symbol>
+</svg>
+
+<!-- ===== 导航 ===== -->
+<header class="nav">
+  <div class="nav__inner container">
+    <a class="brand" href="./index.html">
+      <span class="brand__mark" aria-hidden="true"></span>
+      <!-- TODO: 换成你的名字 -->
+      <span>名字</span>
+    </a>
+
+    <button class="theme-toggle" data-theme-toggle aria-pressed="false" aria-label="切换主题">
+      <svg width="17" height="17" aria-hidden="true"><use href="#i-moon"/></svg>
+    </button>
+  </div>
+</header>
+
+<main>
+
+  <!-- ===== Hero ===== -->
+  <section class="hero container">
+    <div class="hero__copy">
+      <p class="eyebrow">Portfolio · 2026</p>
+      <h1>把零散的想法，<br>做成<mark>能用的东西</mark>。</h1>
+    </div>
+
+    <!-- 今日日报：n8n 每日覆盖 reports/latest.html，这里地址固定不变 -->
+    <aside class="daily" aria-labelledby="dailyTitle">
+      <a class="daily__hit" href="./reports/latest.html" aria-label="阅读今日日报"></a>
+
+      <div class="daily__head">
+        <svg class="daily__icon" width="15" height="15" aria-hidden="true"><use href="#i-news"/></svg>
+        <h2 class="daily__kicker" id="dailyTitle">今日日报</h2>
+        <span class="daily__date">每日一期</span>
+      </div>
+
+      <p class="daily__lead">今天值得看的几件事</p>
+
+      <!-- 缩略版式：纯 CSS 画的报纸版面，不依赖图片 -->
+      <div class="daily__mini" aria-hidden="true">
+        <span class="daily__col"><i class="daily__pic"></i></span>
+        <span class="daily__col"></span>
+        <span class="daily__col"></span>
+      </div>
+
+      <div class="daily__foot">
+        <span class="daily__dot" aria-hidden="true"></span>
+        <span>由 n8n 自动生成</span>
+        <span class="daily__go" aria-hidden="true">阅读 →</span>
+      </div>
+    </aside>
+  </section>
+
+  <!-- ===== 作品 ===== -->
+  <section class="works container" id="works">
+    <div class="grid" id="workGrid">
+
+      <!-- 卡片模板：复制整段 <article>，改 class 尺寸（card--wide / --mid / --sm）、
+           style 里的 --c1/--c2 双色、href 与文字即可 -->
+
+      <article class="card reveal card--wide" style="--c1:#1B4DFF; --c2:#12D6A0; --i:0" data-cat="产品">
+        <a class="card__hit" href="./works/content-hub/index.html" aria-label="查看《内容聚合》详情"></a>
+        <div class="card__cover card__cover--art">
+          <!-- 概念图：四个来源（左）汇进一个窗口（右），窗口里是侧栏 + 卡片 + 播放器层 -->
+          <svg class="cover__art" viewBox="0 0 1080 386" preserveAspectRatio="xMidYMid slice" aria-hidden="true" focusable="false">
+            <defs>
+              <linearGradient id="cvBar" x1="0" y1="0" x2="1" y2="0">
+                <stop offset="0" stop-color="#1B4DFF"/>
+                <stop offset="1" stop-color="#12D6A0"/>
+              </linearGradient>
+              <clipPath id="cvWin">
+                <rect x="246" y="46" width="636" height="296" rx="16"/>
+              </clipPath>
+            </defs>
+
+            <!-- 四个来源入口 -->
+            <g class="art-chip">
+              <rect x="40" y="58" width="108" height="44" rx="12"/>
+              <circle cx="62" cy="80" r="5.5" fill="#1B4DFF" opacity=".85"/>
+              <rect class="art-bar-ink" x="76" y="72" width="56" height="6" rx="3"/>
+              <rect class="art-bar-ink" x="76" y="84" width="36" height="5" rx="2.5" opacity=".6"/>
+              <rect x="40" y="122" width="108" height="44" rx="12"/>
+              <circle cx="62" cy="144" r="5.5" fill="#12D6A0" opacity=".9"/>
+              <rect class="art-bar-ink" x="76" y="136" width="52" height="6" rx="3"/>
+              <rect class="art-bar-ink" x="76" y="148" width="30" height="5" rx="2.5" opacity=".6"/>
+              <rect x="40" y="186" width="108" height="44" rx="12"/>
+              <circle cx="62" cy="208" r="5.5" fill="#1B4DFF" opacity=".6"/>
+              <rect class="art-bar-ink" x="76" y="200" width="58" height="6" rx="3"/>
+              <rect class="art-bar-ink" x="76" y="212" width="34" height="5" rx="2.5" opacity=".6"/>
+              <rect x="40" y="250" width="108" height="44" rx="12"/>
+              <circle cx="62" cy="272" r="5.5" fill="#12D6A0" opacity=".6"/>
+              <rect class="art-bar-ink" x="76" y="264" width="48" height="6" rx="3"/>
+              <rect class="art-bar-ink" x="76" y="276" width="38" height="5" rx="2.5" opacity=".6"/>
+            </g>
+
+            <!-- 汇聚：四条弧线收进窗口左侧 -->
+            <g class="art-line">
+              <path d="M148 80 Q204 84 246 172"/>
+              <path d="M148 144 Q204 152 246 182"/>
+              <path d="M148 208 Q204 196 246 198"/>
+              <path d="M148 272 Q204 244 246 212"/>
+            </g>
+
+            <!-- 主窗口 -->
+            <rect class="art-win" x="246" y="46" width="636" height="296" rx="16"/>
+            <g clip-path="url(#cvWin)">
+              <rect class="art-win-2" x="246" y="46" width="636" height="34"/>
+              <rect class="art-win-2" x="246" y="80" width="52" height="262"/>
+              <rect class="art-bar-2" x="266" y="60" width="7" height="7" rx="3.5"/>
+              <rect class="art-bar-2" x="280" y="60" width="7" height="7" rx="3.5" opacity=".6"/>
+              <rect class="art-bar-2" x="294" y="60" width="7" height="7" rx="3.5" opacity=".35"/>
+              <rect class="art-bar-2" x="430" y="58" width="110" height="10" rx="5" opacity=".55"/>
+              <rect class="art-bar-2" x="808" y="58" width="54" height="10" rx="5" opacity=".35"/>
+
+              <!-- 侧栏站点项 -->
+              <rect x="258" y="98" width="28" height="16" rx="6" fill="#1B4DFF" opacity=".9"/>
+              <rect class="art-bar-2" x="258" y="126" width="28" height="16" rx="6" opacity=".5"/>
+              <rect class="art-bar-2" x="258" y="154" width="28" height="16" rx="6" opacity=".4"/>
+              <rect class="art-bar-2" x="258" y="182" width="28" height="16" rx="6" opacity=".3"/>
+
+              <!-- 内容卡一行 -->
+              <rect x="312" y="96" width="176" height="46" rx="8" fill="#1B4DFF" opacity=".26"/>
+              <rect class="art-dur" x="464" y="126" width="22" height="8" rx="4"/>
+              <rect class="art-bar-2" x="312" y="152" width="132" height="6" rx="3" opacity=".9"/>
+              <rect class="art-bar-2" x="312" y="166" width="92" height="5" rx="2.5" opacity=".55"/>
+              <rect x="500" y="96" width="176" height="46" rx="8" fill="#12D6A0" opacity=".24"/>
+              <rect class="art-dur" x="652" y="126" width="22" height="8" rx="4"/>
+              <rect class="art-bar-2" x="500" y="152" width="118" height="6" rx="3" opacity=".9"/>
+              <rect class="art-bar-2" x="500" y="166" width="104" height="5" rx="2.5" opacity=".55"/>
+              <rect x="688" y="96" width="176" height="46" rx="8" fill="#1B4DFF" opacity=".18"/>
+              <rect class="art-dur" x="840" y="126" width="22" height="8" rx="4"/>
+              <rect class="art-bar-2" x="688" y="152" width="126" height="6" rx="3" opacity=".9"/>
+              <rect class="art-bar-2" x="688" y="166" width="78" height="5" rx="2.5" opacity=".55"/>
+
+              <!-- 播放器层：弹幕 + 播放键 + 进度 -->
+              <rect class="art-win-2" x="326" y="182" width="520" height="150" rx="12" stroke="currentColor" stroke-opacity=".08"/>
+              <rect class="art-bar" x="362" y="204" width="96" height="9" rx="4.5" opacity=".55"/>
+              <rect class="art-bar" x="704" y="204" width="116" height="9" rx="4.5" opacity=".4"/>
+              <rect class="art-bar" x="368" y="228" width="132" height="9" rx="4.5" opacity=".45"/>
+              <circle class="art-bar" cx="586" cy="248" r="24" opacity=".95"/>
+              <path d="M578 238 L600 248 L578 258 Z" fill="#1B4DFF"/>
+              <rect class="art-bar-2" x="350" y="308" width="470" height="6" rx="3" opacity=".35"/>
+              <rect x="350" y="308" width="270" height="6" rx="3" fill="url(#cvBar)"/>
+              <circle class="art-bar" cx="620" cy="311" r="5"/>
+            </g>
+          </svg>
+          <span class="card__num">01</span>
+        </div>
+        <span class="card__arrow" aria-hidden="true">↗</span>
+        <div class="card__body">
+          <div class="card__meta"><span>2026</span><i class="dot"></i><span>产品</span></div>
+          <h3 class="card__title">内容聚合</h3>
+          <p class="card__desc">综合视频、长视频、短剧、电视直播合进一个窗口，一套界面、一套键位。</p>
+          <ul class="card__tags"><li class="tag">桌面应用</li><li class="tag">资源整合</li><li class="tag">自建播放器</li></ul>
+        </div>
+      </article>
+
+      <!-- 技术展示卡：封面画的是链路本身，不是产物预览 -->
+      <article class="card reveal card--mid" style="--c1:#FF4D2E; --c2:#FFD400; --i:1" data-cat="自动化">
+        <a class="card__hit" href="./works/daily-pipeline/index.html" aria-label="查看《n8n 日报流水线》详情"></a>
+        <div class="card__cover">
+          <span class="card__num">02</span>
+          <div class="card__flow" aria-hidden="true">
+            <span class="flow__step"><b>07:00</b><i>定时触发</i></span>
+            <span class="flow__line"></span>
+            <span class="flow__step"><b>n8n</b><i>取数排版</i></span>
+            <span class="flow__line"></span>
+            <span class="flow__step"><b>publish.py</b><i>校验提交</i></span>
+            <span class="flow__line"></span>
+            <span class="flow__step"><b>Pages</b><i>每日上线</i></span>
+          </div>
+          <!-- 左下角露出日报本体：静态快照，取自 reports/latest.html 首屏 -->
+          <div class="card__peek" aria-hidden="true">
+            <img src="./works/daily-pipeline/img/report-peek.png" alt="" width="820" height="466" loading="lazy" decoding="async">
+          </div>
+        </div>
+        <span class="card__arrow" aria-hidden="true">↗</span>
+        <div class="card__body">
+          <div class="card__meta"><span>2026</span><i class="dot"></i><span>自动化</span></div>
+          <h3 class="card__title">n8n 日报流水线</h3>
+          <p class="card__desc">每天 07:00 自己跑完：取数、排版、校验、提交上线，人只在它出错时看一眼。</p>
+          <ul class="card__tags"><li class="tag">n8n</li><li class="tag">自动化</li><li class="tag">GitHub Pages</li></ul>
+        </div>
+      </article>
+
+      <!-- 小程序卡：底图用项目自己的山门封面，链路条 + 从底部升起的手机 -->
+      <article class="card reveal card--mid" style="--c1:#12D6A0; --c2:#1B4DFF; --i:2" data-cat="产品">
+        <a class="card__hit" href="./works/qingcheng/index.html" aria-label="查看《青城山招生小程序》详情"></a>
+        <div class="card__cover card__cover--app">
+          <img class="app__back" src="./works/qingcheng/img/gate.jpg" alt="" width="800" height="800" loading="lazy" decoding="async">
+          <span class="app__veil" aria-hidden="true"></span>
+          <span class="card__num">03</span>
+          <div class="card__flow" aria-hidden="true">
+            <span class="flow__step"><b>wx.login</b><i>静默登录</i></span>
+            <span class="flow__line"></span>
+            <span class="flow__step"><b>activities</b><i>取活动</i></span>
+            <span class="flow__line"></span>
+            <span class="flow__step"><b>enrollments</b><i>写入报名</i></span>
+            <span class="flow__line"></span>
+            <span class="flow__step"><b>records</b><i>查本人</i></span>
+          </div>
+          <div class="app__phone" aria-hidden="true">
+            <img src="./works/qingcheng/img/screen-home.jpg" alt="" width="600" height="1200" loading="lazy" decoding="async">
+          </div>
+        </div>
+        <span class="card__arrow" aria-hidden="true">↗</span>
+        <div class="card__body">
+          <div class="card__meta"><span>2026</span><i class="dot"></i><span>产品</span></div>
+          <h3 class="card__title">青城山招生小程序</h3>
+          <p class="card__desc">看完日程与名额就地报名：填表、传形象照、查审核状态，四页走完。</p>
+          <ul class="card__tags"><li class="tag">微信小程序</li><li class="tag">云数据库</li><li class="tag">ComfyUI 出图</li></ul>
+        </div>
+      </article>
+
+    </div>
+
+    <!-- ===== 小工具 =====
+         一行一件，不占大卡。加小工具只往 .tools__row 里追加一个 <li class="tool">，
+         名称、标签、一句话即可，一行放得下几个就排几个。 -->
+    <div class="tools" id="tools">
+      <div class="tools__head">
+        <h2 class="tools__title">小工具</h2>
+        <span class="tools__rule" aria-hidden="true"></span>
+      </div>
+
+      <ul class="tools__row">
+        <li class="tool" style="--c1:#12D6A0">
+          <a class="tool__link" href="./works/net-doctor/index.html">
+            <span class="tool__name">断网自动修复<span class="tool__tag">Windows</span></span>
+            <span class="tool__desc">先判定断在哪一环，再备份修复、复测，改坏了能回滚。</span>
+          </a>
+        </li>
+
+        <li class="tool" style="--c1:#1B4DFF">
+          <a class="tool__link" href="./works/display-doctor/index.html">
+            <span class="tool__name">多屏设置<span class="tool__tag">Windows</span></span>
+            <span class="tool__desc">读出当前配置，按屏数给方案，点选即生效，切错了能还原。</span>
+          </a>
+        </li>
+
+        <li class="tool" style="--c1:#FFD400">
+          <a class="tool__link" href="./works/eye-care/index.html">
+            <span class="tool__name">护眼提醒<span class="tool__tag">Windows</span></span>
+            <span class="tool__desc">六个系统定时任务，到点弹一张三秒就走的卡片，不占常驻进程。</span>
+          </a>
+        </li>
+
+        <li class="tool" style="--c1:#FF4D2E">
+          <a class="tool__link" href="./works/zt-popup/index.html">
+            <span class="tool__name">涨停速览<span class="tool__tag">Windows</span></span>
+            <span class="tool__desc">只在盘中首次上板弹一次，同一只不重复喊，收盘自己收工。</span>
+          </a>
+        </li>
+      </ul>
+    </div>
+  </section>
+
+  <!-- ===== 一句话主张 ===== -->
+  <section class="statement container" id="about">
+    <p>把重复动作变成<span class="hl">脚本</span>，把数据变成<span class="hl">界面</span>。</p>
+  </section>
+
+</main>
+
+<footer class="foot">
+  <div class="foot__inner container">
+    <p>© 2026 · 用 HTML 与 CSS 手写 · 托管于 GitHub Pages</p>
+    <nav class="foot__links" aria-label="页脚导航">
+      <a href="#works">作品</a>
+      <a href="#about">关于</a>
+      <a href="mailto:you@example.com">邮件</a>
+    </nav>
+  </div>
+</footer>
+
+<script src="./assets/js/main.js" defer></script>
+</body>
+</html>

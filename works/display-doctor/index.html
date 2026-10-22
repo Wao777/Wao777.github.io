@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="zh-CN" data-theme="light">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>多屏设置 · 个人作品集</title>
+<meta name="description" content="Windows 多屏设置工具：读取当前显示器配置，按屏幕数量列出可选方案，点选即生效，另有布局拖动、标识屏幕与一键还原。">
+<meta name="theme-color" content="#F6F4EF" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#0F1116" media="(prefers-color-scheme: dark)">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='8' fill='%231B4DFF'/%3E%3Crect x='8' y='8' width='16' height='16' rx='4' fill='%23FFD400'/%3E%3C/svg%3E">
+<link rel="stylesheet" href="../../assets/css/tokens.css">
+<link rel="stylesheet" href="../../assets/css/main.css">
+<link rel="stylesheet" href="../../assets/css/work.css">
+</head>
+<body style="--c1:#1B4DFF; --c2:#12D6A0">
+
+<a class="skip" href="#main">跳到正文</a>
+
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <symbol id="i-moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8Z"/>
+  </symbol>
+  <symbol id="i-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+    <circle cx="12" cy="12" r="4"/>
+    <path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"/>
+  </symbol>
+  <symbol id="i-info" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round">
+    <circle cx="12" cy="12" r="9"/><path d="M12 11v5"/><path d="M12 8h.01"/>
+  </symbol>
+  <symbol id="i-warn" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M12 3 2.5 20h19L12 3Z"/><path d="M12 9v5"/><path d="M12 17h.01"/>
+  </symbol>
+  <symbol id="i-tip" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M9 18h6"/><path d="M10 21h4"/>
+    <path d="M12 3a6 6 0 0 0-3.6 10.8c.5.4.8 1 .8 1.7V16h5.6v-.5c0-.7.3-1.3.8-1.7A6 6 0 0 0 12 3Z"/>
+  </symbol>
+</svg>
+
+<header class="nav">
+  <div class="nav__inner container">
+    <a class="brand" href="../../index.html">
+      <span class="brand__mark" aria-hidden="true"></span>
+      <span>名字</span>
+    </a>
+    <button class="theme-toggle" data-theme-toggle aria-pressed="false" aria-label="切换主题">
+      <svg width="17" height="17" aria-hidden="true"><use href="#i-moon"/></svg>
+    </button>
+  </div>
+</header>
+
+<main class="doc container" id="main">
+  <nav class="crumbs" aria-label="面包屑">
+    <a href="../../index.html">主页</a><span class="sep">/</span>
+    <a href="../../index.html#tools">小工具</a><span class="sep">/</span>
+    <span aria-current="page">多屏设置</span>
+  </nav>
+
+  <header class="doc__head">
+    <p class="eyebrow">工具 · 2026</p>
+    <h1>多屏设置</h1>
+    <p class="doc__tagline">接上副屏、拔掉副屏、要投屏的时候，不用再去系统设置里一格格拖方块：读出当前配置，按屏数列出方案，点一下就生效，改错了按钮自己会提醒你还原。</p>
+    <div class="doc__meta">
+      <div class="badges">
+        <span class="badge badge--ver">v1.0.1</span>
+        <span class="badge"><i class="badge__dot" style="background:var(--c2)"></i>MIT</span>
+        <span class="badge"><i class="badge__dot" style="background:var(--pop-b)"></i>Windows 10 / 11</span>
+        <span class="badge"><i class="badge__dot" style="background:var(--c1)"></i>不需要管理员权限</span>
+      </div>
+    </div>
+  </header>
+
+  <div class="doc__grid">
+    <aside class="toc">
+      <p class="toc__label">本页目录</p>
+      <ol class="toc__list" data-toc-list><li><a href="#what">这是什么</a></li><li><a href="#ui">界面</a></li><li><a href="#plan">方案与布局</a></li><li><a href="#win">窗口跟随</a></li><li><a href="#cli">命令行</a></li><li><a href="#edge">安全与边界</a></li></ol>
+      <dl class="toc__meta">
+        <div><dt>形态</dt><dd>桌面工具</dd></div>
+        <div><dt>许可</dt><dd>MIT</dd></div>
+      </dl>
+    </aside>
+
+    <div class="doc__col">
+      <div class="doc__actions">
+        <a class="dbtn dbtn--ghost" href="../../index.html#tools">返回主页</a>
+        <a class="dbtn dbtn--ghost" href="https://github.com/Wao777/display-doctor" target="_blank" rel="noopener" title="将跳转到 GitHub 仓库（新窗口）">源码 · GitHub ↗</a>
+      </div>
+
+      <article class="doc__card">
+      <div class="md" data-article>
+        <h2 id="what">这是什么</h2>
+<p>Windows 自带的显示设置能做这些事，但每次都藏在三级页面里：想「只留主屏」，得先找到显示设置、再选「仅在 1 上显示」；切完发现窗口全跑到够不到的副屏去了，还得一个个挪回来。</p>
+<p>这个工具把常用动作摊平到一屏：打开就读出当前有几块屏在用、什么模式、主屏是哪块，然后按屏数生成方案卡（全部扩展 / 全部复制 / 仅屏 N / 自定义组合），点哪张就切成哪样。切换前自动存一份快照，配置一旦偏离「打开程序那一刻」，「还原」按钮就变成警示色提醒你。</p>
+<div class="callout"><svg width="16" height="16" aria-hidden="true"><use href="#i-info"/></svg><p>切换显示配置属于普通用户权限，<strong>不会弹 UAC</strong>。程序不写注册表、不装服务，删掉文件夹就等于卸载。</p></div>
+
+        <h2 id="ui">界面</h2>
+<figure class="shot shot--img"><img src="./img/01-main.png" alt="多屏设置主界面：顶部状态条与还原按钮、常用方案四张卡、下方布局排列画布" width="822" height="852"><figcaption>双屏在用时的一屏全貌：状态条 → 方案卡 → 布局画布，低频功能收在两行折叠项里</figcaption></figure>
+<p>自上而下四段：<strong>状态条</strong>说明当前几台屏在用、什么模式、主屏是哪一块，右侧是「标识屏幕」按钮；<strong>常用方案</strong>按屏数生成卡片，当前生效的那张高亮标出；<strong>布局排列</strong>按真实分辨率比例画出各屏，可以拖；「自定义组合」与「显示器清单」是低频功能，默认收成一行，第一屏不滚动就能看全画布。</p>
+<p>每张方案卡左侧带一个小示意图，读法固定：</p>
+<div class="tbl"><table><thead><tr><th>图示</th><th>含义</th></tr></thead><tbody><tr><td>各屏写不同字母（A、B）</td><td>扩展 —— 每块屏显示不同内容，桌面横向拼接</td></tr><tr><td>各屏写同一个字母 A</td><td>复制 —— 每块屏显示完全相同的内容</td></tr><tr><td>虚线空框</td><td>不参与、会被关闭的那块屏</td></tr></tbody></table></div>
+<p>「标识屏幕」会在每块正在用的屏上盖一个大字母加型号、分辨率，3 秒后自动消失。字母全界面统一——清单、勾选项、方案示意图、屏上的大字母四处一致，屏上亮着 A，就知道清单里的 A 是哪一块。</p>
+<div class="callout callout--tip"><svg width="16" height="16" aria-hidden="true"><use href="#i-tip"/></svg><p>Windows 没有公开 API 能触发系统显示设置里那个「标识」按钮（编号都拿不到），所以这里是等效做法：自己往每块屏盖一个置顶无边框窗口。</p></div>
+
+        <h2 id="plan">方案与布局</h2>
+<p>方案切换在后台线程执行，界面不会卡住；切完自动把跑到屏幕外的窗口拉回主屏。底层走 Windows 的 CCD 接口（<code>SetDisplayConfig</code>），比 <code>DisplaySwitch.exe</code> 强的地方在于能指定具体哪几块屏——后者只能做「仅电脑屏 / 复制 / 扩展 / 仅第二屏」四个全局动作。</p>
+<p>布局排列等价于系统设置里拖动屏幕块，但多了几条保护：方块按真实分辨率比例画，主屏固定在原点不可拖（GDI 规定位于 <code>(0,0)</code> 的源就是主屏）；松手自动吸附到与相邻屏边缘对齐、且不重叠的位置；一旦重叠，冲突的屏描红边并写明是哪两块，「应用此布局」变灰不可点。</p>
+<p>点「应用此布局」后的流程是：先存快照 → 应用 → <strong>回读实际坐标核对</strong>。系统若擅自重排，状态栏会如实说「配置已提交，但系统重排了部分屏幕」，不谎报成功。</p>
+<div class="callout"><svg width="16" height="16" aria-hidden="true"><use href="#i-info"/></svg><p>重叠检测只能放在界面层：系统的 <code>SetDisplayConfig</code> 在校验模式下<strong>也不会拒绝重叠布局</strong>，而是自己悄悄重排成另一个样子——不拦就会把「被改过的布局」当成「应用成功」。</p></div>
+
+        <h2 id="win">窗口跟随</h2>
+<p>换屏最烦的不是屏幕本身，是窗口。顶栏下方两个开关默认都打开，各管一件事：</p>
+<div class="tbl"><table><thead><tr><th>开关</th><th>作用</th></tr></thead><tbody><tr><td>切换后把跑到屏幕外的窗口拉回来</td><td>切到「仅屏 1」时，原本摆在副屏上的窗口会没入够不到的区域，这个开关把它们平移到最近的屏</td></tr><tr><td>还原时把窗口摆回原位置</td><td>先恢复显示配置、等 1.5 秒，再把打开程序那一刻各窗口的位置摆回去</td></tr></tbody></table></div>
+<p>两个开关都只动位置，不改大小、不激活、不改变窗口层级，最大化和最小化的窗口一律不碰；匹配不上的（窗口已关）跳过。拉回动作本身也能被「还原」撤销——切换前的窗口位置随快照一起存着。</p>
+
+        <h2 id="cli">命令行</h2>
+<p>图形界面给日常用，命令行给脚本用。变更类命令默认只预演，加 <code>--yes</code> 才真正执行。</p>
+<div class="tbl tbl--mono"><table><thead><tr><th>参数</th><th>作用</th></tr></thead><tbody><tr><td>（无参数）</td><td>打开图形界面</td></tr><tr><td>--status</td><td>查看当前多屏配置</td></tr><tr><td>--plans</td><td>列出可选方案，常用的排前面</td></tr><tr><td>--apply extend-all</td><td>预演应用某方案（不实际执行）</td></tr><tr><td>--apply extend-all --yes</td><td>真正应用，执行前自动存快照</td></tr><tr><td>--snapshots</td><td>列出已保存的快照</td></tr><tr><td>--restore [快照文件]</td><td>还原到最近一份或指定快照</td></tr><tr><td>--sizes</td><td>校验 ctypes 结构体大小</td></tr></tbody></table></div>
+<p>快照保留最近 20 份。命令行部分只用标准库，<code>customtkinter</code> 仅图形界面需要。</p>
+
+        <h2 id="edge">安全与边界</h2>
+<div class="tbl"><table><thead><tr><th>设计</th><th>做法</th></tr></thead><tbody><tr><td>改前必存快照</td><td>所有变更前先落盘当前配置（含各窗口位置）</td></tr><tr><td>还原目标明确</td><td>回到「打开程序那一刻」，不是 Windows 默认状态</td></tr><tr><td>不自动切换</td><td>界面加载只读配置，必须点卡片或「应用此配置」才动系统</td></tr><tr><td>窗口只移动</td><td>不改大小、不激活、不弹最小化窗口，不动别的进程</td></tr><tr><td>不谎报成功</td><td>应用后回读实际状态核对，不一致就如实报告</td></tr></tbody></table></div>
+<p>范围上有意做了减法：最初设想过「只有单屏 → 提醒 → 自动诊断修复」这条链路，后来整段移除。原因是它要解决的场景只有「插了第二块屏但没亮」，而方案里的「全部扩展」一点就把它激活了；修复解决不了的（线缆、电源、显示器输入源），软件本来也做不了。</p>
+<div class="callout callout--warn"><svg width="16" height="16" aria-hidden="true"><use href="#i-warn"/></svg><p><strong>仅支持 Windows 10 / 11（x64）</strong>：用的是 Windows 专属的 CCD 与 GDI 接口，没有跨平台计划。另外仓库只发源码，不提供预编译包，想要绿色版需自行打包。</p></div>
+<ol><li>只在本机运行，不联网、不收集任何设备信息。</li><li>不提供任何绕过系统限制或侵入他人的能力，动作都是 Windows 自带接口的封装。</li><li>显示器型号、序列号等信息只在本机读写，不出现在任何上传链路里。</li></ol>
+
+      </div>
+      </article>
+    </div>
+  </div>
+
+  <nav class="pager" aria-label="作品翻页">
+    <a class="prev" href="../net-doctor/index.html"><span>← 上一件</span><strong>断网自动修复</strong></a>
+    <a class="next" href="../eye-care/index.html"><span>下一件 →</span><strong>护眼提醒</strong></a>
+  </nav>
+</main>
+
+<footer class="foot">
+  <div class="foot__inner container">
+    <p>© 2026 · 用 HTML 与 CSS 手写 · 托管于 GitHub Pages</p>
+    <nav class="foot__links" aria-label="页脚导航">
+      <a href="../../index.html#works">作品</a>
+      <a href="../../index.html#about">关于</a>
+      <a href="mailto:you@example.com">邮件</a>
+    </nav>
+  </div>
+</footer>
+
+<script src="../../assets/js/main.js" defer></script>
+<script src="../../assets/js/doc.js" defer></script>
+</body>
+</html>

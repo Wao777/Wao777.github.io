@@ -1,0 +1,17 @@
+# n8n 中间产物与发布日志，不进仓库
+_incoming/
+
+# 系统文件
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# Python 缓存
+__pycache__/
+*.pyc
+
+# 本地核对截图（Chrome 无头产物）
+.check/
+
+# 工作区数据（记忆、缓存、工具产物），不进仓库
+.workbuddy/

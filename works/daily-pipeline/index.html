@@ -1,0 +1,201 @@
+<!DOCTYPE html>
+<html lang="zh-CN" data-theme="light">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>n8n 日报流水线 · 个人作品集</title>
+<meta name="description" content="19 个 n8n 节点把 12 家新闻源压成一份报纸，再经校验、提交、上线送到 Pages。生成跑在本机，GitHub 只做接收端。">
+<meta name="theme-color" content="#F6F4EF" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#0F1116" media="(prefers-color-scheme: dark)">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='8' fill='%231B4DFF'/%3E%3Crect x='8' y='8' width='16' height='16' rx='4' fill='%23FFD400'/%3E%3C/svg%3E">
+<link rel="stylesheet" href="../../assets/css/tokens.css">
+<link rel="stylesheet" href="../../assets/css/main.css">
+<link rel="stylesheet" href="../../assets/css/work.css">
+</head>
+<body style="--c1:#FF4D2E; --c2:#FFD400">
+
+<a class="skip" href="#main">跳到正文</a>
+
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <symbol id="i-moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8Z"/>
+  </symbol>
+  <symbol id="i-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+    <circle cx="12" cy="12" r="4"/>
+    <path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"/>
+  </symbol>
+  <symbol id="i-info" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round">
+    <circle cx="12" cy="12" r="9"/><path d="M12 11v5"/><path d="M12 8h.01"/>
+  </symbol>
+  <symbol id="i-warn" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M12 3 2.5 20h19L12 3Z"/><path d="M12 9v5"/><path d="M12 17h.01"/>
+  </symbol>
+  <symbol id="i-tip" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M9 18h6"/><path d="M10 21h4"/>
+    <path d="M12 3a6 6 0 0 0-3.6 10.8c.5.4.8 1 .8 1.7V16h5.6v-.5c0-.7.3-1.3.8-1.7A6 6 0 0 0 12 3Z"/>
+  </symbol>
+</svg>
+
+<header class="nav">
+  <div class="nav__inner container">
+    <a class="brand" href="../../index.html">
+      <span class="brand__mark" aria-hidden="true"></span>
+      <span>名字</span>
+    </a>
+    <button class="theme-toggle" data-theme-toggle aria-pressed="false" aria-label="切换主题">
+      <svg width="17" height="17" aria-hidden="true"><use href="#i-moon"/></svg>
+    </button>
+  </div>
+</header>
+<main class="doc container" id="main">
+  <nav class="crumbs" aria-label="面包屑">
+    <a href="../../index.html">主页</a><span class="sep">/</span>
+    <a href="../../index.html#works">作品</a><span class="sep">/</span>
+    <span aria-current="page">n8n 日报流水线</span>
+  </nav>
+  <header class="doc__head">
+    <p class="eyebrow">自动化 · 2026</p>
+    <h1>n8n 日报流水线</h1>
+    <p class="doc__tagline">到点抓 12 家新闻源，AI 只打分、版面交给规则，排成报纸版式，再校验、提交、上线。生成跑在本机，GitHub 只做接收端。</p>
+    <div class="doc__meta">
+      <div class="badges">
+        <span class="badge badge--ver">v1.0</span>
+        <span class="badge"><i class="badge__dot" style="background:var(--c2)"></i>自用</span>
+        <span class="badge"><i class="badge__dot" style="background:var(--c1)"></i>Windows</span>
+        <span class="badge"><i class="badge__dot" style="background:var(--pop-b)"></i>Python 3.14</span>
+      </div>
+    </div>
+  </header>
+  <div class="doc__grid">
+    <aside class="toc">
+      <p class="toc__label">本页目录</p>
+      <ol class="toc__list" data-toc-list><li><a href="#what">这是什么</a></li><li><a href="#flow-gen">生成链路</a></li><li><a href="#flow-pub">发布链路</a></li><li><a href="#why">几个取舍</a></li><li><a href="#publish">发布脚本</a></li><li><a href="#fail">失败会怎样</a></li><li><a href="#faq">常见问题</a></li><li><a href="#log">更新记录</a></li></ol>
+      <dl class="toc__meta">
+        <div><dt>规模</dt><dd>19 节点 + 122 行脚本</dd></div>
+        <div><dt>许可</dt><dd>自用</dd></div>
+      </dl>
+    </aside>
+    <div class="doc__col">
+      <div class="doc__actions">
+        <a class="dbtn dbtn--ghost" href="../../index.html#works">返回作品</a>
+        <a class="dbtn dbtn--ghost" href="https://github.com/Wao777/daily-brief" target="_blank" rel="noopener" title="将跳转到 GitHub 仓库（新窗口）">源码 · GitHub ↗</a>
+      </div>
+      <article class="doc__card">
+        <div class="md" data-article>
+          <h2 id="what">这是什么</h2>
+<p>「每天一份日报」这件事整条链交出去，分两段：前半段把散在 12 家源里的信息压成一份报纸 HTML，后半段把这份 HTML 校验、提交、推到网上。人只在它出错的时候才需要看一眼。</p>
+<p>出口固定在 <code>reports/latest.html</code>，首页右边那张「今日日报」卡一直指着它——所以日报换新的时候，首页一个字都不用改。</p>
+<div class="callout callout--tip"><svg width="16" height="16" aria-hidden="true"><use href="#i-tip"/></svg><p><strong>只保留最新一期</strong>：覆盖同名文件、不归档。换来的是地址恒定，书签和分享出去的链接永远不会失效。</p></div>
+
+<h2 id="flow-gen">一 · 生成链路</h2>
+<p>重点在这一段：19 个节点、两次 AI 调用，其余全是本地计算。难点不是抓取，而是<strong>取舍</strong>——哪条上头版、哪条当大稿、同一件事被五家报道时怎么只留一条。</p>
+<div class="code"><div class="code__bar"><span class="code__lang">text</span><button class="code__copy" type="button" data-copy>复制</button></div><pre><code>定时触发（Schedule Trigger）
+  ↓
+抓取源（12 家 RSS 并发）
+  ↓
+解析合并（解析 / 去重 / 算兜底分）
+  ↓
+条数校验（不足 10 条直接报错，不出残报）
+  ↓
+查天气（wttr.in → ipwho.is + open-meteo 兜底）
+  ↓
+组装排序请求 → AI 打分（0~100）
+  ↓
+解析打分（合分 + 板块配额 + 单源上限）
+  ↓
+组装候选池 → AI 整理（译题 / 摘要 / 概念分组）
+  ↓
+解析 AI 输出
+  ↓
+渲染 HTML（38000 字符纯 JS，一次产出整份报纸）
+  ↓
+转附件（邮件发送默认关闭）</code></pre></div>
+<p>节点数看着多，其实只有三类活：抓、洗、排。抓和洗是确定性代码，只有「哪条重要」和「怎么把它写成一句人话」交给 AI。</p>
+<div class="tbl"><table><thead><tr><th>阶段</th><th>做什么</th><th>出问题会怎样</th></tr></thead><tbody><tr><td>抓取源</td><td>12 家 RSS 并发，单源失败不拖垮整轮</td><td>那个源当天缺席，其余照跑</td></tr><tr><td>解析合并</td><td>解析字段、按标题去重、给每条算一个兜底分</td><td>兜底分接住 AI 缺位</td></tr><tr><td>条数校验</td><td>少于 10 条直接报错停下</td><td>不出残报，线上仍是上一期</td></tr><tr><td>查天气</td><td><code>wttr.in</code> 为主，失败走 <code>ipwho.is</code> + <code>open-meteo</code></td><td>三源全挂，日期区留空占位</td></tr><tr><td>AI 打分</td><td>每条 0~100，判断今天值不值得上版面</td><td>退回规则分，<code>rankDegraded</code> 为真</td></tr><tr><td>解析打分</td><td>合分、板块配额、单源上限</td><td>全在本地算，不依赖外部</td></tr><tr><td>AI 整理</td><td>译题、写摘要、把同一事件归成概念组</td><td>保留原题与原始候选，<code>degraded</code> 为真</td></tr><tr><td>渲染 HTML</td><td>38000 字符纯 JS，一次产出整份报纸</td><td>缺标题、缺摘要、板块抓空都有兜底</td></tr><tr><td>转附件</td><td>HTML 转成邮件附件</td><td>默认关闭，不影响出报</td></tr></tbody></table></div>
+<div class="callout callout--tip"><svg width="16" height="16" aria-hidden="true"><use href="#i-tip"/></svg><p><strong>取舍权给 AI，版面权给规则</strong>：AI 只回答「这条多重要」，不决定谁当大稿。哪条占通栏由 <code>assign_weights()</code> 按固定规则算——板块首条必为大稿，条数 ≥ 8 时中点再给一条。所以每天的骨架完全一致，只有内容在变；AI 就算传了重点，也会被规则覆盖。</p></div>
+<p>同一件事被多家报道时，条目上带一个 <code>cluster</code> 标记，同值自动并成一组、组内第一篇当主稿。版面上表现为「一个大稿 + 若干来源」，而不是五条内容重复的短讯。</p>
+<div class="callout callout--warn"><svg width="16" height="16" aria-hidden="true"><use href="#i-warn"/></svg><p><strong>每一环都有降级，宁可出残报也不出空</strong>：天气三源全挂就留空占位，AI 两步全挂就退回规则分与原始候选，概念组缺失就退化成单条通排。代价是<strong>失败不报错</strong>——判断质量只能看 <code>rankDegraded</code> / <code>degraded</code> 这类业务字段，不能看节点执行状态是不是绿色。</p></div>
+
+<h2 id="flow-pub">二 · 发布链路</h2>
+<div class="code"><div class="code__bar"><span class="code__lang">text</span><button class="code__copy" type="button" data-copy>复制</button></div><pre><code>07:00  触发（Schedule Trigger）
+  ↓
+取数整理（n8n 节点：抓取 + 摘要）
+  ↓
+排版（拼成自包含 HTML，样式内联、零外链）
+  ↓
+写盘（_incoming/daily.html）
+  ↓
+校验（存在 / 大小 / 是不是 HTML）
+  ↓
+覆盖（reports/latest.html）
+  ↓
+提交推送（git add → commit → push）
+  ↓
+上线（GitHub Pages 构建完成即可访问）</code></pre></div>
+<p>发布这一段是一条直链，没有分支，做的事只有「把这个文件送上线」。中间那层校验是关键：生成失败时上游经常仍然写出一个 200 字节的错误页，直接覆盖就会把首页那张卡指向一页报错信息。</p>
+<div class="tbl"><table><thead><tr><th>节点</th><th>关键设置</th></tr></thead><tbody><tr><td>Schedule Trigger</td><td>每天 07:00；工作流 Settings 时区必须选 <code>Asia/Shanghai</code></td></tr><tr><td>写入节点</td><td><code>Read/Write Files from Disk</code>，File Name 填绝对路径；1.x 才有这个名字，旧版叫 Write Binary File</td></tr><tr><td>IF</td><td>判断上游是否真产出了内容，失败就跳过后面所有步骤</td></tr><tr><td>Execute Command</td><td>调 <code>publish.py</code>；路径写死，不用 <code>{{ $json.xxx }}</code> 拼</td></tr></tbody></table></div>
+
+<h2 id="why">几个取舍</h2>
+<ul>
+<li><strong>渲染器是纯 JS，内联在节点里</strong>：不 <code>require</code>、不读盘、不起子进程、不联网，只用 <code>Date / Math / Set / Map / JSON</code> 和 <code>Buffer</code>。早期版本是 Execute Command 调本机 Python 脚本，换一台机器就断在那里；现在整条链的外部依赖只剩「能上外网」和两个凭据。</li>
+<li><strong>降级写在链里，不是写在文档里</strong>：天气、AI 打分、概念组三处都定义了失败时的替代值，所以 AI 两步全挂也能把报纸出出来。代价是不报错，判断质量得看业务字段。</li>
+<li><strong>不用 GitHub Actions 定时</strong>：Actions 的 cron 按 UTC 算，换算容易错；境外 runner 抓国内源经常被限流；仓库 60 天没提交还会自动停用。而且它没法反过来触发本机的 n8n。</li>
+<li><strong>生成放在本机</strong>：数据源、登录态、代理都在这台机器上，抓取成功率高；出问题能直接翻日志，不用等云端构建。</li>
+<li><strong>GitHub 只做接收端</strong>：一个仓库、一个分支，Pages 自己发布，仓库里不需要任何 workflow 文件。</li>
+<li><strong>只留最新一期</strong>：覆盖同名文件意味着链接恒定，代价是 Pages 有缓存，偶尔会看到上一期——刷新或等几分钟就好。</li>
+</ul>
+
+<h2 id="publish">发布脚本</h2>
+<p><code>scripts/publish.py</code> 一次做完四件事：校验 → 覆盖 → 提交 → 推送。stdout 只输出一行 JSON，n8n 可以直接解析结果。</p>
+<p>这段不在上面那个仓库里：仓库只收生成链（19 个节点的工作流 JSON、渲染器模板、构建脚本），<code>publish.py</code> 是站点这边的本地脚本，跟着站点走。</p>
+<div class="code"><div class="code__bar"><span class="code__lang">cmd</span><button class="code__copy" type="button" data-copy>复制</button></div><pre><code>python "&lt;站点目录&gt;\scripts\publish.py" "&lt;站点目录&gt;\_incoming\daily.html"</code></pre></div>
+<div class="tbl"><table><thead><tr><th>status</th><th>退出码</th><th>含义</th></tr></thead><tbody><tr><td>published</td><td>0</td><td>已发布，附带 commit 短 SHA</td></tr><tr><td>no_change</td><td>0</td><td>内容与仓库一致，跳过提交（不算失败）</td></tr><tr><td>bad_args</td><td>2</td><td>没传源文件路径</td></tr><tr><td>missing_src</td><td>3</td><td>源文件不存在</td></tr><tr><td>too_small</td><td>4</td><td>不足 512 字节，疑似生成失败</td></tr><tr><td>not_html</td><td>5</td><td>开头没有 <code>&lt;html&gt;</code> 或 <code>&lt;body&gt;</code></td></tr><tr><td>no_repo</td><td>6</td><td>站点目录还不是 git 仓库</td></tr><tr><td>no_remote</td><td>7</td><td>仓库没配远端</td></tr><tr><td>git_add_failed</td><td>8</td><td>暂存失败</td></tr><tr><td>commit_failed</td><td>9</td><td>提交失败</td></tr><tr><td>push_failed</td><td>10</td><td>推送失败，多半是凭据或网络</td></tr></tbody></table></div>
+<div class="callout callout--warn"><svg width="16" height="16" aria-hidden="true"><use href="#i-warn"/></svg><p>路径里有中文时，n8n 的 Execute Command 很容易把引号吃掉，报「系统找不到指定的路径」。先确认引号还在；仍不行就把整个站点挪到纯英文路径下——Pages 不关心本地路径长什么样。</p></div>
+
+<h2 id="fail">失败会怎样</h2>
+<ul>
+<li><strong>抓到的条数不够</strong>：少于 10 条在「条数校验」就停下，宁可不发也不出残报，线上仍是上一期。</li>
+<li><strong>AI 那两步降级</strong>：报纸照出，只是摘要没润色、没有跨源概念组。<code>rankDegraded</code> / <code>degraded</code> 会为真——节点是绿的，也可能走了降级。</li>
+<li><strong>天气全挂</strong>：日期区留空占位，不影响其余版面。</li>
+<li><strong>生成失败</strong>：内容不足 512 字节或者根本不是 HTML，脚本停在 <code>too_small</code> / <code>not_html</code>，线上仍然是上一期。</li>
+<li><strong>仓库没绑</strong>：<code>no_repo</code> 直接退出，一个文件都不改，不会留下半成品提交。</li>
+<li><strong>推送失败</strong>：<code>push_failed</code>；本地已经提交好了，网络恢复后手动 push 一次即可。</li>
+<li><strong>内容没变</strong>：<code>no_change</code>，当成成功处理——每天的内容本来就有可能几乎一样。</li>
+</ul>
+
+<h2 id="faq">常见问题</h2>
+<details class="faq"><summary>怎么确认 AI 那两步真的干活了？</summary><div class="faq__body"><p>看「解析打分」输出的 <code>rankDegraded</code> 和「解析 AI 输出」的 <code>degraded</code>。两个节点都设了 <code>onError: continueRegularOutput</code>，报错被静默吞掉，执行状态照样是绿的——只看绿色会误以为 AI 生效了，实际跑的是降级分支。</p></div></details>
+<details class="faq"><summary>改版式要动几个文件？</summary><div class="faq__body"><p>两个真源：渲染器模板 <code>render_brief.js.tpl</code> 管版式与 CSS，工作流 JSON 管 19 个节点的代码与参数。构建脚本有一道硬闸——模板主体必须与节点里那段代码逐字节相同，只改一边会直接中止并打印差异位置，所以不会出现「模板和线上跑的代码悄悄分叉」。</p></div></details>
+<details class="faq"><summary>日报换新了，首页那张卡会跟着变吗？</summary><div class="faq__body"><p>卡上不写具体日期，只写「每日一期」。卡片永远指向同一个地址，所以不会过期；变的是点进去的那一页。</p></div></details>
+<details class="faq"><summary>为什么不把每一期都归档？</summary><div class="faq__body"><p>地址恒定优先。要归档就得让文件名带日期，卡片也就得跟着改，等于每天动一次首页；现在这样是拿「翻不到旧刊」换「链接永不失效」。</p></div></details>
+<details class="faq"><summary>n8n 里要存 GitHub token 吗？</summary><div class="faq__body"><p>不用。走本机 <code>git push</code>，账号由 Windows 凭据管理器记着，n8n 只负责发一条命令，不碰任何密钥。前提是手动 push 成功过一次，凭据已记住。</p></div></details>
+<details class="faq"><summary>站点还不是 git 仓库的时候会发出去吗？</summary><div class="faq__body"><p>不会。<code>publish.py</code> 检查到没有 <code>.git</code> 或没有远端，就以 <code>no_repo</code> / <code>no_remote</code> 停下，源文件连复制都不会发生。</p></div></details>
+
+<h2 id="log">更新记录</h2>
+<ul><li><strong>生成链 v0.4.5</strong> — AI 打分排序接进链路，节点定稿为 19 个；取舍权归 AI，版面权归规则</li><li><strong>v1.0</strong> — 校验、覆盖、提交、推送合成一个脚本，退出码分流给 n8n 判断</li><li><strong>v0.6</strong> — 从 Execute Command 里直接 <code>copy</code> + <code>git</code>，改成调用独立脚本</li><li><strong>v0.3</strong> — 首页日报卡与 <code>reports/latest.html</code> 拆开，地址固定不变</li></ul>
+
+        </div>
+      </article>
+    </div>
+  </div>
+  <nav class="pager" aria-label="作品翻页">
+    <a class="prev" href="../content-hub/index.html"><span>← 上一件</span><strong>内容聚合 · 一个窗口</strong></a>
+    <a class="next" href="../qingcheng/index.html"><span>下一件 →</span><strong>青城山招生小程序</strong></a>
+  </nav>
+</main>
+
+<footer class="foot">
+  <div class="foot__inner container">
+    <p>© 2026 · 用 HTML 与 CSS 手写 · 托管于 GitHub Pages</p>
+    <nav class="foot__links" aria-label="页脚导航">
+      <a href="../../index.html#works">作品</a>
+      <a href="../../index.html#about">关于</a>
+      <a href="mailto:you@example.com">邮件</a>
+    </nav>
+  </div>
+</footer>
+
+<script src="../../assets/js/main.js" defer></script>
+<script src="../../assets/js/doc.js" defer></script>
+</body>
+</html>

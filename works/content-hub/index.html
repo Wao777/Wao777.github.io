@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="zh-CN" data-theme="light">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>内容聚合 · 个人作品集</title>
+<meta name="description" content="把几个来源的内容合进同一个窗口：一套界面、一个自建播放器、一套键位。">
+<meta name="theme-color" content="#F6F4EF" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#0F1116" media="(prefers-color-scheme: dark)">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='8' fill='%231B4DFF'/%3E%3Crect x='8' y='8' width='16' height='16' rx='4' fill='%23FFD400'/%3E%3C/svg%3E">
+<link rel="stylesheet" href="../../assets/css/tokens.css">
+<link rel="stylesheet" href="../../assets/css/main.css">
+<link rel="stylesheet" href="../../assets/css/work.css">
+</head>
+<body style="--c1:#1B4DFF; --c2:#12D6A0">
+
+<a class="skip" href="#main">跳到正文</a>
+
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <symbol id="i-moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8Z"/>
+  </symbol>
+  <symbol id="i-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+    <circle cx="12" cy="12" r="4"/>
+    <path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"/>
+  </symbol>
+  <symbol id="i-info" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round">
+    <circle cx="12" cy="12" r="9"/><path d="M12 11v5"/><path d="M12 8h.01"/>
+  </symbol>
+  <symbol id="i-warn" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M12 3 2.5 20h19L12 3Z"/><path d="M12 9v5"/><path d="M12 17h.01"/>
+  </symbol>
+  <symbol id="i-tip" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M9 18h6"/><path d="M10 21h4"/>
+    <path d="M12 3a6 6 0 0 0-3.6 10.8c.5.4.8 1 .8 1.7V16h5.6v-.5c0-.7.3-1.3.8-1.7A6 6 0 0 0 12 3Z"/>
+  </symbol>
+</svg>
+
+<header class="nav">
+  <div class="nav__inner container">
+    <a class="brand" href="../../index.html">
+      <span class="brand__mark" aria-hidden="true"></span>
+      <span>名字</span>
+    </a>
+    <button class="theme-toggle" data-theme-toggle aria-pressed="false" aria-label="切换主题">
+      <svg width="17" height="17" aria-hidden="true"><use href="#i-moon"/></svg>
+    </button>
+  </div>
+</header>
+<main class="doc container" id="main">
+  <nav class="crumbs" aria-label="面包屑">
+    <a href="../../index.html">主页</a><span class="sep">/</span>
+    <a href="../../index.html#works">作品</a><span class="sep">/</span>
+    <span aria-current="page">内容聚合</span>
+  </nav>
+  <header class="doc__head">
+    <p class="eyebrow">产品 · 2026</p>
+    <h1>内容聚合</h1>
+    <p class="doc__tagline">几个来源合进一个窗口，界面、播放器、弹幕、评论全部自己重写成一套。</p>
+    <div class="doc__meta">
+      <div class="badges">
+        <span class="badge badge--ver">v1.0</span>
+        <span class="badge"><i class="badge__dot" style="background:var(--c2)"></i>个人项目</span>
+        <span class="badge"><i class="badge__dot" style="background:var(--c1)"></i>Windows</span>
+        <span class="badge"><i class="badge__dot" style="background:var(--pop-b)"></i>纯本地运行</span>
+      </div>
+    </div>
+  </header>
+  <div class="doc__grid">
+    <aside class="toc">
+      <p class="toc__label">本页目录</p>
+      <ol class="toc__list" data-toc-list><li><a href="#what">这是什么</a></li><li><a href="#ui">界面布局</a></li><li><a href="#mod">功能模块</a></li><li><a href="#legal">合规与免责</a></li></ol>
+      <dl class="toc__meta">
+        <div><dt>形态</dt><dd>桌面客户端</dd></div>
+        <div><dt>平台</dt><dd>Windows</dd></div>
+      </dl>
+    </aside>
+    <div class="doc__col">
+      <div class="doc__actions">
+        <a class="dbtn dbtn--ghost" href="../../index.html#works">返回作品</a>
+        <span class="dbtn dbtn--off" title="本项目暂不提供公开源码">源码暂不提供</span>
+      </div>
+      <article class="doc__card">
+      <div class="md" data-article>
+        <h2 id="what">这是什么</h2>
+<p>不同来源的内容各有一套浏览方式：同一件事要在几个页面之间翻，播放器、弹幕、评论区还各长各的。更麻烦的是它们的形态根本不一样——综合视频靠分区和榜单，剧集靠专辑和分集，短剧一集两分钟要连着往下看，电视直播则是另一套频道表。这个客户端把这些来源合到同一个窗口：一套界面、一个播放器、一套键位。</p>
+<p>界面也不套平台的网页：内容区由可增删的板块拼成，播放器、弹幕、评论、简介都是自己重写的控件，所以布局能改、能收、能关得干净。</p>
+<div class="callout"><svg width="16" height="16" aria-hidden="true"><use href="#i-info"/></svg><p>本页截图中的站点标识、封面、标题、画面与评论已整体打码；正文按内容形态介绍各个来源，理由见文末合规说明。</p></div>
+<figure class="shot shot--img"><img src="./img/01-main.png" alt="主界面：左侧导航栏、顶部工具条与板块卡内容区" width="1440" height="900"><figcaption>主界面：左侧栏导航、顶部工具条、右侧板块卡内容区</figcaption></figure>
+<h2 id="ui">界面布局</h2>
+<p>窗口分三段：最左一列窄侧栏做全局导航，竖向排内容源入口，当前项高亮，底部常驻一个添加按钮；顶部横栏左侧是当前源的分类切换（视频 / 直播），右侧依次是刷新、设置、主题、搜索、历史；剩下的整块是内容区，由若干板块卡纵向堆叠——卡头写板块名与刷新状态，卡身是 3～5 列自适应的内容卡（封面、标题、数据、时长），可单卡刷新、展开或收起。播放器不占新窗口，而是盖在内容区之上的一层，约占窗口八成。</p>
+<h2 id="mod">功能模块</h2>
+<h3>资源整合</h3>
+<p>几种形态不同的内容被拉平成同一种东西：一张卡片、一个播放器、一套缓存与历史。侧栏切换即整体换页，每个来源有独立的板块配置、关注列表与缓存，互不串台；当前来源与分类状态重启后恢复。</p>
+<h3>能看什么</h3>
+<div class="tbl"><table><thead><tr><th>来源</th><th>内容形态</th><th>在这个客户端里能做什么</th></tr></thead><tbody><tr><td>综合视频</td><td>分区视频、榜单、创作者投稿</td><td>分区与榜单浏览、创作者关注、多 P / 合集切集、弹幕、评论</td></tr><tr><td>长视频</td><td>剧集、电影、综艺</td><td>按专辑展开分集、选集连播、清晰度档位随账号可用范围给出</td></tr><tr><td>短剧</td><td>竖屏连载短剧</td><td>按剧集连续播放、自动下一集、按分类与标签翻</td></tr><tr><td>电视直播</td><td>频道直播</td><td>频道表浏览、多线路备用、起播失败自动换线、内嵌播放</td></tr><tr><td>小说</td><td>—</td><td>入口已留，尚未开放</td></tr></tbody></table></div>
+<div class="callout"><svg width="16" height="16" aria-hidden="true"><use href="#i-tip"/></svg><p>同一个「选集」在四种来源里是四种东西——分 P、专辑分集、剧集序号、频道线路，在这里被收成同一个侧栏面板；「关注」也一样，视频创作者与直播房间走同一份列表。这是聚合真正省事的地方：<strong>记一套操作，而不是记四套</strong>。</p></div>
+<h3>自由的界面</h3>
+<p>内容区不是写死的模板，而是由可增删的板块拼起来：板块能排序、改名、改类型、改刷新周期，也能整块收起；卡片列数跟着窗口宽度走，宽屏多排、窄屏少排，不拉伸单卡。深浅两套主题共用一组颜色变量，切换即时生效。</p>
+<h3>自建播放器</h3>
+<p>不用平台的网页播放器：画面、控制条、进度条、音量、倍速、画质、选集、全屏全是自己写的控件，键位与交互全站一致。</p>
+<figure class="shot shot--img"><img src="./img/02-player.png" alt="播放器：标题栏、画面、控制条与评论页签" width="1440" height="900" loading="lazy"><figcaption>播放器：标题栏、画面、控制条与下方评论页签</figcaption></figure>
+<div class="tbl"><table><thead><tr><th>能力</th><th>说明</th></tr></thead><tbody><tr><td>内嵌播放</td><td>画面嵌在面板里，不开浏览器、不弹外部窗口</td></tr><tr><td>倍速</td><td>0.75 / 1 / 1.25 / 1.5 / 2 档，直播场景自动禁用</td></tr><tr><td>画质</td><td>只列源端实际能兑现的档位，拿不到会退回并提示，不静默降级</td></tr><tr><td>选集连播</td><td>多段内容与连载都有侧栏选集面板，支持上一集 / 下一集 / 自动连播</td></tr><tr><td>桌面浮窗</td><td>画面可交给独立顶层小窗，拖到桌面任意位置，主窗口最小化后仍在，锁 16:9</td></tr><tr><td>缓冲进度</td><td>进度条标出已缓冲区间，悬停显示时间点</td></tr><tr><td>失败重试</td><td>起播失败就地给重试按钮；起播超时自动换一次软解，避免黑屏</td></tr><tr><td>快捷键</td><td>空格播放暂停，左右 ±5 秒，上下音量，F 全屏，ESC 退出</td></tr></tbody></table></div>
+<h3>弹幕</h3>
+<p>弹幕不走平台的播放器，直接叠在自己的画面上随进度滚动，暂停即停。不透明度、字号、速度、显示区域、密度都能调，支持屏蔽词与一键开关，状态记忆。</p>
+<h3>评论与简介</h3>
+<p>播放器下方两个页签，各自独立滚动：评论按热度排序、底部分页加载；简介页给内容说明与点赞、投币等计数。看评论不用跳出去，看简介也不用另开页面。</p>
+<h3>历史与续播</h3>
+<p>播放中每 10 秒落一次进度，关掉播放器或退出程序都不丢；顶栏「历史」列出最近观看，点开即续。只存本地，可逐条删除或整表清空。</p>
+<h3>设置与缓存</h3>
+<p>设置抽屉从右侧滑出，顶部页签按当前内容源动态显示：通用（功能开关）、板块、关注、标签、凭证、缓存，末尾还挂着功能与历史两页，窗口窄时需横向滚动。</p>
+<figure class="shot shot--img"><img src="./img/03-settings.png" alt="设置抽屉：页签与功能开关列表" width="1440" height="900" loading="lazy"><figcaption>设置抽屉：按内容源动态显示的页签与开关列表</figcaption></figure>
+<p>缓存页统一管理接口响应、封面、图标、弹幕、视频预缓存五类数据，各有配额，超出按 LRU 淘汰，正在播放的内容不会被误删。</p>
+<h3>外观与窗口</h3>
+<p>圆角窗体、深色标题栏、独立应用图标；重复启动会提示已有窗口，不会两个程序抢同一个端口。</p>
+<h2 id="legal">合规与免责</h2>
+<p>程序仅在本机运行，不对外提供任何服务，也不分发任何内容。</p>
+<div class="tbl"><table><thead><tr><th>模块</th><th>审查结论</th><th>文档处理</th></tr></thead><tbody><tr><td>通用界面与播放能力</td><td>无合规风险</td><td>完整展示</td></tr><tr><td>各来源的形态与用法</td><td>只写「有什么、能做什么」，属产品层描述</td><td>按内容形态介绍</td></tr><tr><td>具体站点标识与界面</td><td>点名加展示容易把话题引向取流方式，存在合规风险</td><td>截图整体打码，正文不出现名称</td></tr></tbody></table></div>
+<div class="callout"><svg width="16" height="16" aria-hidden="true"><use href="#i-info"/></svg><p>本页只回答「能看什么、怎么用」，不回答「内容怎么拿到」——取流、解密、登录态一概不涉及。</p></div>
+<div class="callout callout--warn"><svg width="16" height="16" aria-hidden="true"><use href="#i-warn"/></svg><p><strong>本页不含任何实现细节</strong>（接口、密钥、参数、源码），避免构成规避手段的说明书。</p></div>
+<ol><li>内容著作权归原平台与作者所有，程序不存储、不转存、不分发。</li><li>账号凭证只留本机，不上传、不转发。</li><li>仅供个人使用与学习，请勿商用或公开传播。</li></ol>
+
+      </div>
+      </article>
+    </div>
+  </div>
+  <nav class="pager" aria-label="作品翻页">
+    <a class="prev" href="../zt-popup/index.html"><span>← 上一件</span><strong>涨停速览</strong></a>
+    <a class="next" href="../daily-pipeline/index.html"><span>下一件 →</span><strong>n8n 日报流水线</strong></a>
+  </nav>
+</main>
+
+<footer class="foot">
+  <div class="foot__inner container">
+    <p>© 2026 · 用 HTML 与 CSS 手写 · 托管于 GitHub Pages</p>
+    <nav class="foot__links" aria-label="页脚导航">
+      <a href="../../index.html#works">作品</a>
+      <a href="../../index.html#about">关于</a>
+      <a href="mailto:you@example.com">邮件</a>
+    </nav>
+  </div>
+</footer>
+
+<script src="../../assets/js/main.js" defer></script>
+<script src="../../assets/js/doc.js" defer></script>
+</body>
+</html>

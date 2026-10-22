@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html lang="zh-CN" data-theme="light">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>青城山招生小程序 · 个人作品集</title>
+<meta name="description" content="四个页面走完一次招生报名：山门看日程与名额、填表传形象照、提交入库、查自己的报名状态。微信登录 + 云数据库 + 云存储，隐私靠 RLS 而不是前端。">
+<meta name="theme-color" content="#F6F4EF" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#0F1116" media="(prefers-color-scheme: dark)">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='8' fill='%231B4DFF'/%3E%3Crect x='8' y='8' width='16' height='16' rx='4' fill='%23FFD400'/%3E%3C/svg%3E">
+<link rel="stylesheet" href="../../assets/css/tokens.css">
+<link rel="stylesheet" href="../../assets/css/main.css">
+<link rel="stylesheet" href="../../assets/css/work.css">
+</head>
+<body style="--c1:#12D6A0; --c2:#1B4DFF">
+
+<a class="skip" href="#main">跳到正文</a>
+
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <symbol id="i-moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8Z"/>
+  </symbol>
+  <symbol id="i-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+    <circle cx="12" cy="12" r="4"/>
+    <path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"/>
+  </symbol>
+  <symbol id="i-info" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round">
+    <circle cx="12" cy="12" r="9"/><path d="M12 11v5"/><path d="M12 8h.01"/>
+  </symbol>
+  <symbol id="i-warn" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M12 3 2.5 20h19L12 3Z"/><path d="M12 9v5"/><path d="M12 17h.01"/>
+  </symbol>
+  <symbol id="i-tip" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M9 18h6"/><path d="M10 21h4"/>
+    <path d="M12 3a6 6 0 0 0-3.6 10.8c.5.4.8 1 .8 1.7V16h5.6v-.5c0-.7.3-1.3.8-1.7A6 6 0 0 0 12 3Z"/>
+  </symbol>
+</svg>
+
+<header class="nav">
+  <div class="nav__inner container">
+    <a class="brand" href="../../index.html">
+      <span class="brand__mark" aria-hidden="true"></span>
+      <span>名字</span>
+    </a>
+    <button class="theme-toggle" data-theme-toggle aria-pressed="false" aria-label="切换主题">
+      <svg width="17" height="17" aria-hidden="true"><use href="#i-moon"/></svg>
+    </button>
+  </div>
+</header>
+<main class="doc container" id="main">
+  <nav class="crumbs" aria-label="面包屑">
+    <a href="../../index.html">主页</a><span class="sep">/</span>
+    <a href="../../index.html#works">作品</a><span class="sep">/</span>
+    <span aria-current="page">青城山招生小程序</span>
+  </nav>
+  <header class="doc__head">
+    <p class="eyebrow">产品 · 2026</p>
+    <h1>青城山招生小程序</h1>
+    <p class="doc__tagline">四个页面走完一次招生报名：山门看日程与名额，填表、传形象照，提交入库，再回来查自己那一条。微信登录 + 云数据库 + 云存储，谁能看到哪一行由 RLS 决定，不由前端决定。</p>
+    <div class="doc__meta">
+      <div class="badges">
+        <span class="badge badge--ver">v1.0</span>
+        <span class="badge"><i class="badge__dot" style="background:var(--c2)"></i>自用</span>
+        <span class="badge"><i class="badge__dot" style="background:var(--c1)"></i>微信小程序</span>
+        <span class="badge"><i class="badge__dot" style="background:var(--pop-b)"></i>PostgreSQL</span>
+      </div>
+    </div>
+  </header>
+  <div class="doc__grid">
+    <aside class="toc">
+      <p class="toc__label">本页目录</p>
+      <ol class="toc__list" data-toc-list><li><a href="#what">这是什么</a></li><li><a href="#pages">四页与一条主路径</a></li><li><a href="#data">数据与权限</a></li><li><a href="#visual">图是怎么来的</a></li><li><a href="#ship">发布与包体</a></li><li><a href="#fail">失败会怎样</a></li><li><a href="#faq">常见问题</a></li><li><a href="#log">更新记录</a></li></ol>
+      <dl class="toc__meta">
+        <div><dt>规模</dt><dd>4 页 + 2 张表</dd></div>
+        <div><dt>许可</dt><dd>自用</dd></div>
+      </dl>
+    </aside>
+    <div class="doc__col">
+      <div class="doc__actions">
+        <a class="dbtn dbtn--ghost" href="../../index.html#works">返回作品</a>
+        <a class="dbtn dbtn--ghost" href="https://github.com/Wao777/personal-miniprogram-demo" target="_blank" rel="noopener" title="将跳转到 GitHub 仓库（新窗口）">源码 · GitHub ↗</a>
+      </div>
+      <article class="doc__card">
+        <div class="md" data-article>
+          <h2 id="what">这是什么</h2>
+<p>一个完整做下来、能提交报名的招生小程序：活动有会期、道场、名额、截止时间，五门课业任选一门；用户用微信登录，填七项资料、传一张形象照，提交后进「我的报名」看审核状态，也能取消。</p>
+<p>这只是一个练习作品。</p>
+<figure class="shot shot--img shot--sm">
+  <img src="./img/screen-home.jpg" alt="小程序首页：山门封面、名额统计、山中四事、五门课业" width="600" height="1200" loading="lazy" decoding="async">
+  <figcaption>首页：山门 + 名额与倒计时 + 山中四事 + 五门课业，一屏之内把「要不要去」讲完。</figcaption>
+</figure>
+
+<h2 id="pages">一 · 四页与一条主路径</h2>
+<p>三个 tab 页加一个跳转页，没有第五条路。每页只做一件事，页面之间不互相兜底——一处取不到数据，就只在这一页显示失败态。</p>
+<div class="tbl"><table><thead><tr><th>页面</th><th>职责</th><th>出问题会怎样</th></tr></thead><tbody><tr><td>首页 <code>index</code></td><td>山门封面、活动主数据、名额与倒计时、山中四事、五门课业、四步流程</td><td>取不到活动就显示「山门暂时未开，请稍后再试」，不白屏</td></tr><tr><td>详情 <code>detail</code></td><td>缘起、七日日程、课业门类、报名须知、行前信息</td><td>同上；已报过的人底部按钮直接变「已报名 · 查看记录」</td></tr><tr><td>报名 <code>enroll</code></td><td>登录、七项表单校验、形象照上传、重复报名拦截</td><td>未登录先出登录卡；校验不过就停在原地，不提交半份数据</td></tr><tr><td>我的报名 <code>records</code></td><td>本人记录、状态、取消</td><td>没有记录走空态；取消只把状态置 <code>canceled</code>，不删行</td></tr></tbody></table></div>
+<p>主路径只有一条，从登录穿到入库：</p>
+<div class="code"><div class="code__bar"><span class="code__lang">text</span><button class="code__copy" type="button" data-copy>复制</button></div><pre><code>wx.login（静默，不弹授权框）
+  ↓
+activities（slug = qingcheng-2026-autumn，公开只读）
+  ↓
+报名表单：姓名 / 手机 / 性别 / 年龄 / 城市 / 课业 / 自述
+  ↓
+形象照 → 云存储 users/&lt;uid&gt;/enrollments/…（库里只存对象路径）
+  ↓
+enrollments 插入（owner_id 由库默认值写，前端不传）
+  ↓
+activity_enrollment_count(id) 只回一个数字</code></pre></div>
+<div class="callout callout--tip"><svg width="16" height="16" aria-hidden="true"><use href="#i-tip"/></svg><p><strong>登录只在需要的地方发生</strong>：<code>app.js</code> 启动就试一次静默登录，失败也不拦人看首页——活动信息是公开只读的，没必要为了逛一逛先要授权。真正要身份的是报名与记录两页，那里才出「微信一键登录」。</p></div>
+<p>表单校验放在提交前一次性做完，不在输入时逐字拦截：姓名 2–20 字、手机号须是 11 位且 1 开头、年龄 16–99、必须选一门课业、城市不能空。形象照是选填，5MB 上限。</p>
+
+<h2 id="data">二 · 数据与权限</h2>
+<p>两张表就够，一条聚合函数就够。核心判断是：<strong>前端不承担任何权限职责</strong>，它拿到什么全看数据库放什么。</p>
+<div class="tbl"><table><thead><tr><th>对象</th><th>内容</th><th>访问规则</th></tr></thead><tbody><tr><td><code>activities</code></td><td>活动主数据：标题、副题、会期、道场、名额、截止时间、日程、课业、须知</td><td>公开只读，策略 <code>activities_read</code>，未登录也能读</td></tr><tr><td><code>enrollments</code></td><td>报名行：申请人、手机、性别、年龄、城市、课业、自述、照片路径、状态</td><td>本人读写，四条 owner 策略；<code>UNIQUE(activity_id, owner_id)</code> 防重复报名</td></tr><tr><td><code>activity_enrollment_count(id)</code></td><td>已报名人数，只返回一个整数</td><td><code>SECURITY DEFINER</code>，先 <code>REVOKE PUBLIC</code> 再只授给 <code>anon</code> / <code>authenticated</code></td></tr></tbody></table></div>
+<p>名额那个数字是唯一的例外：首页要显示「还剩几席」，但如果前端能直接 <code>select *</code> 报名表，这个数字就等于把所有人的手机号一起交出去。所以人数走函数——函数内部才碰表，出口只有一个整数。</p>
+<div class="callout callout--warn"><svg width="16" height="16" aria-hidden="true"><use href="#i-warn"/></svg><p><strong>RLS 是唯一防线，不是第二道</strong>：<code>owner_id</code> 由数据库默认值写入，前端连字段都不传；「我的报名」天然只回本人那几行。就算绕过小程序直接打 API，能读到的也只有自己那条。反过来说，<strong>策略写错就等于公开</strong>，这里没有中间地带。</p></div>
+<div class="tbl tbl--mono"><table><thead><tr><th>enrollments 字段</th><th>说明</th></tr></thead><tbody><tr><td>activity_id</td><td>外键指向 activities</td></tr><tr><td>owner_id</td><td>默认值 <code>auth.uid()</code>，前端不传</td></tr><tr><td>applicant_name / phone</td><td>核验身份用，手机号在「我的报名」里打码显示</td></tr><tr><td>gender / age / region</td><td>可空的画像字段，年龄不填也能提交</td></tr><tr><td>track</td><td>五门课业之一，决定分坛</td></tr><tr><td>self_intro</td><td>选填，长老看这一栏</td></tr><tr><td>photo_path</td><td>云存储对象路径，不是可访问链接</td></tr><tr><td>status</td><td><code>pending</code> / <code>approved</code> / <code>rejected</code> / <code>canceled</code></td></tr><tr><td>created_at</td><td>提交时间，列表按它倒序</td></tr></tbody></table></div>
+<p>照片同理：上传后库里只留路径，展示时再换一个<strong>限时签名地址</strong>。对象桶不是公开读的，路径拿到手也打不开。</p>
+
+<h2 id="visual">三 · 图是怎么来的</h2>
+<p>山门图、四张「山中四事」底纹、五门课业符号，全部由本地 ComfyUI 的 Z-Image Turbo 出图，符号再经 BiRefNet 去背成 108×108 透明 PNG。没有一张是从素材站找的，也没有用代码画几何图形凑。</p>
+<div class="callout callout--tip"><svg width="16" height="16" aria-hidden="true"><use href="#i-tip"/></svg><p><strong>颜色只能靠正向词收</strong>：Z-Image 没有负向提示词。第一版山门图正向里写了 <code>jade-green</code>，出来是一片亮翡翠绿——想压成水墨青灰，只能把 <code>muted slate blue-grey</code>、<code>charcoal ink</code>、<code>qinglu shanshan</code> 这类词写进正向，靠「缺少负向」是压不住的。</p></div>
+<div class="callout callout--warn"><svg width="16" height="16" aria-hidden="true"><use href="#i-warn"/></svg><p><strong>小程序 <code>image</code> 组件没有 <code>object-position</code></strong>：四张底纹原图是 2:1，卡片框是 1.25:1。Web 那边可以 <code>cover</code> + 居底把树留着，小程序里没法指定，只能<strong>提前把图裁成卡片比例</strong>，四张统一 1.25:1 后用 <code>aspectFill</code> 铺满，零裁切。先算比例再改样式，能省掉一轮重画。</p></div>
+<p>符号这条链是三段：出图（768²、统一「古金单色线描、纯白底」）→ 去背（BiRefNet，2–4 秒一张）→ 归一化（取 alpha 边界框，居中贴到 86% 画布，再 LANCZOS 缩到 108×108）。最后一步不是审美调整，是让五门符号在列表里<strong>视觉大小一致</strong>。</p>
+
+<h2 id="ship">四 · 发布与包体</h2>
+<div class="code"><div class="code__bar"><span class="code__lang">text</span><button class="code__copy" type="button" data-copy>复制</button></div><pre><code>源码（4 页 + api/utils + assets）
+  ↓
+云服务开通：PostgreSQL + 对象存储 + 微信登录
+  ↓
+建表建策略（串行执行）
+  ↓
+miniprogram_npm 预置 SDK
+  ↓
+上传 → 体验版 → 提审 → 发布</code></pre></div>
+<div class="tbl"><table><thead><tr><th>环节</th><th>关键点</th></tr></thead><tbody><tr><td>云数据库</td><td>建表必须串行：<code>enrollments</code> 带外键，和 <code>activities</code> 并发送会报 <code>DATABASE_42P01</code></td></tr><tr><td>SDK</td><td>把 <code>miniprogram_dist/</code> 里的 SDK 直接放进 <code>miniprogram_npm/</code>，等于手工完成一次「构建 npm」，不装开发者工具也能发布</td></tr><tr><td>tabBar 图标</td><td>Pillow 按 324px 设计稿画完降采样到 81px；坐标空间必须和画布尺寸一致，否则画出画布外、只剩一张空图</td></tr><tr><td>包体</td><td>470KB，其中图片 204KB；所有照片走云存储，不进包</td></tr></tbody></table></div>
+
+<h2 id="fail">失败会怎样</h2>
+<ul>
+<li><strong>活动数据取不到</strong>：首页与详情各自显示失败文案并有「重新加载」，其余 tab 仍可用。</li>
+<li><strong>静默登录失败</strong>：只写一条日志，不影响浏览；报名和记录页会出登录按钮。</li>
+<li><strong>重复报名</strong>：唯一约束报 <code>23505</code>，前端翻译成「你已提交过本期报名」并刷新已有记录，不是一句数据库错误。</li>
+<li><strong>截止或满额</strong>：提交前先判断倒计时与剩余名额，不让用户填完整张表才被拒。</li>
+<li><strong>照片上传失败</strong>：提示可以直接跳过，<code>photo_path</code> 允许为空，不卡住报名。</li>
+<li><strong>时区</strong>：所有日期统一按东八区格式化，避免真机时区不同导致「截止日差一天」。</li>
+</ul>
+
+<h2 id="faq">常见问题</h2>
+<details class="faq"><summary>为什么报名表不让前端传 owner_id？</summary><div class="faq__body"><p>一旦前端能指定归属，改个请求就能替别人报名、或者把记录写到别人名下。交给数据库默认值写 <code>auth.uid()</code>，前端连这个字段都不出现，越权入口从根上没有。</p></div></details>
+<details class="faq"><summary>报名人数为什么要单独写个函数？</summary><div class="faq__body"><p>直接查 <code>enrollments</code> 的 count 需要给对方读全表的权限，等于公开所有人的手机号。函数用 <code>SECURITY DEFINER</code> 在库内部聚合，只返回整数；先 <code>REVOKE PUBLIC</code> 再显式授权，避免默认继承来的调用权。</p></div></details>
+<details class="faq"><summary>底纹为什么不能像网页那样「居中偏下裁」？</summary><div class="faq__body"><p>小程序 <code>image</code> 组件只支持几种 <code>mode</code>，没有 <code>object-position</code>。<code>aspectFill</code> 一定居中裁，想要「留树梢」只能把图先裁成目标比例。这也是为什么四张底纹进包前都过了一遍裁切，而不是在样式里调。</p></div></details>
+<details class="faq"><summary>真机没跑过，这算做完了吗？</summary><div class="faq__body"><p>静态这一层是做完了：全部 JS 过 <code>node --check</code>，JSON 可解析，页面与资源引用齐备，WXML 标签配对平衡。但<strong>编译、真机登录、报名写入回读</strong>这三件必须在小程序环境里才能验，本机跑不了。所以状态是「代码完结、待真机核验」，不是「已上线」。</p></div></details>
+<details class="faq"><summary>包体为什么只有 470KB？</summary><div class="faq__body"><p>图片全部重新压过：四张底纹共 72KB，五门符号 4.9–13KB 一个，tabBar 图标是 81px 小图。用户上传的照片根本不进包——它走云存储，包里只有一条路径。</p></div></details>
+
+<h2 id="log">更新记录</h2>
+<ul><li><strong>v1.0</strong> — 四页 + 微信登录 + 云数据库与云存储打通，报名可提交、可查、可取消</li><li><strong>v0.9</strong> — 五门课业符号接入页面，未登记的课业回落成菱形点，不破图</li><li><strong>v0.8</strong> — 四事卡片铺上图，底纹统一预裁 1.25:1</li><li><strong>v0.5</strong> — 课业由「御剑」改为「打坐」，与「剑道」不再重复</li></ul>
+
+        </div>
+      </article>
+    </div>
+  </div>
+  <nav class="pager" aria-label="作品翻页">
+    <a class="prev" href="../daily-pipeline/index.html"><span>← 上一件</span><strong>n8n 日报流水线</strong></a>
+    <a class="next" href="../net-doctor/index.html"><span>下一件 →</span><strong>断网自动修复</strong></a>
+  </nav>
+</main>
+
+<footer class="foot">
+  <div class="foot__inner container">
+    <p>© 2026 · 用 HTML 与 CSS 手写 · 托管于 GitHub Pages</p>
+    <nav class="foot__links" aria-label="页脚导航">
+      <a href="../../index.html#works">作品</a>
+      <a href="../../index.html#about">关于</a>
+      <a href="mailto:you@example.com">邮件</a>
+    </nav>
+  </div>
+</footer>
+
+<script src="../../assets/js/main.js" defer></script>
+<script src="../../assets/js/doc.js" defer></script>
+</body>
+</html>

@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="zh-CN" data-theme="light">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>护眼提醒 · 个人作品集</title>
+<meta name="description" content="盯盘场景的护眼提醒：六个 Windows 系统级定时任务，到点在屏幕右下角弹一张三秒自动消失的卡片，不依赖任何常驻软件。">
+<meta name="theme-color" content="#F6F4EF" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#0F1116" media="(prefers-color-scheme: dark)">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='8' fill='%231B4DFF'/%3E%3Crect x='8' y='8' width='16' height='16' rx='4' fill='%23FFD400'/%3E%3C/svg%3E">
+<link rel="stylesheet" href="../../assets/css/tokens.css">
+<link rel="stylesheet" href="../../assets/css/main.css">
+<link rel="stylesheet" href="../../assets/css/work.css">
+</head>
+<body style="--c1:#FFD400; --c2:#FF4D2E">
+
+<a class="skip" href="#main">跳到正文</a>
+
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <symbol id="i-moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8Z"/>
+  </symbol>
+  <symbol id="i-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+    <circle cx="12" cy="12" r="4"/>
+    <path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"/>
+  </symbol>
+  <symbol id="i-info" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round">
+    <circle cx="12" cy="12" r="9"/><path d="M12 11v5"/><path d="M12 8h.01"/>
+  </symbol>
+  <symbol id="i-warn" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M12 3 2.5 20h19L12 3Z"/><path d="M12 9v5"/><path d="M12 17h.01"/>
+  </symbol>
+  <symbol id="i-tip" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M9 18h6"/><path d="M10 21h4"/>
+    <path d="M12 3a6 6 0 0 0-3.6 10.8c.5.4.8 1 .8 1.7V16h5.6v-.5c0-.7.3-1.3.8-1.7A6 6 0 0 0 12 3Z"/>
+  </symbol>
+</svg>
+
+<header class="nav">
+  <div class="nav__inner container">
+    <a class="brand" href="../../index.html">
+      <span class="brand__mark" aria-hidden="true"></span>
+      <span>名字</span>
+    </a>
+    <button class="theme-toggle" data-theme-toggle aria-pressed="false" aria-label="切换主题">
+      <svg width="17" height="17" aria-hidden="true"><use href="#i-moon"/></svg>
+    </button>
+  </div>
+</header>
+
+<main class="doc container" id="main">
+  <nav class="crumbs" aria-label="面包屑">
+    <a href="../../index.html">主页</a><span class="sep">/</span>
+    <a href="../../index.html#tools">小工具</a><span class="sep">/</span>
+    <span aria-current="page">护眼提醒</span>
+  </nav>
+
+  <header class="doc__head">
+    <p class="eyebrow">工具 · 2026</p>
+    <h1>护眼提醒</h1>
+    <p class="doc__tagline">盯盘盯到下午，最先撑不住的是眼睛。这套提醒不常驻、不开窗口、不占托盘，只靠六个 Windows 定时任务，到点在屏幕右下角弹一张三秒就走的卡片。</p>
+    <div class="doc__meta">
+      <div class="badges">
+        <span class="badge badge--ver">2026-08</span>
+        <span class="badge"><i class="badge__dot" style="background:var(--c2)"></i>Windows 定时任务</span>
+        <span class="badge"><i class="badge__dot" style="background:var(--pop-b)"></i>常驻进程 0</span>
+        <span class="badge"><i class="badge__dot" style="background:var(--c1)"></i>不联网</span>
+      </div>
+    </div>
+  </header>
+
+  <div class="doc__grid">
+    <aside class="toc">
+      <p class="toc__label">本页目录</p>
+      <ol class="toc__list" data-toc-list><li><a href="#what">这是什么</a></li><li><a href="#popup">弹窗长什么样</a></li><li><a href="#when">提醒时刻</a></li><li><a href="#quiet">全屏时不打扰</a></li><li><a href="#edge">限制与代价</a></li></ol>
+      <dl class="toc__meta">
+        <div><dt>形态</dt><dd>本地脚本</dd></div>
+        <div><dt>触发</dt><dd>6 个计划任务</dd></div>
+      </dl>
+    </aside>
+
+    <div class="doc__col">
+      <div class="doc__actions">
+        <a class="dbtn dbtn--ghost" href="../../index.html#tools">返回主页</a>
+        <span class="dbtn dbtn--off" title="本项目暂不提供公开源码">源码暂不提供</span>
+      </div>
+
+      <article class="doc__card">
+      <div class="md" data-article>
+        <h2 id="what">这是什么</h2>
+<p>长时间盯盘的人有个共同毛病：看得进去的时候不觉得，等到眼睛发胀、发干、看远处发虚，已经是几个小时后了。定时提醒软件不少，但大多数要一直开着窗、占着托盘，某天忘了开就等于没有。</p>
+<p>这套做法反过来：提醒本身交给 Windows 的任务计划程序，<strong>开机就生效，不依赖任何软件是否在运行、也不依赖我记不记得打开它</strong>。每次触发只做一件事——调一个几十行的小脚本，在右下角弹一张卡片，3 秒后自己消失，进程跟着退出。</p>
+<p>文案不是统一的「该休息了」，而是按场景分开写：午间是热敷加散步，收盘是立刻出门看远，睡前是热敷加穴位按摩。哪句话在哪个时刻说，是这套提醒里唯一需要认真设计的东西。</p>
+
+        <h2 id="popup">弹窗长什么样</h2>
+<figure class="shot shot--img shot--sm"><img src="./img/01-popup.png" alt="护眼提醒弹窗：深色圆角卡片，蓝色竖条、20-20-20 护眼标题、一行正文与底部进度条" width="380" height="99"><figcaption>盘中的 20-20-20 提醒：左侧蓝条标类别，标题点明主题，正文一句话说该做什么，底部细进度条就是剩余时间</figcaption></figure>
+<p>卡片是无边框置顶窗口（Tkinter 自绘），靠 DWM 的圆角偏好做圆角，贴在<strong>工作区</strong>右下角、距边 16 像素——不是屏幕角，任务栏高度变了它也贴得准。</p>
+<p>几个细节都是被日常用出来的：</p>
+<div class="tbl"><table><thead><tr><th>细节</th><th>为什么这么设计</th></tr></thead><tbody><tr><td>不抢焦点</td><td>窗口带 <code>WS_EX_NOACTIVATE</code> 与 <code>WS_EX_TOOLWINDOW</code>，弹出时当前输入框的光标不会跳走，盘中填单不会被打断</td></tr><tr><td>3 秒自动走</td><td>显示 3 秒，底部一条 3px 进度条走完渐隐关闭；嫌看不完点一下立刻关</td></tr><tr><td>自带提示音</td><td>两声上行短音（A5 → D6，约 0.4 秒）由脚本现生成 WAV 播放，不走系统声音方案——系统静音了也听得见</td></tr><tr><td>淡入淡出</td><td>0.2 秒淡入、0.3 秒淡出，不硬切，扫一眼不会觉得有东西在闪</td></tr></tbody></table></div>
+<div class="callout"><svg width="16" height="16" aria-hidden="true"><use href="#i-info"/></svg><p>整个脚本不读剪贴板、不记按键、不联网，也没有开机自启项——它只在被任务计划叫醒的那几秒钟里存在。</p></div>
+
+        <h2 id="when">提醒时刻</h2>
+<p>六个任务全部是「就绪」状态，触发时间按盯盘作息排，避开开盘竞价的混乱时段：</p>
+<div class="tbl"><table><thead><tr><th>任务</th><th>时间</th><th>说的是什么</th></tr></thead><tbody><tr><td>EyeCare-2020-Morning</td><td>10:00–11:30 每 20 分钟</td><td>20-20-20：看 6 米外远处 20 秒</td></tr><tr><td>EyeCare-1130-NoonCompress</td><td>每天 11:30</td><td>午间热敷 15 分钟，再出门走 10–15 分钟</td></tr><tr><td>EyeCare-2020-Afternoon</td><td>13:00–15:00 每 20 分钟</td><td>同上，下午场</td></tr><tr><td>EyeCare-1415-Flipper</td><td>每天 14:15</td><td>反转拍训练 5 分钟 + 掌心捂眼 30 秒</td></tr><tr><td>EyeCare-1500-Outdoor</td><td>每天 15:00</td><td>收盘立刻出门走 30 分钟看远处，不碰屏幕</td></tr><tr><td>EyeCare-2200-Bedtime</td><td>每天 22:00</td><td>睡前流程：热敷 + 按摩 + 远近交替；22:30 后不看屏幕</td></tr></tbody></table></div>
+<p>高频的两档用的是任务计划自带的重现设置（每 20 分钟一次，上午跑 90 分钟、下午跑 120 分钟），不是常驻循环——不触发的时候系统里什么都没有。</p>
+<div class="callout callout--tip"><svg width="16" height="16" aria-hidden="true"><use href="#i-tip"/></svg><p>15:00 那一档是全天最关键的：<strong>收盘立刻离开屏幕看远 30 分钟</strong>，效果抵得上白天所有护眼动作的总和。所以它的文案写得最不客气。</p></div>
+
+        <h2 id="quiet">全屏时不打扰</h2>
+<p>提醒最怕一种情况：正在全屏看盘、放片、开会，一张卡横在屏幕角上。所以脚本启动第一件事是判断前台窗口<strong>是否真的铺满整块显示器</strong>——不是看「最大化」，而是比对窗口矩形与显示器矩形四边。</p>
+<p>满屏时只播一声提示音、不弹卡片，也不补弹。这样既不打断全屏内容，又不至于彻底没动静：耳朵收到那一小声，就知道该抬头看看时间了。</p>
+
+        <h2 id="edge">限制与代价</h2>
+<p>这套东西是给自己用的，从没打算做成通用软件，所以取舍很直接：</p>
+<ul>
+<li><strong>没有设置界面</strong>：改时间、改文案要进任务计划程序或直接改脚本里的配置表，不适合分享给不碰命令行的人。</li>
+<li><strong>依赖本机 Python</strong>：任务调用的是 <code>pythonw.exe</code> 加脚本路径，Python 挪位置或卸载，提醒就静默失效（不会有任何报错提示）。</li>
+<li><strong>只针对一块屏</strong>：弹在系统工作区右下角，多屏时固定出现在主屏。</li>
+<li><strong>作息变了要手动调</strong>：这套时间表是照「8:30 起床、00:00 入睡」排的，换了作息得自己对着改。</li>
+</ul>
+<div class="callout callout--warn"><svg width="16" height="16" aria-hidden="true"><use href="#i-warn"/></svg><p>它的作用是<strong>提醒</strong>，不是治疗。眼睛已经出现持续胀痛、视物模糊或畏光，该做的是去眼科，而不是把提醒调得更勤。</p></div>
+
+      </div>
+      </article>
+    </div>
+  </div>
+
+  <nav class="pager" aria-label="作品翻页">
+    <a class="prev" href="../display-doctor/index.html"><span>← 上一件</span><strong>多屏设置</strong></a>
+    <a class="next" href="../zt-popup/index.html"><span>下一件 →</span><strong>涨停速览</strong></a>
+  </nav>
+</main>
+
+<footer class="foot">
+  <div class="foot__inner container">
+    <p>© 2026 · 用 HTML 与 CSS 手写 · 托管于 GitHub Pages</p>
+    <nav class="foot__links" aria-label="页脚导航">
+      <a href="../../index.html#works">作品</a>
+      <a href="../../index.html#about">关于</a>
+      <a href="mailto:you@example.com">邮件</a>
+    </nav>
+  </div>
+</footer>
+
+<script src="../../assets/js/main.js" defer></script>
+<script src="../../assets/js/doc.js" defer></script>
+</body>
+</html>

@@ -1,0 +1,265 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>今日日报 · 2026-10-22</title>
+<meta name="description" content="每日一期的简报：当日信息按重要性排序，标注主线、值得留意与可略过项。">
+<meta name="robots" content="noindex">
+
+<!-- ============================================================
+     本文件由 n8n 流每日自动覆盖（只保留最新一期）。
+     首页 Hero 右侧的「今日日报」卡固定指向 ./reports/latest.html。
+     下面这份是版式示例，n8n 产出时整体替换 <body> 内容即可，
+     样式已内联，不依赖站点的任何 css 文件。
+     ============================================================ -->
+
+<style>
+  :root {
+    --bg: #F6F4EF;
+    --ink: #14161A;
+    --ink-2: #50555F;
+    --ink-3: #8A8F99;
+    --line: #DCD6CA;
+    --brand: #1B4DFF;
+    --red: #FF4D2E;
+  }
+
+  * { box-sizing: border-box; }
+
+  html { -webkit-text-size-adjust: 100%; }
+
+  body {
+    margin: 0;
+    background: var(--bg);
+    color: var(--ink);
+    font-family: "PingFang SC", "Microsoft YaHei", "Hiragino Sans GB", system-ui, sans-serif;
+    font-size: 15px;
+    line-height: 1.8;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  .serif {
+    font-family: "Source Han Serif SC", "Noto Serif SC", "Songti SC", "SimSun", Georgia, serif;
+  }
+
+  .wrap {
+    max-width: 1060px;
+    margin: 0 auto;
+    padding: 0 clamp(20px, 5vw, 48px) 72px;
+  }
+
+  /* ---------- 顶部返回条 ---------- */
+  .topbar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+    padding: 18px 0;
+    border-bottom: 1px solid var(--line);
+    font-size: 12px;
+    letter-spacing: .04em;
+    color: var(--ink-3);
+  }
+
+  .topbar a {
+    color: var(--ink-2);
+    text-decoration: none;
+    border-bottom: 1px solid transparent;
+    transition: color .2s, border-color .2s;
+  }
+
+  .topbar a:hover { color: var(--brand); border-bottom-color: var(--brand); }
+
+  /* ---------- 报头 ---------- */
+  .masthead {
+    padding: clamp(28px, 5vw, 52px) 0 18px;
+    border-bottom: 3px double var(--ink);
+    text-align: center;
+  }
+
+  .masthead h1 {
+    margin: 0;
+    font-size: clamp(2.4rem, 6.6vw, 4.4rem);
+    font-weight: 900;
+    letter-spacing: .16em;
+    line-height: 1.1;
+    text-indent: .16em;
+  }
+
+  .masthead .sub {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-wrap: wrap;
+    gap: 10px;
+    margin-top: 14px;
+    font-size: 12px;
+    letter-spacing: .12em;
+    color: var(--ink-2);
+  }
+
+  .masthead .sub i {
+    width: 4px;
+    height: 4px;
+    border-radius: 50%;
+    background: var(--red);
+    display: inline-block;
+  }
+
+  /* ---------- 头条 ---------- */
+  .headline {
+    padding: clamp(26px, 4vw, 42px) 0 clamp(20px, 3vw, 30px);
+    border-bottom: 1px solid var(--line);
+    text-align: center;
+  }
+
+  .headline .kicker {
+    margin: 0 0 12px;
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: .22em;
+    color: var(--red);
+    text-transform: uppercase;
+  }
+
+  .headline h2 {
+    margin: 0;
+    font-size: clamp(1.7rem, 4.4vw, 2.9rem);
+    font-weight: 800;
+    letter-spacing: -.01em;
+    line-height: 1.28;
+  }
+
+  .headline .lede {
+    max-width: 42em;
+    margin: 16px auto 0;
+    font-size: 15px;
+    line-height: 1.9;
+    color: var(--ink-2);
+  }
+
+  /* ---------- 三栏正文 ---------- */
+  .story {
+    margin-top: clamp(24px, 3.4vw, 36px);
+    column-count: 3;
+    column-gap: 32px;
+    column-rule: 1px solid var(--line);
+    font-size: 14.6px;
+    line-height: 1.95;
+    text-align: justify;
+  }
+
+  .story h3 {
+    margin: 0 0 8px;
+    font-size: 1.05rem;
+    font-weight: 800;
+    letter-spacing: .02em;
+    break-after: avoid;
+  }
+
+  .story h3::before {
+    content: "";
+    display: block;
+    width: 22px;
+    height: 3px;
+    margin-bottom: 10px;
+    background: var(--brand);
+  }
+
+  .story p {
+    margin: 0 0 14px;
+    text-indent: 2em;
+    break-inside: avoid;
+  }
+
+  .story > p:first-of-type {
+    text-indent: 0;
+    padding-left: 12px;
+    border-left: 3px solid var(--brand);
+    color: var(--ink);
+  }
+
+  /* ---------- 结尾说明 ---------- */
+  .colophon {
+    margin-top: clamp(30px, 4vw, 44px);
+    padding-top: 16px;
+    border-top: 3px double var(--ink);
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px 24px;
+    justify-content: space-between;
+    font-size: 11.5px;
+    letter-spacing: .06em;
+    color: var(--ink-3);
+  }
+
+  .colophon a { color: var(--ink-2); text-decoration: none; border-bottom: 1px solid var(--line); }
+  .colophon a:hover { color: var(--brand); border-bottom-color: var(--brand); }
+
+  @media (max-width: 860px) {
+    .story { column-count: 2; }
+  }
+
+  @media (max-width: 560px) {
+    body { font-size: 14.5px; }
+    .story { column-count: 1; font-size: 14.6px; }
+    .story h3::before { width: 18px; }
+    .masthead h1 { letter-spacing: .1em; text-indent: .1em; }
+  }
+</style>
+</head>
+<body>
+
+<div class="wrap">
+
+  <div class="topbar">
+    <a href="../index.html">← 返回主页</a>
+    <span>每日 07:00 自动更新 · 仅保留最新一期</span>
+  </div>
+
+  <header class="masthead serif">
+    <h1>今日日报</h1>
+    <p class="sub">
+      <span>2026 年 10 月 22 日</span>
+      <i aria-hidden="true"></i>
+      <span>星期四</span>
+      <i aria-hidden="true"></i>
+      <span>总第 001 期</span>
+    </p>
+  </header>
+
+  <section class="headline">
+    <p class="kicker">今日头条</p>
+    <h2 class="serif">当日信息，<br>按重要性排序</h2>
+    <p class="lede">
+      日报不做新闻搬运，只做排序与取舍：哪些构成主线，哪些值得留意，哪些可以略过。
+      版式每日一致，内容每日重排，便于横向比对。
+    </p>
+  </section>
+
+  <article class="story">
+
+    <h3>一 · 本期主线</h3>
+    <p>信息过载的实质并非内容过多，而是缺少排序。同一条消息对不同读者的权重差异极大：于一人是噪音，于另一人则是必须即刻处置的信号。日报的作用，是把这套排序固定为可复核的规则，使判断有据可依，不必每日从头权衡。</p>
+    <p>本期几条线索指向同一趋势：变化正从「新闻事件」下沉为「日常条件」。一项技术不再需要被解释即可投入使用时，才真正开始改变工作方式。这一过程通常没有发布会，也没有节点式宣告，但其影响较任何一次高调亮相更为持久。</p>
+
+    <h3>二 · 值得留意</h3>
+    <p>值得留意的信号往往不具备新闻形态：某个环节的耗时骤然下降，或原本需要半日的工作压缩至十分钟。此类变化不会进入头条，却常在一两个月后表现为「局面骤然改变」的错觉。</p>
+    <p>与之相对，被反复强调的趋势通常已越过价值窗口。判断一条信息是否仍然有效，可依一个简单标准：若它已成共识，其能带来的信息差已所剩无几。</p>
+
+    <h3>三 · 一条判断</h3>
+    <p>注意力应放在「此刻可动手之处」，而非「正在被讨论之处」。前者产生结果，后者消耗时间。信息密度越高，这条原则越有效——可讨论的总多于可动手的。</p>
+    <p>下一期同日 07:00 更新。</p>
+
+  </article>
+
+  <footer class="colophon">
+    <span>本页由 n8n 自动生成 · 每日覆盖 latest.html</span>
+    <span><a href="../index.html">返回主页</a></span>
+  </footer>
+
+</div>
+
+</body>
+</html>

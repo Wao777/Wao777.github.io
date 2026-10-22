@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="zh-CN" data-theme="light">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>涨停速览 · 个人作品集</title>
+<meta name="description" content="盘中盯 A 股涨停板的桌面提醒：只在首次上板时弹一次卡片，右下角 3 秒自动关闭，不刷屏、不重复，免安装单文件。">
+<meta name="theme-color" content="#F6F4EF" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#0F1116" media="(prefers-color-scheme: dark)">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='8' fill='%231B4DFF'/%3E%3Crect x='8' y='8' width='16' height='16' rx='4' fill='%23FFD400'/%3E%3C/svg%3E">
+<link rel="stylesheet" href="../../assets/css/tokens.css">
+<link rel="stylesheet" href="../../assets/css/main.css">
+<link rel="stylesheet" href="../../assets/css/work.css">
+</head>
+<body style="--c1:#FF4D2E; --c2:#FFD400">
+
+<a class="skip" href="#main">跳到正文</a>
+
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <symbol id="i-moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8Z"/>
+  </symbol>
+  <symbol id="i-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+    <circle cx="12" cy="12" r="4"/>
+    <path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"/>
+  </symbol>
+  <symbol id="i-info" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round">
+    <circle cx="12" cy="12" r="9"/><path d="M12 11v5"/><path d="M12 8h.01"/>
+  </symbol>
+  <symbol id="i-warn" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M12 3 2.5 20h19L12 3Z"/><path d="M12 9v5"/><path d="M12 17h.01"/>
+  </symbol>
+  <symbol id="i-tip" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M9 18h6"/><path d="M10 21h4"/>
+    <path d="M12 3a6 6 0 0 0-3.6 10.8c.5.4.8 1 .8 1.7V16h5.6v-.5c0-.7.3-1.3.8-1.7A6 6 0 0 0 12 3Z"/>
+  </symbol>
+</svg>
+
+<header class="nav">
+  <div class="nav__inner container">
+    <a class="brand" href="../../index.html">
+      <span class="brand__mark" aria-hidden="true"></span>
+      <span>名字</span>
+    </a>
+    <button class="theme-toggle" data-theme-toggle aria-pressed="false" aria-label="切换主题">
+      <svg width="17" height="17" aria-hidden="true"><use href="#i-moon"/></svg>
+    </button>
+  </div>
+</header>
+
+<main class="doc container" id="main">
+  <nav class="crumbs" aria-label="面包屑">
+    <a href="../../index.html">主页</a><span class="sep">/</span>
+    <a href="../../index.html#tools">小工具</a><span class="sep">/</span>
+    <span aria-current="page">涨停速览</span>
+  </nav>
+
+  <header class="doc__head">
+    <p class="eyebrow">工具 · 2026</p>
+    <h1>涨停速览</h1>
+    <p class="doc__tagline">盘中想知道谁刚上板，又不想一直盯着涨停池列表翻页：它只在某只票「首次」封板那一刻弹一张卡，3 秒自己关掉，同一只再炸再封都不重复喊。</p>
+    <div class="doc__meta">
+      <div class="badges">
+        <span class="badge badge--ver">v1.0.0</span>
+        <span class="badge"><i class="badge__dot" style="background:var(--c2)"></i>MIT</span>
+        <span class="badge"><i class="badge__dot" style="background:var(--pop-b)"></i>Windows · 单文件免安装</span>
+        <span class="badge"><i class="badge__dot" style="background:var(--c1)"></i>东方财富公开接口</span>
+      </div>
+    </div>
+  </header>
+
+  <div class="doc__grid">
+    <aside class="toc">
+      <p class="toc__label">本页目录</p>
+      <ol class="toc__list" data-toc-list><li><a href="#what">这是什么</a></li><li><a href="#ui">界面</a></li><li><a href="#once">只喊一次怎么做到</a></li><li><a href="#data">数据与容错</a></li><li><a href="#edge">边界与免责</a></li></ol>
+      <dl class="toc__meta">
+        <div><dt>形态</dt><dd>桌面工具</dd></div>
+        <div><dt>许可</dt><dd>MIT</dd></div>
+      </dl>
+    </aside>
+
+    <div class="doc__col">
+      <div class="doc__actions">
+        <a class="dbtn dbtn--ghost" href="../../index.html#tools">返回主页</a>
+        <a class="dbtn dbtn--ghost" href="https://github.com/Wao777/zt-popup" target="_blank" rel="noopener" title="将跳转到 GitHub 仓库（新窗口）">源码 · GitHub ↗</a>
+      </div>
+
+      <article class="doc__card">
+      <div class="md" data-article>
+        <h2 id="what">这是什么</h2>
+<p>看涨停板的痛点不是「看不到」，而是「看不过来」：池子几十上百只，每隔几秒就有新的封板、炸板、回封。真正值得抬头的只有一件事——<strong>某只票在这一刻第一次上板</strong>。其余的都是噪音。</p>
+<p>这个工具就只做这一件事：交易日 09:26 先采一次竞价涨停当基准，09:30–14:57 每 5 秒扫一遍涨停池，发现新面孔就弹一张卡，告诉你名字、板数与封单额，右下角 3 秒后自动关闭。14:57 自己收工，不留后台进程。</p>
+<div class="callout"><svg width="16" height="16" aria-hidden="true"><use href="#i-info"/></svg><p>免安装：Release 里下 <code>ZTPopup.exe</code> 双击即用，不需要装 Python，不会弹出黑框，也不写注册表、不加开机自启。</p></div>
+
+        <h2 id="ui">界面</h2>
+<figure class="shot shot--img shot--sm"><img src="./img/01-toast.png" alt="涨停提醒卡片：华媒控股 首板，封单 8777 万，原因 广告营销" width="288" height="136"><figcaption>盘中首次上板的提醒卡（工作区右下角）：名字与板数一行，封单额一行，所属题材一行</figcaption></figure>
+<p>卡片只放三行有用信息：<strong>股票名 + 板数标记</strong>（首板 / 二板…）、<strong>封单金额</strong>、<strong>上涨原因或所属题材</strong>。深色底、红字标板数，扫一眼就知道要不要回头看盘。</p>
+<p>另有一个常驻的<strong>状态小窗</strong>，比卡片更安静，但随时能确认它还在干活：当前处于哪个阶段（竞价 / 盘中 / 已收盘）、数据是哪一天的、涨停池现在多少只、今天已经提示过几次、上次扫描时间。任务栏也有图标，程序在不在跑一眼可见。</p>
+<p>非交易日打开会直接写明「今日休市，不会有盘中数据」，不会让人干等一个永远不会来的弹窗。</p>
+
+        <h2 id="once">只喊一次怎么做到</h2>
+<p>「不重复、不刷屏」是这工具唯一值得说的设计，规则写死成四条：</p>
+<div class="tbl"><table><thead><tr><th>场景</th><th>行为</th></tr></thead><tbody><tr><td>竞价阶段（09:30 前）已涨停</td><td>只记入基准名单，<strong>不提示</strong>；盘中即使炸板回封也不提示</td></tr><tr><td>同一只票炸板 → 回封 → 再炸</td><td>全程只弹最初那一次，后续一律静默</td></tr><tr><td>盘中中途才打开程序</td><td>先把当前已涨停的全部静默记入，只提示之后新上板的</td></tr><tr><td>14:57 以后</td><td>自动结束进程，不再扫描</td></tr></tbody></table></div>
+<p>换句话说，它把「已经发生过的」和「刚发生的」严格分开——不会因为你开得晚就补发一串轰炸，也不会因为一次回封把早就看过的票再喊一遍。</p>
+<div class="callout callout--tip"><svg width="16" height="16" aria-hidden="true"><use href="#i-tip"/></svg><p>单实例保护：重复双击只会提示「已在运行」，不会开出第二个进程抢同一个数据源。</p></div>
+
+        <h2 id="data">数据与容错</h2>
+<p>数据来自东方财富的涨停板池接口（<code>getTopicZTPool</code>），免费、无需 token、盘中准实时。请求失败按 2 / 5 / 8 秒退避重试，三次都失败就降级用上次缓存渲染，不会崩窗、也不会弹一堆错误框烦人。</p>
+<p>源码运行需要 Python 3.9+ 且解释器带 tkinter；也可以加 <code>--demo</code> 用最近交易日的真实数据演示一次弹窗，不用等开盘。</p>
+
+        <h2 id="edge">边界与免责</h2>
+<p>它是个提醒器，不是决策工具。看得到「谁刚上板」不等于看得到「该不该跟」——封单额会撤，题材会熄火，这些都是卡片给不了的信息。</p>
+<div class="callout callout--warn"><svg width="16" height="16" aria-hidden="true"><use href="#i-warn"/></svg><p><strong>本工具仅作行情信息展示与提醒</strong>，数据来自公开接口，可能存在延迟或缺失，<strong>不构成任何投资建议</strong>。市场有风险，投资需谨慎。</p></div>
+<ul>
+<li>只读公开行情接口，不接入任何交易通道，不下单、不修改账户。</li>
+<li>不采集、不上传本机任何信息；退出即结束，不留驻留进程。</li>
+<li>接口若变更或限流，提醒会失效——这类外部依赖不在可控范围内。</li>
+</ul>
+
+      </div>
+      </article>
+    </div>
+  </div>
+
+  <nav class="pager" aria-label="作品翻页">
+    <a class="prev" href="../eye-care/index.html"><span>← 上一件</span><strong>护眼提醒</strong></a>
+    <a class="next" href="../content-hub/index.html"><span>下一件 →</span><strong>内容聚合 · 一个窗口</strong></a>
+  </nav>
+</main>
+
+<footer class="foot">
+  <div class="foot__inner container">
+    <p>© 2026 · 用 HTML 与 CSS 手写 · 托管于 GitHub Pages</p>
+    <nav class="foot__links" aria-label="页脚导航">
+      <a href="../../index.html#works">作品</a>
+      <a href="../../index.html#about">关于</a>
+      <a href="mailto:you@example.com">邮件</a>
+    </nav>
+  </div>
+</footer>
+
+<script src="../../assets/js/main.js" defer></script>
+<script src="../../assets/js/doc.js" defer></script>
+</body>
+</html>

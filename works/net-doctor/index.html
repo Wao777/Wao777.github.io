@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="zh-CN" data-theme="light">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>断网自动修复 · 个人作品集</title>
+<meta name="description" content="Windows 断网诊断与修复工具：先判定断在哪一环，再备份配置、按需修复、修完复测，改错了可回滚。">
+<meta name="theme-color" content="#F6F4EF" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#0F1116" media="(prefers-color-scheme: dark)">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='8' fill='%231B4DFF'/%3E%3Crect x='8' y='8' width='16' height='16' rx='4' fill='%23FFD400'/%3E%3C/svg%3E">
+<link rel="stylesheet" href="../../assets/css/tokens.css">
+<link rel="stylesheet" href="../../assets/css/main.css">
+<link rel="stylesheet" href="../../assets/css/work.css">
+</head>
+<body style="--c1:#12D6A0; --c2:#1B4DFF">
+
+<a class="skip" href="#main">跳到正文</a>
+
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <symbol id="i-moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8Z"/>
+  </symbol>
+  <symbol id="i-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+    <circle cx="12" cy="12" r="4"/>
+    <path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"/>
+  </symbol>
+  <symbol id="i-info" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round">
+    <circle cx="12" cy="12" r="9"/><path d="M12 11v5"/><path d="M12 8h.01"/>
+  </symbol>
+  <symbol id="i-warn" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M12 3 2.5 20h19L12 3Z"/><path d="M12 9v5"/><path d="M12 17h.01"/>
+  </symbol>
+  <symbol id="i-tip" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M9 18h6"/><path d="M10 21h4"/>
+    <path d="M12 3a6 6 0 0 0-3.6 10.8c.5.4.8 1 .8 1.7V16h5.6v-.5c0-.7.3-1.3.8-1.7A6 6 0 0 0 12 3Z"/>
+  </symbol>
+</svg>
+
+<header class="nav">
+  <div class="nav__inner container">
+    <a class="brand" href="../../index.html">
+      <span class="brand__mark" aria-hidden="true"></span>
+      <span>名字</span>
+    </a>
+    <button class="theme-toggle" data-theme-toggle aria-pressed="false" aria-label="切换主题">
+      <svg width="17" height="17" aria-hidden="true"><use href="#i-moon"/></svg>
+    </button>
+  </div>
+</header>
+
+<main class="doc container" id="main">
+  <nav class="crumbs" aria-label="面包屑">
+    <a href="../../index.html">主页</a><span class="sep">/</span>
+    <a href="../../index.html#tools">小工具</a><span class="sep">/</span>
+    <span aria-current="page">断网自动修复</span>
+  </nav>
+
+  <header class="doc__head">
+    <p class="eyebrow">工具 · 2026</p>
+    <h1>断网自动修复</h1>
+    <p class="doc__tagline">上不了网时不再靠重启和乱改设置：先判定断在哪一环，再备份、修复、复测，改错了能回滚。</p>
+    <div class="doc__meta">
+      <div class="badges">
+        <span class="badge badge--ver">v1.2.0</span>
+        <span class="badge"><i class="badge__dot" style="background:var(--c2)"></i>MIT</span>
+        <span class="badge"><i class="badge__dot" style="background:var(--pop-b)"></i>Windows 10 / 11</span>
+        <span class="badge"><i class="badge__dot" style="background:var(--c1)"></i>运行仅需标准库</span>
+      </div>
+    </div>
+  </header>
+
+  <div class="doc__grid">
+    <aside class="toc">
+      <p class="toc__label">本页目录</p>
+      <ol class="toc__list" data-toc-list><li><a href="#what">这是什么</a></li><li><a href="#ui">界面</a></li><li><a href="#diag">怎么判</a></li><li><a href="#fix">修复与回滚</a></li><li><a href="#cli">命令行</a></li><li><a href="#safety">安全与限制</a></li></ol>
+      <dl class="toc__meta">
+        <div><dt>形态</dt><dd>桌面工具</dd></div>
+        <div><dt>许可</dt><dd>MIT</dd></div>
+      </dl>
+    </aside>
+
+    <div class="doc__col">
+      <div class="doc__actions">
+        <a class="dbtn dbtn--ghost" href="../../index.html#tools">返回主页</a>
+        <a class="dbtn dbtn--ghost" href="https://github.com/Wao777/net-doctor" target="_blank" rel="noopener" title="将跳转到 GitHub 仓库（新窗口）">源码 · GitHub ↗</a>
+      </div>
+
+      <article class="doc__card">
+      <div class="md" data-article>
+        <h2 id="what">这是什么</h2>
+<p>电脑突然上不了网，常见做法是重启、重装驱动、见设置就改，往往越弄越糟。这个工具把「排查断网」拆成固定几步：先用分层探针判定当前是否正常、断在哪一环，再把 40 余项可能原因一次性列出来，按需勾选修复，修完自动复测。</p>
+<p>动手之前先把配置备份落盘，改坏了能一键还原。图形界面给日常用，命令行可脚本化、可输出 JSON。</p>
+<div class="callout"><svg width="16" height="16" aria-hidden="true"><use href="#i-info"/></svg><p>扫描阶段是<strong>只读</strong>的：遍历检查项时不改动任何系统设置，只有你勾选并确认后才执行修复动作。</p></div>
+
+        <h2 id="ui">界面</h2>
+<figure class="shot shot--img"><img src="./img/01-main.png" alt="网络健康时的主界面：顶部判定横幅、左侧原因列表、右侧处理方案、底部执行日志" width="1016" height="769"><figcaption>网络健康时：横幅直接给结论，配置类条目只以「提示」级列出，不打扰</figcaption></figure>
+<p>窗口分三块：顶部是判定横幅，颜色即结论（绿＝网络健康、橙＝能连网但上网受限、红＝完全断网），右侧标出故障范围；中部左列是「疑似断网原因」清单，带级别、分类与问题描述，勾选即代表要处理；右列「问题详情与处理方案」写判定依据、分步处理建议和仍可用的应用；底部执行日志按时间线记下每一层探针的结果。</p>
+<figure class="shot shot--img"><img src="./img/02-diagnose.png" alt="判定为域名解析故障时的界面：橙色横幅、DNS 相关条目被勾选、右侧给出分步处理建议" width="1016" height="769" loading="lazy"><figcaption>判定为域名解析故障：横幅点明「能上 QQ，却打不开网页」，并给出该形态专属的步骤</figcaption></figure>
+<p>判定到真实故障时，界面会指出断在哪一环，并给出该形态专属的处理步骤与建议勾选的修复动作——比如域名解析故障只需刷新缓存、切公共 DNS、还原 hosts，不必去动网卡。</p>
+
+        <h2 id="diag">怎么判</h2>
+<p>判定不靠猜，靠分层探针：本机协议栈 → 网关 → 公网 IP → DNS 解析 → DNS 服务器 → TCP 443 → HTTP → 浏览器路径 → MTU，哪一层断了就停在哪一层报原因，几秒内出结论。</p>
+<div class="tbl"><table><thead><tr><th>判定维度</th><th>输出</th></tr></thead><tbody><tr><td>健康度</td><td>网络健康 / 能连网但上网受限 / 完全断网，共 3 档</td></tr><tr><td>故障形态</td><td>9 种，各自带一套处理预案</td></tr><tr><td>浏览器路径</td><td>按系统代理实测「浏览器那条路」，区分「只是浏览器上不了网」与「整机全断」</td></tr><tr><td>提示级条目</td><td>实测正常时，hosts 自定义记录、静态 IP、代理、网卡节能等可能是你自己设置的项，只提示、不计入需处理</td></tr></tbody></table></div>
+<div class="callout"><svg width="16" height="16" aria-hidden="true"><use href="#i-tip"/></svg><p>健康度<strong>只由实测连通性决定</strong>。既然探针证明能上网，就不把「你可能是故意这么配的」当成故障，也不会自动勾选任何修复动作——避免把好配置改坏。</p></div>
+
+        <h2 id="fix">修复与回滚</h2>
+<p>17 个修复动作分两档。<strong>稳健档</strong>可逆、无需重启：刷新 DNS 缓存、复位代理设置、重新获取 IP、还原 hosts 等；<strong>进阶档</strong>是协议栈与防火墙重置，需要二次确认并重启。</p>
+<p>执行修复前，hosts、注册表代理设置、IP 配置、路由表、MTU、服务启动类型、网卡电源管理整体落盘到 <code>backups/&lt;时间戳&gt;/</code>，并写一份清单记录每项的来源与还原方式。备份不成功就不动手。</p>
+<p>修完自动复测。通了就报成功并给出备份路径；仍不通时，会先判断「已修复的项是否失效」——问题确实修好却还是上不了网，多半在线路、硬件或运营商侧，这时明确告知该找谁，而不是继续瞎改。</p>
+<div class="callout"><svg width="16" height="16" aria-hidden="true"><use href="#i-info"/></svg><p>回滚按备份清单逐项还原，可选任意历史备份点；界面按钮与 <code>--restore</code> 命令等价。</p></div>
+
+        <h2 id="cli">命令行</h2>
+<div class="tbl tbl--mono"><table><thead><tr><th>参数</th><th>作用</th></tr></thead><tbody><tr><td>（无参数）</td><td>打开图形界面</td></tr><tr><td>--quick</td><td>快速体检：秒级判定网络是否正常、断在哪一环</td></tr><tr><td>--scan</td><td>完整扫描并打印诊断结果，加 --fast 跳过慢检查</td></tr><tr><td>--fix</td><td>扫描后询问是否修复；加 --auto 则全自动不询问</td></tr><tr><td>--advanced</td><td>允许执行进阶修复（协议栈 / 防火墙重置）</td></tr><tr><td>--json -o 文件</td><td>输出 JSON，便于脚本消费</td></tr><tr><td>--restore [时间戳]</td><td>回滚最近一次或指定备份</td></tr><tr><td>--report-dir 目录</td><td>指定诊断报告输出目录</td></tr></tbody></table></div>
+<p>退出码：<code>0</code> 成功 / <code>1</code> 用户取消 / <code>2</code> 备份不存在 / <code>3</code> 回滚有失败项 / <code>4</code> 权限不足。每次运行还会生成 txt 与自包含 HTML 报告，便于留档或转给运维。</p>
+
+        <h2 id="safety">安全与限制</h2>
+<p>修复类操作需要管理员权限，程序会申请提权，并只在你确认后执行。</p>
+<div class="tbl"><table><thead><tr><th>设计</th><th>做法</th></tr></thead><tbody><tr><td>扫描零改动</td><td>全部检查项均为只读探测</td></tr><tr><td>先备份后修复</td><td>配置快照落盘成功才允许执行</td></tr><tr><td>动作分档</td><td>进阶档默认不勾选，需二次确认</td></tr><tr><td>不依赖高危工具</td><td>注册表走 winreg API、服务走 WMI / PowerShell，不调用 reg.exe、sc.exe</td></tr><tr><td>可回滚</td><td>备份清单记录每项来源与还原方式</td></tr></tbody></table></div>
+<p>已知限制：仅支持 Windows 10 / 11 及以上；网络状态采集优先用 PowerShell 的 NetTCPIP 模块，缺模块的老系统自动降级为 netsh 文本解析；上网行为管理、802.1X 准入认证、运营商侧故障无法从本机判定，工具会明确提示需要联系专业人员；未经代码签名时，个别杀毒软件可能对打包产物误报。</p>
+<div class="callout callout--warn"><svg width="16" height="16" aria-hidden="true"><use href="#i-warn"/></svg><p><strong>它会改系统设置</strong>。工具先备份、修复可回滚，但断网排查本身存在风险；公司或校园网环境请先问过网络管理员再动手。</p></div>
+<ol><li>只在本机运行，不收集、不上传任何设备信息；探针只做连通性检测。</li><li>不提供任何绕过网络管控、破解或侵入他人设备的能力，修复动作都是 Windows 自带能力的封装。</li><li>请自行评估使用风险，因修改网络配置造成的后果由使用者承担。</li></ol>
+
+      </div>
+      </article>
+    </div>
+  </div>
+
+  <nav class="pager" aria-label="作品翻页">
+    <a class="prev" href="../qingcheng/index.html"><span>← 上一件</span><strong>青城山招生小程序</strong></a>
+    <a class="next" href="../display-doctor/index.html"><span>下一件 →</span><strong>多屏设置</strong></a>
+  </nav>
+</main>
+
+<footer class="foot">
+  <div class="foot__inner container">
+    <p>© 2026 · 用 HTML 与 CSS 手写 · 托管于 GitHub Pages</p>
+    <nav class="foot__links" aria-label="页脚导航">
+      <a href="../../index.html#works">作品</a>
+      <a href="../../index.html#about">关于</a>
+      <a href="mailto:you@example.com">邮件</a>
+    </nav>
+  </div>
+</footer>
+
+<script src="../../assets/js/main.js" defer></script>
+<script src="../../assets/js/doc.js" defer></script>
+</body>
+</html>
