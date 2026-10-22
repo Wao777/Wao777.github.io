@@ -1,265 +1,381 @@
 <!DOCTYPE html>
 <html lang="zh-CN">
 <head>
-<meta charset="utf-8">
+<meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>今日日报 · 2026-10-22</title>
-<meta name="description" content="每日一期的简报：当日信息按重要性排序，标注主线、值得留意与可略过项。">
-<meta name="robots" content="noindex">
-
-<!-- ============================================================
-     本文件由 n8n 流每日自动覆盖（只保留最新一期）。
-     首页 Hero 右侧的「今日日报」卡固定指向 ./reports/latest.html。
-     下面这份是版式示例，n8n 产出时整体替换 <body> 内容即可，
-     样式已内联，不依赖站点的任何 css 文件。
-     ============================================================ -->
-
+<title>每日简报 · 2026-10-22</title>
 <style>
-  :root {
-    --bg: #F6F4EF;
-    --ink: #14161A;
-    --ink-2: #50555F;
-    --ink-3: #8A8F99;
-    --line: #DCD6CA;
-    --brand: #1B4DFF;
-    --red: #FF4D2E;
+*{margin:0;padding:0;box-sizing:border-box}
+body{
+  background:#B4AC99; color:#1A1A1A; font-family:"Songti SC","STSong","SimSun","Source Han Serif SC","Noto Serif SC",serif; line-height:1.6;
+  display:flex; flex-direction:column; align-items:center;
+  gap:0; padding:0;                    /* ← 无缝：纸与纸之间零间隙 */
+}
+:root{--red:#B7282E; --ink:#1A1A1A; --gray:#6B6459; --line:#CFC6B4; --line2:#8C8577; --body:#282828}
+
+/* ═══════════ 纸张：宽定、高自适应 + 对开比例保底 ═══════════ */
+.paper{
+  container-type:inline-size;
+  position:relative; flex:none;
+  width:min(96vw, 1560px);
+  min-height:min(66.46vw, 1080px);     /* 780×540mm 对开：高 = 宽 × 0.6923 */
+  background:#F4EFE3;
+  box-shadow:0 .18vw .5vw rgba(45,35,15,.14);
+}
+.paper + .paper{box-shadow:inset 0 .22cqw .55cqw rgba(60,48,25,.13), 0 .18vw .5vw rgba(45,35,15,.14)}
+.paper::before{
+  content:""; position:absolute; inset:0; pointer-events:none; z-index:0;
+  background-image:radial-gradient(rgba(122,100,64,.05) 1px, transparent 1px);
+  background-size:.28cqw .28cqw;
+}
+.paper::after{
+  content:""; position:absolute; inset:0; pointer-events:none; z-index:0;
+  background:radial-gradient(ellipse at 50% 0%, rgba(255,252,240,.5), transparent 55%);
+}
+.sheet{position:relative; z-index:1; padding:2cqw 2.6cqw 1.3cqw;
+  min-height:inherit; display:flex; flex-direction:column;}
+
+/* ═══════════ 报头 ═══════════ */
+.mast-head{
+  display:flex; justify-content:space-between; align-items:flex-end;
+  font-family:"PingFang SC","Microsoft YaHei","Hiragino Sans GB",sans-serif; font-size:.82cqw; letter-spacing:.16em; color:var(--gray);
+  padding-bottom:.45cqw;
+}
+.mast-head .c{color:var(--red); letter-spacing:.3em}
+.ruler{height:0; border-top:.24cqw solid var(--ink); border-bottom:.09cqw solid var(--ink)}
+.ruler.top{margin-bottom:.5cqw}
+.ruler.bot{border-top:.09cqw solid var(--ink); border-bottom:.24cqw solid var(--ink); margin-top:.5cqw}
+.logo-row{display:flex; align-items:center; justify-content:center; gap:1.6cqw; padding:.2cqw 0 .1cqw}
+.logo-side{flex:1; font-family:"PingFang SC","Microsoft YaHei","Hiragino Sans GB",sans-serif; font-size:.85cqw; line-height:1.7; color:var(--gray); letter-spacing:.1em}
+.logo-side.r{text-align:right}
+.logo-side b{display:block; color:var(--ink); font-weight:600; letter-spacing:.18em}
+.logo{font-weight:900; font-size:5.6cqw; line-height:1; letter-spacing:.24em; text-indent:.24em; white-space:nowrap}
+.logo em{
+  font-style:normal; color:var(--red); font-size:1.15cqw; letter-spacing:.3em;
+  display:block; text-align:center; margin-top:.5cqw; text-indent:0;
+}
+.mini-head{
+  display:flex; justify-content:space-between; align-items:baseline;
+  font-family:"PingFang SC","Microsoft YaHei","Hiragino Sans GB",sans-serif; font-size:.82cqw; letter-spacing:.14em; color:var(--gray);
+  padding-bottom:.5cqw;
+}
+.mini-head .nm{font-family:"Songti SC","STSong","SimSun","Source Han Serif SC","Noto Serif SC",serif; font-size:1.75cqw; font-weight:900; letter-spacing:.24em; color:var(--ink)}
+.mini-head .pb{color:var(--red); letter-spacing:.24em}
+
+/* 报头右侧天气框（竖框，可读性优于横条） */
+.weather{
+  flex:none; width:17.5cqw; border:.09cqw solid var(--line2);
+  padding:.7cqw .85cqw; background:rgba(255,255,255,.32);
+}
+.weather .w-tag{
+  font-family:"PingFang SC","Microsoft YaHei","Hiragino Sans GB",sans-serif; font-size:.7cqw; letter-spacing:.3em; color:var(--red);
+  border-bottom:.06cqw solid var(--line); padding-bottom:.3cqw; margin-bottom:.4cqw;
+}
+.weather .w-row{display:flex; align-items:baseline; justify-content:space-between; gap:.5cqw}
+.weather .w-city{font-size:1cqw; letter-spacing:.12em}
+.weather .w-temp{font-size:2cqw; line-height:1.12; font-weight:700}
+.weather .w-temp i{font-style:normal; font-size:.85cqw; font-weight:400; color:var(--red); margin-left:.35cqw}
+.weather .w-detail{
+  font-family:"PingFang SC","Microsoft YaHei","Hiragino Sans GB",sans-serif; font-size:.72cqw; color:var(--gray);
+  line-height:1.82; margin-top:.3cqw;
+}
+
+/* ═══════════ 头条 ═══════════ */
+.lead{padding:1.55cqw 0 1.25cqw; border-bottom:.24cqw double var(--line2)}
+.kicker{
+  display:inline-block; font-family:"PingFang SC","Microsoft YaHei","Hiragino Sans GB",sans-serif; font-size:.92cqw; font-weight:700; letter-spacing:.3em;
+  color:#fff; background:var(--red); padding:.24cqw .9cqw .24cqw 1.05cqw; margin-bottom:.65cqw;
+}
+.lead h2{font-size:2.9cqw; line-height:1.26; font-weight:900; margin-bottom:.6cqw}
+.lead h2 a{color:inherit; text-decoration:none}
+.lead h2 a:hover{color:var(--red)}
+/* 头条摘要：单栏通排（不分栏），字号加大加粗提高可读性 */
+.lead-body p{
+  font-size:1.28cqw; line-height:1.86; font-weight:500;
+  text-align:justify; text-indent:2em; color:#1E1E1E;
+}
+.lead-body p::first-letter{
+  float:left; font-size:4.2cqw; line-height:.9; font-weight:700; color:var(--red);
+  padding:.4cqw .6cqw 0 0; text-indent:0;
+}
+.byline{
+  font-family:"PingFang SC","Microsoft YaHei","Hiragino Sans GB",sans-serif; font-size:.78cqw; color:var(--gray);
+  letter-spacing:.06em; margin-top:.6cqw; padding-top:.45cqw; border-top:.06cqw dotted var(--line);
+}
+
+/* ═══════════ 对开双版：两版等高，版内撑满 ═══════════ */
+.spread{
+  display:grid; grid-template-columns:1fr 1fr; column-gap:2.4cqw;
+  position:relative; padding-top:1.1cqw; align-items:stretch; flex:1;
+}
+.spread::before{
+  content:""; position:absolute; top:1.1cqw; bottom:0; left:50%;
+  width:.05cqw; background:var(--line2); opacity:.45;
+}
+.page{min-width:0; display:flex; flex-direction:column; flex:1}
+
+/* 版头：主板块即版名 */
+.page-head{
+  display:flex; justify-content:space-between; align-items:baseline;
+  border-bottom:.2cqw solid var(--ink);
+  padding-bottom:.45cqw; margin-bottom:1.05cqw;
+}
+.ph-name{font-size:2.05cqw; font-weight:900; letter-spacing:.14em; line-height:1.2; white-space:nowrap}
+.ph-name::before{
+  content:""; display:inline-block; width:.55cqw; height:1.5cqw;
+  background:var(--red); margin-right:.7cqw; vertical-align:-.18cqw;
+}
+.ph-name i{
+  font-style:normal; font-family:"PingFang SC","Microsoft YaHei","Hiragino Sans GB",sans-serif; font-size:.76cqw; letter-spacing:.22em;
+  color:var(--line2); margin-left:.75cqw; font-weight:400;
+}
+.ph-name .cont{
+  font-family:"PingFang SC","Microsoft YaHei","Hiragino Sans GB",sans-serif; font-size:.82cqw; color:var(--red);
+  letter-spacing:.1em; margin-left:.5cqw; font-weight:400;
+}
+.ph-meta{
+  font-family:"PingFang SC","Microsoft YaHei","Hiragino Sans GB",sans-serif; font-size:.78cqw; color:var(--gray);
+  letter-spacing:.14em; white-space:nowrap;
+}
+
+/* 版身：可容纳多个板块，末个板块吃掉剩余高度 */
+.page-body{flex:1; display:flex; flex-direction:column; gap:1.15cqw}
+.sec{display:flex; flex-direction:column}
+.sec:not(:first-child){border-top:.24cqw solid var(--ink); padding-top:1.05cqw}
+.sec:last-child{flex:1}
+.sec-head{
+  display:flex; justify-content:space-between; align-items:baseline;
+  margin-bottom:.8cqw; padding:0 .38cqw;   /* 栏头文字与正文基准线对齐 */
+}
+.sec-head .name{font-size:1.52cqw; font-weight:700; letter-spacing:.12em; white-space:nowrap}
+.sec-head .name::before{
+  content:""; display:inline-block; width:.42cqw; height:1.1cqw;
+  background:var(--red); margin-right:.55cqw; vertical-align:-.06cqw;
+}
+.sec-head .name i{
+  font-style:normal; font-family:"PingFang SC","Microsoft YaHei","Hiragino Sans GB",sans-serif; font-size:.72cqw; letter-spacing:.2em;
+  color:var(--line2); margin-left:.55cqw; font-weight:400;
+}
+.sec-head .cnt{
+  font-family:"PingFang SC","Microsoft YaHei","Hiragino Sans GB",sans-serif; font-size:.76cqw; color:var(--gray);
+  letter-spacing:.12em; white-space:nowrap;
+}
+
+/* ═══════════ 模块流：一个模块一整块，块内再分栏 ═══════════ */
+.grid{
+  display:flex; flex-direction:column;
+  /* 从顶部往下紧凑排，不做两端分散。
+     space-between 会把模块硬拉到版面上下两端：内容少的版（科技第 2 版只有
+     6 条）中间就空出一整块，比尾部落白难看得多。空白一律留在尾部。 */
+  gap:calc(.85cqw * var(--k)); justify-content:flex-start;
+}
+.sec:last-child .grid{flex:1}
+
+/* 概念组才带边框：一个框 = 一个概念，别让并排的两条不相关稿子看着像同一条 */
+.mod.cluster{
+  border:.09cqw solid #C6BBA6; background:rgba(255,255,255,.36);
+  padding:.72cqw 1.26cqw .8cqw;      /* 内容左边界 = 1.26 + .09 边框 = 1.35cqw */
+}
+.mod.cluster .item{padding-bottom:0; border-bottom:none}
+
+/* 不带框的模块：左右各缩到「框内文字」的同一基准线，文字不再比框宽 */
+.mod.duo, .mod.solo{padding-left:1.35cqw; padding-right:1.35cqw}
+
+/* 概念组：组头 + 组内两列 */
+.cl-head{
+  display:flex; justify-content:space-between; align-items:baseline;
+  border-bottom:.13cqw solid var(--line2); padding-bottom:.32cqw; margin-bottom:.66cqw;
+}
+.cl-name{
+  font-size:calc(1.06cqw * var(--k)); font-weight:700; letter-spacing:.12em; line-height:1.2;
+  min-width:0; overflow:hidden; text-overflow:ellipsis; white-space:nowrap;
+}
+.cl-name::before{
+  content:""; display:inline-block; width:.34cqw; height:.86cqw;
+  background:var(--red); margin-right:.48cqw; vertical-align:-.02cqw;
+}
+.cl-name i{
+  font-style:normal; font-family:"PingFang SC","Microsoft YaHei","Hiragino Sans GB",sans-serif; font-size:.68cqw; letter-spacing:.2em;
+  color:var(--line2); margin-left:.5cqw; font-weight:400;
+}
+.cl-cnt{
+  flex:none; font-family:"PingFang SC","Microsoft YaHei","Hiragino Sans GB",sans-serif; font-size:.7cqw; color:var(--gray);
+  letter-spacing:.12em; white-space:nowrap;
+}
+/* 两栏共用一套栏线：gap 一致，分隔线都落在留白正中，上下模块的栏边界才对得齐 */
+/* align-items:start —— 组内每一条按自身内容高度收尾，不互相拉平。
+   默认 stretch 会把两列拉成等高：c-lead 的左侧红条是 item 的 border-left，
+   跟着 item 一起被拉长，尾端就超出一条实际内容的底部（用户截图里红线明显
+   越出栏界）。改为按内容高度后，红条只包住它自己那一条。 */
+.cl-grid{display:grid; grid-template-columns:1fr 1fr; column-gap:1.6cqw; row-gap:.7cqw; align-items:start}
+/* 组内奇数条：最后一条通栏，避免右栏留空 */
+.cl-grid .item:last-child:nth-child(odd){grid-column:span 2}
+/* 跨两栏的收尾条必须和主稿正文共用同一条左边缘。主稿左边是 .2cqw 红竖线加
+   .75cqw 内边距（合计 .95cqw），跨栏条若从 0 起排，正文就比上面那条更靠左，
+   看着像掉出了组外。 */
+.cl-grid .c-mate:last-child:nth-child(odd){padding-left:.95cqw}
+
+/* 并排双稿：两条普通稿合一块 */
+.m2{display:grid; grid-template-columns:1fr 1fr; column-gap:1.6cqw}
+
+/* 栏线画在 gap 正中：右栏盒子左移半个 gap，再用 padding 把文字推回列起点
+   （-0.8 平移 + 0.06 线宽 + 0.74 内边距 = 文字仍从列起点开始） */
+.cl-grid .item:nth-child(even),
+.m2 .item:nth-child(even){
+  border-left:.06cqw solid rgba(140,133,119,.42);
+  margin-left:-.8cqw; padding-left:.74cqw;
+}
+
+/* 单条通排：版内落单的普通稿横贯整版，像报纸里的加框短讯 */
+.mod.solo .item h4{font-size:calc(1.2cqw * var(--k))}
+.mod.solo .item p{font-size:calc(.92cqw * var(--k)); -webkit-line-clamp:3}
+
+/* 组内主稿（组的第一个成员）与配稿 */
+.item.c-lead{border-left:.2cqw solid var(--red); padding-left:.75cqw}
+.item.c-lead h4{font-size:calc(1.24cqw * var(--k)); line-height:1.36}
+.item.c-lead p{font-size:calc(.92cqw * var(--k)); line-height:1.82; -webkit-line-clamp:5}
+/* 整版没有别的视觉锚点时，把第一个组的组内主稿升成通栏大稿（.anchor 由
+   ensure_anchor 标记）。比把它从组里摘出去更稳——摘出去会把只有 2 条的组
+   摘成孤稿，大稿底下紧跟一条同主题小稿，看着像排错。 */
+.mod.cluster.anchor .c-lead{grid-column:1 / -1; border-left-width:.28cqw; padding-right:1.35cqw}
+.mod.cluster.anchor .c-lead h4{font-size:calc(1.85cqw * var(--k)); line-height:1.34; margin-bottom:.45cqw}
+.mod.cluster.anchor .c-lead p{font-size:calc(.95cqw * var(--k)); line-height:1.84; -webkit-line-clamp:6}
+/* 组里只剩一条小稿时（2 条组很常见）让它也通栏，否则大稿下面右半列空着 */
+/* 重点组（组内主稿升成通栏）里，其余每一条都通栏顺排，不做左右分栏。
+   否则第 2 条会落在左半栏（宽只有一半）、又被「偶数列左移」规则拉出去
+   5.87px 加一条灰竖线，第 3 条再回到通栏——三行三种宽度，中间那条像被挤出去。
+   统一成「主稿通栏 + 其余通栏顺排」，正文左边缘与主稿对齐（.95cqw）。 */
+.mod.cluster.anchor .cl-grid > .c-mate{grid-column:1 / -1; margin-left:0; border-left:none; padding-left:.95cqw}
+.item.c-mate h4{font-size:calc(1.06cqw * var(--k))}
+.item.c-mate p{font-size:calc(.88cqw * var(--k)); line-height:1.8; -webkit-line-clamp:4}
+
+.item{
+  display:flex; flex-direction:column;
+  padding-bottom:.66cqw; border-bottom:.06cqw dotted var(--line);
+}
+.item .src{margin-top:auto; padding-top:.45cqw}
+.item h4{
+  font-size:calc(1.1cqw * var(--k)); line-height:1.4; font-weight:700; margin-bottom:.38cqw;
+  display:-webkit-box; -webkit-line-clamp:4; -webkit-box-orient:vertical; overflow:hidden;
+}
+.item h4 a{color:inherit; text-decoration:none}
+.item h4 a:hover{color:var(--red)}
+/* 英文源：原题小字斜体，与中文译题并列对照 */
+.title-en{
+  font-family:"PingFang SC","Microsoft YaHei","Hiragino Sans GB",sans-serif; font-size:calc(.78cqw * var(--k)); line-height:1.4; font-style:italic;
+  color:#6A6255; margin:-.16cqw 0 .4cqw;
+}
+.title-en a{color:inherit; text-decoration:none}
+.title-en a:hover{color:var(--red)}
+.item.major .title-en{font-size:calc(.88cqw * var(--k))}
+.item p{
+  font-size:calc(.9cqw * var(--k)); line-height:1.8; color:var(--body); text-align:justify;
+  display:-webkit-box; -webkit-line-clamp:5; -webkit-box-orient:vertical; overflow:hidden;
+}
+.src{font-family:"PingFang SC","Microsoft YaHei","Hiragino Sans GB",sans-serif; font-size:calc(.73cqw * var(--k)); color:var(--gray); letter-spacing:.04em}
+.src a{color:var(--red); text-decoration:none}
+.src a:hover{text-decoration:underline}
+.src .d{margin:0 .35cqw; color:var(--line2)}
+
+/* 板块重点：通栏 + 朱红竖线 + 加大字号（版内视觉焦点，不套卡片框）
+   红竖线随之内移到框线里侧，文字左边界与框内基准线 1.35cqw 对齐 */
+.item.major{
+  margin-left:.35cqw;
+  border-left:.28cqw solid var(--red);
+  padding-left:.72cqw; padding-right:1.35cqw;
+}
+.item.major h4{font-size:calc(1.85cqw * var(--k)); line-height:1.34; margin-bottom:.45cqw}
+.item.major p{font-size:calc(.95cqw * var(--k)); line-height:1.84; -webkit-line-clamp:6}
+/* 同版第二个板块的重点：降一档，不与本版头条抢视线 */
+.item.major.soft{border-left-width:.2cqw; padding-left:.8cqw}
+.item.major.soft h4{font-size:calc(1.48cqw * var(--k))}
+.item.major.soft p{font-size:calc(.9cqw * var(--k)); -webkit-line-clamp:5}
+
+/* 空版兜底 */
+.end-note{
+  text-align:center; color:var(--line2); font-family:"PingFang SC","Microsoft YaHei","Hiragino Sans GB",sans-serif;
+  font-size:.85cqw; letter-spacing:.3em; align-self:center; margin:auto 0 0;
+}
+.end-sub{
+  text-align:center; color:var(--gray); font-family:"PingFang SC","Microsoft YaHei","Hiragino Sans GB",sans-serif;
+  font-size:.72cqw; letter-spacing:.24em; margin:.5cqw 0 auto;
+}
+
+/* ═══════════ 版次 / 页脚 ═══════════ */
+.pager{
+  display:grid; grid-template-columns:1fr 1fr; column-gap:2.4cqw;
+  border-top:.09cqw solid var(--line); padding-top:.4cqw; margin-top:1.1cqw;
+}
+.pager span{
+  text-align:center; font-family:"PingFang SC","Microsoft YaHei","Hiragino Sans GB",sans-serif; font-size:.78cqw;
+  letter-spacing:.4em; text-indent:.4em; color:var(--gray);
+}
+.foot{
+  margin-top:.5cqw; padding-top:.5cqw; border-top:.2cqw double var(--line2);
+  font-family:"PingFang SC","Microsoft YaHei","Hiragino Sans GB",sans-serif; font-size:.75cqw; line-height:1.9; color:var(--gray);
+  letter-spacing:.04em; text-align:center;
+}
+.foot b{color:var(--ink); font-weight:600}
+.foot .s{margin:0 .55cqw; color:var(--line2)}
+
+@media (max-aspect-ratio: 1/1){
+  body::after{
+    content:"请横屏查看 · 本版按对开报纸排布";
+    position:fixed; left:0; right:0; bottom:0; z-index:9;
+    font-family:"PingFang SC","Microsoft YaHei","Hiragino Sans GB",sans-serif; font-size:12px; letter-spacing:.1em;
+    color:#F4EFE3; background:rgba(26,26,26,.82); text-align:center; padding:9px 0;
   }
-
-  * { box-sizing: border-box; }
-
-  html { -webkit-text-size-adjust: 100%; }
-
-  body {
-    margin: 0;
-    background: var(--bg);
-    color: var(--ink);
-    font-family: "PingFang SC", "Microsoft YaHei", "Hiragino Sans GB", system-ui, sans-serif;
-    font-size: 15px;
-    line-height: 1.8;
-    -webkit-font-smoothing: antialiased;
-  }
-
-  .serif {
-    font-family: "Source Han Serif SC", "Noto Serif SC", "Songti SC", "SimSun", Georgia, serif;
-  }
-
-  .wrap {
-    max-width: 1060px;
-    margin: 0 auto;
-    padding: 0 clamp(20px, 5vw, 48px) 72px;
-  }
-
-  /* ---------- 顶部返回条 ---------- */
-  .topbar {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    gap: 16px;
-    padding: 18px 0;
-    border-bottom: 1px solid var(--line);
-    font-size: 12px;
-    letter-spacing: .04em;
-    color: var(--ink-3);
-  }
-
-  .topbar a {
-    color: var(--ink-2);
-    text-decoration: none;
-    border-bottom: 1px solid transparent;
-    transition: color .2s, border-color .2s;
-  }
-
-  .topbar a:hover { color: var(--brand); border-bottom-color: var(--brand); }
-
-  /* ---------- 报头 ---------- */
-  .masthead {
-    padding: clamp(28px, 5vw, 52px) 0 18px;
-    border-bottom: 3px double var(--ink);
-    text-align: center;
-  }
-
-  .masthead h1 {
-    margin: 0;
-    font-size: clamp(2.4rem, 6.6vw, 4.4rem);
-    font-weight: 900;
-    letter-spacing: .16em;
-    line-height: 1.1;
-    text-indent: .16em;
-  }
-
-  .masthead .sub {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    flex-wrap: wrap;
-    gap: 10px;
-    margin-top: 14px;
-    font-size: 12px;
-    letter-spacing: .12em;
-    color: var(--ink-2);
-  }
-
-  .masthead .sub i {
-    width: 4px;
-    height: 4px;
-    border-radius: 50%;
-    background: var(--red);
-    display: inline-block;
-  }
-
-  /* ---------- 头条 ---------- */
-  .headline {
-    padding: clamp(26px, 4vw, 42px) 0 clamp(20px, 3vw, 30px);
-    border-bottom: 1px solid var(--line);
-    text-align: center;
-  }
-
-  .headline .kicker {
-    margin: 0 0 12px;
-    font-size: 11px;
-    font-weight: 700;
-    letter-spacing: .22em;
-    color: var(--red);
-    text-transform: uppercase;
-  }
-
-  .headline h2 {
-    margin: 0;
-    font-size: clamp(1.7rem, 4.4vw, 2.9rem);
-    font-weight: 800;
-    letter-spacing: -.01em;
-    line-height: 1.28;
-  }
-
-  .headline .lede {
-    max-width: 42em;
-    margin: 16px auto 0;
-    font-size: 15px;
-    line-height: 1.9;
-    color: var(--ink-2);
-  }
-
-  /* ---------- 三栏正文 ---------- */
-  .story {
-    margin-top: clamp(24px, 3.4vw, 36px);
-    column-count: 3;
-    column-gap: 32px;
-    column-rule: 1px solid var(--line);
-    font-size: 14.6px;
-    line-height: 1.95;
-    text-align: justify;
-  }
-
-  .story h3 {
-    margin: 0 0 8px;
-    font-size: 1.05rem;
-    font-weight: 800;
-    letter-spacing: .02em;
-    break-after: avoid;
-  }
-
-  .story h3::before {
-    content: "";
-    display: block;
-    width: 22px;
-    height: 3px;
-    margin-bottom: 10px;
-    background: var(--brand);
-  }
-
-  .story p {
-    margin: 0 0 14px;
-    text-indent: 2em;
-    break-inside: avoid;
-  }
-
-  .story > p:first-of-type {
-    text-indent: 0;
-    padding-left: 12px;
-    border-left: 3px solid var(--brand);
-    color: var(--ink);
-  }
-
-  /* ---------- 结尾说明 ---------- */
-  .colophon {
-    margin-top: clamp(30px, 4vw, 44px);
-    padding-top: 16px;
-    border-top: 3px double var(--ink);
-    display: flex;
-    flex-wrap: wrap;
-    gap: 10px 24px;
-    justify-content: space-between;
-    font-size: 11.5px;
-    letter-spacing: .06em;
-    color: var(--ink-3);
-  }
-
-  .colophon a { color: var(--ink-2); text-decoration: none; border-bottom: 1px solid var(--line); }
-  .colophon a:hover { color: var(--brand); border-bottom-color: var(--brand); }
-
-  @media (max-width: 860px) {
-    .story { column-count: 2; }
-  }
-
-  @media (max-width: 560px) {
-    body { font-size: 14.5px; }
-    .story { column-count: 1; font-size: 14.6px; }
-    .story h3::before { width: 18px; }
-    .masthead h1 { letter-spacing: .1em; text-indent: .1em; }
-  }
+}
 </style>
 </head>
 <body>
-
-<div class="wrap">
-
-  <div class="topbar">
-    <a href="../index.html">← 返回主页</a>
-    <span>每日 07:00 自动更新 · 仅保留最新一期</span>
-  </div>
-
-  <header class="masthead serif">
-    <h1>今日日报</h1>
-    <p class="sub">
-      <span>2026 年 10 月 22 日</span>
-      <i aria-hidden="true"></i>
-      <span>星期四</span>
-      <i aria-hidden="true"></i>
-      <span>总第 001 期</span>
-    </p>
+<div class="paper"><div class="sheet"><header>
+    <div class="mast-head">
+      <span>2026-10-22　星期四</span>
+      <span class="c">第 20261022 期</span>
+      <span>共 38 条</span>
+    </div>
+    <div class="ruler top"></div>
+    <div class="logo-row">
+      <div class="logo-side"><b>DAILY BRIEF</b>每日新闻摘要<br>采集窗口 过去 24 小时<br>共 38 条　来源 13 家</div>
+      <h1 class="logo">每日简报<em>DAILY BRIEF</em></h1>
+      <aside class="weather">
+        <div class="w-tag">天 气</div>
+        <div class="w-row"><span class="w-city">Chengdu</span><span class="w-temp">16°<i>局部有雨</i></span></div>
+        <div class="w-detail">今日 15~18<br>湿度 82　风 10km/h<br>日出 07:11 AM　日落 06:25 PM</div>
+      </aside>
+    </div>
+    <div class="ruler bot"></div>
   </header>
 
-  <section class="headline">
-    <p class="kicker">今日头条</p>
-    <h2 class="serif">当日信息，<br>按重要性排序</h2>
-    <p class="lede">
-      日报不做新闻搬运，只做排序与取舍：哪些构成主线，哪些值得留意，哪些可以略过。
-      版式每日一致，内容每日重排，便于横向比对。
-    </p>
-  </section>
-
-  <article class="story">
-
-    <h3>一 · 本期主线</h3>
-    <p>信息过载的实质并非内容过多，而是缺少排序。同一条消息对不同读者的权重差异极大：于一人是噪音，于另一人则是必须即刻处置的信号。日报的作用，是把这套排序固定为可复核的规则，使判断有据可依，不必每日从头权衡。</p>
-    <p>本期几条线索指向同一趋势：变化正从「新闻事件」下沉为「日常条件」。一项技术不再需要被解释即可投入使用时，才真正开始改变工作方式。这一过程通常没有发布会，也没有节点式宣告，但其影响较任何一次高调亮相更为持久。</p>
-
-    <h3>二 · 值得留意</h3>
-    <p>值得留意的信号往往不具备新闻形态：某个环节的耗时骤然下降，或原本需要半日的工作压缩至十分钟。此类变化不会进入头条，却常在一两个月后表现为「局面骤然改变」的错觉。</p>
-    <p>与之相对，被反复强调的趋势通常已越过价值窗口。判断一条信息是否仍然有效，可依一个简单标准：若它已成共识，其能带来的信息差已所剩无几。</p>
-
-    <h3>三 · 一条判断</h3>
-    <p>注意力应放在「此刻可动手之处」，而非「正在被讨论之处」。前者产生结果，后者消耗时间。信息密度越高，这条原则越有效——可讨论的总多于可动手的。</p>
-    <p>下一期同日 07:00 更新。</p>
-
+  <article class="lead">
+    <div class="kicker">今日头条</div>
+    <h2><a href="https://www.chinanews.com.cn/gn/2026/10-22/10719077.shtml" target="_blank" rel="noopener">纪念中国工农红军长征胜利90周年大会在京举行 习近平发表重要讲话</a></h2>
+    <div class="lead-body"><p>纪念中国工农红军长征胜利90周年大会22日上午在北京人民大会堂隆重举行。习近平发表重要讲话强调，铭记历史方能开创未来，全党全军全国各族人民要大力弘扬伟大长征精神，接续奋斗、砥砺前行，在新的长征路上奋力创造新的辉煌。</p></div>
+    <div class="byline">中国新闻网·即时<span class="d">·</span>2026-10-22T08:06:00.000Z</div>
   </article>
 
-  <footer class="colophon">
-    <span>本页由 n8n 自动生成 · 每日覆盖 latest.html</span>
-    <span><a href="../index.html">返回主页</a></span>
+  <div class="spread">
+    <div class="page" style="--k:0.979"><div class="page-head"><div class="ph-name">科技</div><div class="ph-meta">第 1 版 · 9 条</div></div><div class="page-body"><div class="sec"><div class="grid"><section class="mod cluster anchor"><div class="cl-head"><div class="cl-name">PHP安全危机<i>PHP Security Crisis</i></div><div class="cl-cnt">2 条</div></div><div class="cl-grid"><article class="item c-lead"><h4><a href="http://www.geekpark.net/news/372731" target="_blank" rel="noopener">AI挖漏洞一整年，终于给人类爆了个大的</a></h4><p>10月21日晚，芬兰、荷兰、法国、德国、比利时等多国重要基础设施网站几乎同时临时关闭，鹿特丹港、荷兰足协、维基媒体基金会、任天堂等相继停掉部分服务。这些网站并非被黑，而是因PHP两个漏洞主动预防性下线。</p><div class="src">极客公园<span class="d">·</span>2026-10-22T06:15:28.000Z</div></article><article class="item c-mate"><h4><a href="https://www.wired.com/story/hackers-exploited-the-php-vulnerabilities-days-before-they-were-patched/" target="_blank" rel="noopener">黑客在补丁发布前数日已利用PHP漏洞</a></h4><div class="title-en"><a href="https://www.wired.com/story/hackers-exploited-the-php-vulnerabilities-days-before-they-were-patched/" target="_blank" rel="noopener">Hackers Exploited the PHP Vulnerabilities Days Before They Were Patched</a></div><p>亚马逊云服务日志显示，四天前已有人尝试利用被称为PHP2Shell的漏洞。目前这些漏洞正在互联网上被“广泛利用”，补丁公开后攻击者可借AI逆向工程加速入侵。</p><div class="src">Wired<span class="d">·</span>2026-10-22T02:24:17.000Z</div></article></div></section><section class="mod cluster"><div class="cl-head"><div class="cl-name">特斯拉财报<i>Tesla Earnings</i></div><div class="cl-cnt">4 条</div></div><div class="cl-grid"><article class="item c-lead"><h4><a href="https://www.qbitai.com/2026/10/504841.html" target="_blank" rel="noopener">特斯拉利润腰斩，一夜跌没“通用汽车”，马斯克称FSD在中国也会遥遥领先</a></h4><p>特斯拉第三季度财报显示利润大幅下滑，市值一夜蒸发相当于一家通用汽车。马斯克在财报会上表示FSD一年增长70万付费用户，并称FSD在中国市场也会遥遥领先。</p><div class="src">量子位<span class="d">·</span>2026-10-22T07:14:48.000Z</div></article><article class="item c-mate"><h4><a href="https://arstechnica.com/cars/2026/10/tesla-profits-drop-43-in-q3/" target="_blank" rel="noopener">特斯拉第三季度利润下降43%</a></h4><div class="title-en"><a href="https://arstechnica.com/cars/2026/10/tesla-profits-drop-43-in-q3/" target="_blank" rel="noopener">Tesla profits drop 43% in Q3</a></div><p>特斯拉2026年第三季度利润同比下降43%，曾经高速增长的储能业务也在本季度出现萎缩，公司整体经营承压。</p><div class="src">Ars Technica<span class="d">·</span>2026-10-21T21:35:07.000Z</div></article><article class="item c-mate"><h4><a href="https://www.theverge.com/transportation/1015790/tesla-q3-2026-earnings-revenue-profit-roadster-spacex-merger" target="_blank" rel="noopener">飞行跑车救不了特斯拉平淡的三季度营收</a></h4><div class="title-en"><a href="https://www.theverge.com/transportation/1015790/tesla-q3-2026-earnings-revenue-profit-roadster-spacex-merger" target="_blank" rel="noopener">Flying Roadsters can’t lift Tesla’s flat Q3 revenues</a></div><p>特斯拉公布第三季度财报，截至9月的季度净利润17亿美元、营收280亿美元，营收持平，利润下降。此前高调的Roadster演示未能改变业绩平淡的现实。</p><div class="src">The Verge<span class="d">·</span>2026-10-21T23:20:33.000Z</div></article><article class="item c-mate"><h4><a href="https://techcrunch.com/2026/10/21/tesla-says-it-will-start-selling-cybercabs-by-end-of-year/" target="_blank" rel="noopener">特斯拉称年底前开始销售Cybercab</a></h4><div class="title-en"><a href="https://techcrunch.com/2026/10/21/tesla-says-it-will-start-selling-cybercabs-by-end-of-year/" target="_blank" rel="noopener">Tesla says it will start selling Cybercabs by end of year</a></div><p>特斯拉表示将在年底前向客户销售Cybercab，尽管联邦监管机构正在调查该车是否符合车辆安全标准。这款金色双座自动驾驶车没有方向盘等传统操控装置。</p><div class="src">TechCrunch<span class="d">·</span>2026-10-22T00:17:54.000Z</div></article></div></section><section class="mod cluster"><div class="cl-head"><div class="cl-name">AI助理竞赛<i>AI Assistant Race</i></div><div class="cl-cnt">3 条</div></div><div class="cl-grid"><article class="item c-lead"><h4><a href="https://openai.com/index/openai-models-google-cloud" target="_blank" rel="noopener">OpenAI模型即将登陆谷歌云</a></h4><div class="title-en"><a href="https://openai.com/index/openai-models-google-cloud" target="_blank" rel="noopener">OpenAI models are coming to Google Cloud</a></div><p>OpenAI与谷歌云将把前沿模型和Codex工作流引入Gemini的Model Garden，并通过谷歌云Marketplace提供，两家竞争对手在云平台上展开合作。</p><div class="src">OpenAI<span class="d">·</span>2026-10-21T12:00:00.000Z</div></article><article class="item c-mate"><h4><a href="http://www.geekpark.net/news/372740" target="_blank" rel="noopener">被迫下场，Anthropic推出个人AI助理Claude Duet</a></h4><p>Anthropic于美国时间10月21日发布个人AI助理Claude Duet，是xAI、Meta、OpenAI之后最晚亮相同类产品的一家。行业正从被动聊天框转向AI主动找事做，Claude Duet主打主动服务。</p><div class="src">极客公园<span class="d">·</span>2026-10-22T07:23:08.000Z</div></article><article class="item c-mate"><h4><a href="https://arstechnica.com/ai/2026/10/openais-latest-ai-models-are-coming-to-google-cloud-and-antigravity/" target="_blank" rel="noopener">OpenAI最新模型将进入谷歌云和Antigravity</a></h4><div class="title-en"><a href="https://arstechnica.com/ai/2026/10/openais-latest-ai-models-are-coming-to-google-cloud-and-antigravity/" target="_blank" rel="noopener">OpenAI&#x27;s latest AI models are coming to Google Cloud and Antigravity</a></div><p>谷歌云将在未来几周上线GPT 6.1 Astra、Sol和Luna等OpenAI最新模型，进一步扩大双方在模型分发上的合作范围。</p><div class="src">Ars Technica<span class="d">·</span>2026-10-21T18:51:42.000Z</div></article></div></section></div></div></div></div>
+    <div class="page" style="--k:1.022"><div class="page-head"><div class="ph-name">科技<span class="cont">（续）</span></div><div class="ph-meta">第 2 版 · 6 条</div></div><div class="page-body"><div class="sec"><div class="grid"><section class="mod cluster anchor"><div class="cl-head"><div class="cl-name">国产大模型<i>Chinese LLMs</i></div><div class="cl-cnt">2 条</div></div><div class="cl-grid"><article class="item c-lead"><h4><a href="https://www.qbitai.com/2026/10/504832.html" target="_blank" rel="noopener">星辰意图理解模型Xing4.0-29B-Intent发布</a></h4><p>中电信人工智能科技有限公司星辰通用人工智能实验室正式发布并开源意图理解专用模型Xing4.0-29B-Intent，该模型既能“做选择题”也能“做填空题”，面向意图理解任务。</p><div class="src">量子位<span class="d">·</span>2026-10-22T07:11:14.000Z</div></article><article class="item c-mate"><h4><a href="http://www.geekpark.net/news/372743" target="_blank" rel="noopener">大模型内卷之后，AI竞争进入搜索基础设施时代</a></h4><p>随着Agent渗透办公、内容、金融等场景，决定AI体验上限的是连接真实世界的能力。传统关键词搜索读不懂复杂意图、易引发幻觉，自建检索体系工程门槛极高，搜索基础设施成为AI落地共性卡点。</p><div class="src">极客公园<span class="d">·</span>2026-10-22T08:15:50.000Z</div></article></div></section><section class="mod duo"><div class="m2"><article class="item c-mate"><h4><a href="http://www.geekpark.net/news/372746" target="_blank" rel="noopener">AI漫剧越做越快，赚钱却没那么容易了</a></h4><p>阅文创作大会上，CEO侯晓楠提出“一人公司”概念，发布首批AI精品动画项目并将DramaBuddy升级为OPC一站式平台。一线从业者则感受到从风口期到红海期的行业变化，变现难度上升。</p><div class="src">极客公园<span class="d">·</span>2026-10-22T08:20:34.000Z</div></article><article class="item c-mate"><h4><a href="https://www.theverge.com/tech/1015799/meta-shares-class-ai-q3-2026-earnings" target="_blank" rel="noopener">Meta将发行新类别股份为AI投入融资</a></h4><div class="title-en"><a href="https://www.theverge.com/tech/1015799/meta-shares-class-ai-q3-2026-earnings" target="_blank" rel="noopener">Meta to create a new class of shares to fund AI push</a></div><p>Meta在第三季度财报中宣布将发行无投票权新股，用于支持AI计划、潜在收购和员工薪酬，新股预计2027年开始交易。</p><div class="src">The Verge<span class="d">·</span>2026-10-21T21:30:02.000Z</div></article></div></section><section class="mod duo"><div class="m2"><article class="item c-mate"><h4><a href="https://www.theverge.com/ai-artificial-intelligence/1015958/data-center-pollution-rising-report" target="_blank" rel="noopener">数据中心可能抹去数十年的空气质量改善成果</a></h4><div class="title-en"><a href="https://www.theverge.com/ai-artificial-intelligence/1015958/data-center-pollution-rising-report" target="_blank" rel="noopener">Data centers could erase decades of air quality gains</a></div><p>生成式AI基础设施热潮下，得克萨斯州新建和拟建数据中心用电需求激增，可能导致当地空气污染回升至2000年代以来的水平，抵消数十年空气质量改善成果。</p><div class="src">The Verge<span class="d">·</span>2026-10-21T22:33:44.000Z</div></article><article class="item c-mate"><h4><a href="https://www.qbitai.com/2026/10/504800.html" target="_blank" rel="noopener">谁在给OpenAI供应具身数据？</a></h4><p>具身智能热潮下，数据供应成为Physical AI核心供应链的一环，相关企业正挤进全球具身数据供应体系。</p><div class="src">量子位<span class="d">·</span>2026-10-22T07:05:59.000Z</div></article></div></section></div></div></div></div>
+  </div>
+
+  <div class="pager"><span>第 1 版</span><span>第 2 版</span></div>
+
+</div></div>
+
+<div class="paper"><div class="sheet"><header><div class="mini-head"><span class="nm">每日简报</span><span class="pb">第 3 版 — 第 4 版</span><span>2026-10-22　星期四　第 20261022 期</span></div><div class="ruler bot"></div></header>
+
+  <div class="spread">
+    <div class="page" style="--k:1.039"><div class="page-head"><div class="ph-name">财经 · 国内</div><div class="ph-meta">第 3 版 · 9 条</div></div><div class="page-body"><div class="sec"><div class="sec-head"><div class="name">财经</div><div class="cnt">8 条</div></div><div class="grid"><article class="item major"><h4><a href="https://wallstreetcn.com/articles/3784140" target="_blank" rel="noopener">AI挖出PHP潜伏十余年严重漏洞，全球大量网站紧急下线</a></h4><p>研究人员借助谷歌和OpenAI旗下AI工具在PHP中发现两处严重安全漏洞，漏洞在代码库中潜伏逾十年。PHP团队周三发布紧急补丁，荷兰、法国、丹麦、芬兰等多国政府网站预防性下线，约260万个PHP主机中约150万个版本尚无可用补丁。</p><div class="src">华尔街见闻<span class="d">·</span>2026-10-21T21:43:08.000Z</div></article><section class="mod solo"><article class="item c-mate"><h4><a href="https://wallstreetcn.com/articles/3784177" target="_blank" rel="noopener">报道：DeepSeek完成1000亿元融资，宁德时代和腾讯参投</a></h4><p>大模型公司DeepSeek完成约1000亿元融资，折合约150亿美元，洽谈期间融资目标从500亿元两次上调至约1000亿元。宁德时代拟增资约100亿元，腾讯也是最大投资者之一。</p><div class="src">华尔街见闻<span class="d">·</span>2026-10-22T03:02:57.000Z</div></article></section><section class="mod cluster"><div class="cl-head"><div class="cl-name">全球市场震荡<i>Global Market Turmoil</i></div><div class="cl-cnt">2 条</div></div><div class="cl-grid"><article class="item c-lead"><h4><a href="https://wallstreetcn.com/articles/3784189" target="_blank" rel="noopener">AI交易熄火、中东局势恶化，全球股市遭遇“黑色星期四”</a></h4><p>科技股财报喜忧参半叠加中东局势升温，美股盘前纳斯达克100指数期货跌1.7%，特斯拉跌约5%，半导体股普跌；欧洲主要股指开盘走低，韩国综合指数一度跌4%。</p><div class="src">华尔街见闻<span class="d">·</span>2026-10-22T08:04:46.000Z</div></article><article class="item c-mate"><h4><a href="https://wallstreetcn.com/articles/3784171" target="_blank" rel="noopener">创业板跌超4%失守2600点，工行、建行再创新高</a></h4><p>10月22日A股三大指数集体下挫，创业板指跌4.37%失守2600点，较6月高点跌幅超40%。AI硬件全线调整，光通信、光模块等跌幅居前，创新药、CRO大跌，银行股走强。</p><div class="src">华尔街见闻<span class="d">·</span>2026-10-22T08:14:25.000Z</div></article></div></section><section class="mod cluster"><div class="cl-head"><div class="cl-name">外资与消费<i>FDI and Consumption</i></div><div class="cl-cnt">2 条</div></div><div class="cl-grid"><article class="item c-lead"><h4><a href="https://www.chinanews.com.cn/cj/2026/10-22/10719057.shtml" target="_blank" rel="noopener">“十四五”我国吸收外商直接投资超7500亿美元</a></h4><p>商务部副部长蒋成华在国新办发布会上介绍，“十四五”时期我国吸收外商直接投资5年累计超7500亿美元，非金融类对外直接投资累计超8000亿美元，货物进出口超6万亿美元。</p><div class="src">中国新闻网·财经<span class="d">·</span>2026-10-22T07:05:23.000Z</div></article><article class="item c-mate"><h4><a href="https://www.chinanews.com.cn/cj/2026/10-22/10719088.shtml" target="_blank" rel="noopener">前三季度我国高技术产业引资增幅达33.8%</a></h4><p>今年1至9月，我国高技术产业引资保持高速增长，增幅达33.8%，占比达41.6%。</p><div class="src">中国新闻网·财经<span class="d">·</span>2026-10-22T07:44:09.000Z</div></article></div></section><section class="mod duo"><div class="m2"><article class="item c-mate"><h4><a href="https://www.chinanews.com.cn/cj/2026/10-22/10719094.shtml" target="_blank" rel="noopener">中国电竞市场规模即将突破两千亿元</a></h4><p>第七届中国电竞产业大会在西宁开幕，会上发布的报告预计2026年中国整体电竞市场规模将突破2000亿元，市场从高速增量扩张转向存量深耕、价值提升的平稳发展阶段。</p><div class="src">中国新闻网·财经<span class="d">·</span>2026-10-22T07:55:30.000Z</div></article><article class="item c-mate"><h4><a href="https://www.chinanews.com.cn/cj/2026/10-22/10719049.shtml" target="_blank" rel="noopener">雀巢发布三季度及前9个月财报：大中华区有机增长4.2%</a></h4><p>雀巢集团发布2026年第三季度及前9个月财报，第三季度所有大区和全球直管业务实际内部增长均为正，大中华区本季度增长提速，有机增长率达4.2%。</p><div class="src">中国新闻网·财经<span class="d">·</span>2026-10-22T07:23:32.000Z</div></article></div></section></div></div><div class="sec"><div class="sec-head"><div class="name">国内</div><div class="cnt">1 条</div></div><div class="grid"><article class="item major soft"><h4><a href="https://www.chinanews.com.cn/cj/2026/10-22/10719128.shtml" target="_blank" rel="noopener">A股收评：近5000只个股飘绿，三大指数集体收跌</a></h4><p>A股三大指数集体收跌，创业板指跌超4%，近5000只个股飘绿。CPO、光通信概念股重挫，文化传媒、贵金属大跌，人形机器人、电信板块飘红。</p><div class="src">中国新闻网·即时<span class="d">·</span>2026-10-22T08:20:51.000Z</div></article></div></div></div></div>
+    <div class="page" style="--k:0.966"><div class="page-head"><div class="ph-name">国内 · 国际</div><div class="ph-meta">第 4 版 · 13 条</div></div><div class="page-body"><div class="sec"><div class="sec-head"><div class="name">国内<span class="cont" style="color:var(--red)">（续）</span></div><div class="cnt">6 条</div></div><div class="grid"><section class="mod cluster anchor"><div class="cl-head"><div class="cl-name">长征胜利90周年<i>Long March 90th Anniversary</i></div><div class="cl-cnt">2 条</div></div><div class="cl-grid"><article class="item c-lead"><h4><a href="https://www.chinanews.com.cn/gn/2026/10-22/10718927.shtml" target="_blank" rel="noopener">纪念中国工农红军长征胜利90周年大会在京隆重举行 习近平出席并发表重要讲话</a></h4><p>纪念中国工农红军长征胜利90周年大会22日上午在京隆重举行。习近平出席大会并发表重要讲话，李强、赵乐际、王沪宁、蔡奇、丁薛祥、李希和韩正出席大会。</p><div class="src">中国新闻网·国内<span class="d">·</span>2026-10-22T03:06:16.000Z</div></article><article class="item c-mate"><h4><a href="https://www.chinanews.com.cn/gn/2026/10-22/10719012.shtml" target="_blank" rel="noopener">习近平：在纪念中国工农红军长征胜利90周年大会上的讲话</a></h4><p>新华社播发习近平在纪念中国工农红军长征胜利90周年大会上的讲话全文。</p><div class="src">中国新闻网·国内<span class="d">·</span>2026-10-22T06:10:18.000Z</div></article></div></section><section class="mod duo"><div class="m2"><article class="item c-mate"><h4><a href="https://www.chinanews.com.cn/gn/2026/10-22/10719122.shtml" target="_blank" rel="noopener">北京市委常委、副市长夏林茂接受审查调查</a></h4><p>据中央纪委国家监委网站消息，北京市委常委、副市长夏林茂涉嫌严重违纪违法，目前正接受中央纪委国家监委纪律审查和监察调查。</p><div class="src">中国新闻网·即时<span class="d">·</span>2026-10-22T08:16:23.000Z</div></article><article class="item c-mate"><h4><a href="https://www.chinanews.com.cn/cj/2026/10-22/10719112.shtml" target="_blank" rel="noopener">“十四五”时期我国吸收外商直接投资超7500亿美元</a></h4><p>国新办22日举行“开局起步‘十五五’”系列主题新闻发布会，商务部副部长蒋成华介绍，“十四五”时期社会消费品零售总额先后跨越40万亿元和50万亿元大关，服务进出口突破1万亿美元。</p><div class="src">中国新闻网·即时<span class="d">·</span>2026-10-22T08:16:45.000Z</div></article></div></section><section class="mod duo"><div class="m2"><article class="item c-mate"><h4><a href="https://www.chinanews.com.cn/gj/2026/10-22/10719127.shtml" target="_blank" rel="noopener">泽连斯基称俄军向基辅发射21枚弹道导弹 已致2死34伤</a></h4><p>乌克兰总统泽连斯基22日表示，俄军从21日晚起分三轮向基辅发射21枚弹道导弹，造成住宅、能源设施、火车站、地铁、购物中心、企业等建筑受损，已致2人死亡、34人受伤。</p><div class="src">中国新闻网·即时<span class="d">·</span>2026-10-22T08:18:39.000Z</div></article><article class="item c-mate"><h4><a href="https://www.chinanews.com.cn/gj/2026/10-22/10719127.shtml" target="_blank" rel="noopener">泽连斯基称俄军向基辅发射21枚弹道导弹 已致2死34伤</a></h4><p>乌克兰总统泽连斯基22日表示，俄军从21日晚起分三轮向基辅发射21枚弹道导弹，住宅、能源设施、火车站、地铁、购物中心等受损，已致2人死亡、34人受伤。</p><div class="src">中国新闻网·即时<span class="d">·</span>2026-10-22T08:18:39.000Z</div></article></div></section></div></div><div class="sec"><div class="sec-head"><div class="name">国际</div><div class="cnt">7 条</div></div><div class="grid"><section class="mod cluster"><div class="cl-head"><div class="cl-name">俄乌冲突<i>Russia-Ukraine Conflict</i></div><div class="cl-cnt">3 条</div></div><div class="cl-grid"><article class="item c-lead"><h4><a href="https://www.chinanews.com.cn/gj/2026/10-22/10719003.shtml" target="_blank" rel="noopener">俄罗斯莫斯科地区遭大规模无人机袭击</a></h4><p>莫斯科市市长索比亚宁22日称，21日晚至22日凌晨共有630架无人机袭击莫斯科地区，大多数在远距离被防空系统摧毁，163架在靠近莫斯科市时被拦截。</p><div class="src">中国新闻网·国际<span class="d">·</span>2026-10-22T05:59:31.000Z</div></article><article class="item c-mate"><h4><a href="https://www.chinanews.com.cn/gj/2026/10-22/10718822.shtml" target="_blank" rel="noopener">从奥斯陆到圣彼得堡，美特使密集斡旋，美俄乌三方会谈酝酿重启</a></h4><p>俄方表示准备于11月重启俄美乌三方会谈，泽连斯基称乌方支持尽快启动新一轮会谈，特朗普称俄乌冲突的结束从未如此“接近”。美特使威特科夫穿梭多国斡旋，分析认为离正式和谈仍有距离。</p><div class="src">中国新闻网·国际<span class="d">·</span>2026-10-21T22:46:30.000Z</div></article><article class="item c-mate"><h4><a href="https://www.chinanews.com.cn/gj/2026/10-22/10718813.shtml" target="_blank" rel="noopener">俄总统助理：俄方原则同意下月重启俄美乌三方谈判</a></h4><p>俄罗斯总统助理乌沙科夫21日说，普京当天与美国总统特使威特科夫会谈期间表示，俄方原则上同意在11月中旬重启俄美乌三方谈判。</p><div class="src">中国新闻网·国际<span class="d">·</span>2026-10-21T16:22:33.000Z</div></article></div></section><section class="mod cluster"><div class="cl-head"><div class="cl-name">中东局势<i>Middle East Tensions</i></div><div class="cl-cnt">2 条</div></div><div class="cl-grid"><article class="item c-lead"><h4><a href="https://www.chinanews.com.cn/gj/2026/10-22/10718956.shtml" target="_blank" rel="noopener">美媒：美以制定计划，拟美国中期选举后再次打击伊朗</a></h4><p>据《纽约时报》报道，美国官员及知情人士透露，美国和以色列军方已制定具体计划，准备在美国中期选举结束后恢复对伊朗实施打击。</p><div class="src">中国新闻网·国际<span class="d">·</span>2026-10-22T03:53:17.000Z</div></article><article class="item c-mate"><h4><a href="https://www.chinanews.com.cn/gj/2026/10-22/10719085.shtml" target="_blank" rel="noopener">沙特民航总局：达曼机场遇袭死亡人数升至2人</a></h4><p>沙特民航总局就达曼法赫德国王国际机场21日晚遭袭事件发布补充声明，袭击造成的死亡人数已升至2人，其中一人为沙特公民，另一人为印度籍。</p><div class="src">中国新闻网·国际<span class="d">·</span>2026-10-22T07:37:07.000Z</div></article></div></section><section class="mod duo"><div class="m2"><article class="item c-mate"><h4><a href="https://www.chinanews.com.cn/gj/2026/10-22/10719107.shtml" target="_blank" rel="noopener">美国俄亥俄州发生化学品储罐泄漏，近1000名居民被迫撤离</a></h4><p>据美媒报道，美国俄亥俄州托莱多市发生化学品储罐泄漏事件，近1000名居民被迫撤离。</p><div class="src">中国新闻网·国际<span class="d">·</span>2026-10-22T07:59:22.000Z</div></article><article class="item c-mate"><h4><a href="https://news.un.org/feed/view/zh/story/2026/10/1143042" target="_blank" rel="noopener">世卫组织协助尼日利亚应对首例埃博拉输入病例</a></h4><p>世卫组织表示，尼日利亚已确认该国首例布恩迪布焦型埃博拉病毒病例，患者为近期从乌干达入境的女性，正在隔离治疗。当地已识别44名接触者开展健康监测。</p><div class="src">联合国新闻<span class="d">·</span>2026-10-21T12:00:00.000Z</div></article></div></section></div></div></div></div>
+  </div>
+
+  <div class="pager"><span>第 3 版</span><span>第 4 版</span></div>
+  <footer class="foot">
+    <b>每日简报</b>　n8n 每日自动采集生成<span class="s">|</span>采集窗口 过去 24 小时<span class="s">|</span>期号按日期编号<span class="s">|</span>消息源 极客公园 / Wired / 量子位 / Ars Technica / The Verge / TechCrunch / OpenAI / 华尔街见闻 / 中国新闻网·财经 / 中国新闻网·即时 / 中国新闻网·国内 / 中国新闻网·国际 / 联合国新闻
   </footer>
 
-</div>
-
+</div></div>
 </body>
 </html>
