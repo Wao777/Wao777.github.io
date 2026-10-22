@@ -9,6 +9,8 @@
 ├─ index.html                 主页：Hero（标题 + 今日日报卡）→ 作品网格 → 小工具行 → 一句话主张
 ├─ reports/latest.html        今日日报，由 n8n 每日覆盖，地址固定
 ├─ scripts/publish.py         发布脚本：校验 → 覆盖 → commit → push
+├─ scripts/make_icons.py      图标生成器：改配色或尺寸后重跑
+├─ scripts/inject_meta.py     批量注入 canonical / og / 图标链接（幂等，带 --dry）
 ├─ _incoming/                 n8n 的中间产物与发布日志（不参与部署）
 ├─ works/<slug>/index.html    每个作品一个目录，链接一律写全 ./works/<slug>/index.html
 ├─ assets/
@@ -16,10 +18,13 @@
 │  ├─ css/main.css            主页样式 + 响应式
 │  ├─ css/work.css            详情页样式（README 版式）
 │  ├─ js/main.js              主题切换 / 滚动入场
-│  └─ js/doc.js               详情页：代码复制 / 目录跟随高亮
+│  ├─ js/doc.js               详情页：代码复制 / 目录跟随高亮
+│  └─ img/                    站点图标：favicon.svg / favicon.ico / apple-touch-icon.png
 ├─ 404.html                   独立样式，不依赖外部资源
+├─ robots.txt                 允许全站抓取，声明 sitemap 地址
+├─ sitemap.xml                8 个页面，新增作品要手动加一条
 ├─ .nojekyll                  禁用 Jekyll 处理
-└─ CNAME                      （绑定自定义域名时才需要）
+└─ CNAME                      由 GitHub 后台填域名时自动生成，不要手动先提交
 ```
 
 ## 本地预览
