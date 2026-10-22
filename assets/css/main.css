@@ -330,7 +330,10 @@ body::before {
 
 @media (min-width: 1600px) {
 
-  .pager {
+  /* 必须挂在 body.page-home 上：详情页也有一枚 class="pager"（上一件/下一件），
+     不限定的话这里会把那枚真导航变成 position:fixed; inset:0 的整屏块，
+     两块不透明卡面直接糊住整页（1872 / 2560 宽下点击作品卡就看到白屏）。 */
+  body.page-home .pager {
     display: block;
     position: fixed;
     inset: 0;
@@ -338,7 +341,7 @@ body::before {
     pointer-events: none;
   }
 
-  .pager span {
+  body.page-home .pager span {
     position: absolute;
     display: block;
   }
