@@ -43,39 +43,49 @@ python -m http.server 8080
 
 首页 Hero 右侧那张卡固定在 `reports/latest.html`，**这个地址永不改变**，所以日报换新时首页一个字都不用改。
 
-链路：
+链路（**一条工作流跑完，不再手工配节点**）：
 
 ```
-n8n Schedule（每天 07:00）
-  → 你现有的生成节点，产出日报 HTML
-  → Read/Write Files from Disk 写到 _incoming/daily.html
-  → Execute Command 调 scripts/publish.py
-  → 覆盖 reports/latest.html → commit → push
+n8n Schedule（每天 07:00，工作流时区 Asia/Shanghai）
+  → 生成链 19 节点：12 家 RSS → 解析合并 → 条数校验 → 天气 → AI 打分 → AI 整理 → 渲染 HTML
+  → 转 HTML 附件
+  → 写日报文件：写 D:\n8n\out\daily.html（白名单内，见下方环境变量）
+  → 推送上线：执行 scripts/publish.py
+  → 校验 → 覆盖 reports/latest.html → commit → push（SSH 443）
   → GitHub Pages 约 1 分钟后发布
 ```
 
-**不需要在 GitHub 上建任何 Actions**。生成在你机器上，GitHub 只负责收和发。
+整条链共 **21 个节点**（生成 19 + 写盘 1 + 推送 1）。**不需要在 GitHub 上建任何 Actions**。生成在你机器上，GitHub 只负责收和发。
 
-### 一次性准备
+**仓库里不放 n8n 的工作流 JSON**：这个仓库是站点本身（页面 + 图片 + `publish.py`）。工作流只活在 n8n 自己的库里，要公开存档另开仓库。
 
-1. **先把仓库建起来并推一次**（见下面的「部署到 GitHub Pages」）。`publish.py` 发现没有 `.git` 或没有 remote 会直接报错退出，不会静默失败。
-2. **手动 `git push` 一次**，让 Windows 凭据管理器记住 GitHub 账号。否则 n8n 里那次 push 会卡在等账号密码，节点超时。
-3. **建好 `_incoming` 目录**（放 n8n 的中间产物，可随时清空）。
+### 已经做完的一次性准备
 
-### n8n 节点怎么配
+1. 仓库 `Wao777.github.io` 已建，`main` 已首推，本地 `origin` 指向 `ssh://git@ssh.github.com:443/Wao777/Wao777.github.io.git`（22 端口在本机不通，必须走 443）。
+2. 推送走 SSH key，n8n 里那次 push 不需要交互式登录。
+3. `D:\n8n\start-n8n.bat` 已加 `set NODES_EXCLUDE=[]`——n8n 2.x 默认封禁 Execute Command 节点，不加这一行工作流会报「Unrecognized node type」。
 
-| 节点 | 配置 |
-|---|---|
-| **Schedule Trigger** | Rule → Days，Hour `7`，Minute `0` |
-| **工作流 Settings** | Timezone 选 `Asia/Shanghai`。不改的话按 UTC 跑，实际会差 8 小时 |
-| **Read/Write Files from Disk**（旧版叫 Write Binary File） | Operation 选 `Write File to Disk`，File Name 填绝对路径 `<站点目录>\_incoming\daily.html` |
-| **IF**（建议加） | 判断上游是否真产出了内容（比如 `$json.error` 为空）。生成失败就跳过下一步，避免把报错页推上线 |
-| **Execute Command** | 见下方命令 |
+### 工作流需要的两个环境变量
 
-Execute Command 里把那串路径写死，别用 `{{ $json.xxx }}` 拼——经过二进制节点后路径经常丢：
+| 变量 | 值 | 为什么 |
+|---|---|---|
+| `NODES_EXCLUDE` | `[]` | n8n 2.0 起默认封禁 Execute Command 与 Local File Trigger，空数组才放开 |
+| `N8N_RESTRICT_FILE_ACCESS_TO` | `D:\n8n\out` | 写盘白名单。不在白名单里的路径会报「Access to the file is not allowed」，所以日报先落在 `D:\n8n\out` 再由脚本搬走 |
+
+两个都已经写进 `start-n8n.bat`。**用命令行 `n8n execute` 测试时要自己带上这两个变量**，否则报的错跟工作流本身无关。
+
+### 尾部三个节点
+
+| 节点 | 类型 | 配置 |
+|---|---|---|
+| 转 HTML 附件 | Convert to File | 转成 `text/html` 二进制，属性名 `data` |
+| 写日报文件 | Read/Write Files from Disk | Operation `write`，File Name `D:\n8n\out\daily.html` |
+| 推送上线 | Execute Command | 见下方命令 |
+
+Execute Command 里把路径写死，别用 `{{ $json.xxx }}` 拼——经过二进制节点后路径经常丢：
 
 ```cmd
-%USERPROFILE%\AppData\Local\Programs\Python\Python314\python.exe "<站点目录>\scripts\publish.py" "<站点目录>\_incoming\daily.html"
+%USERPROFILE%\AppData\Local\Programs\Python\Python314\python.exe "<站点目录>\scripts\publish.py" "D:\n8n\out\daily.html"
 ```
 
 路径含中文，如果 n8n 报「系统找不到指定的路径」，先确认引号没被吃掉；仍不行就把整个站点目录挪到纯英文路径下（GitHub Pages 不关心本地路径）。
@@ -210,13 +220,12 @@ python scripts\publish.py "路径\到\某个日报.html"
 
 | 位置 | 改什么 |
 |---|---|
-| `index.html` 导航 `.brand` | `名字` → 你的名字（导航目前只有品牌与主题切换，没有链接） |
+| 导航 `.brand` | 现为 `Wao 的个人站点`（八个页面都已统一）；导航只有品牌与主题切换，没有链接 |
 | `index.html` Hero 标题 | 「把零散的想法，做成能用的东西。」 |
 | `index.html` 一句话主张（`#about`） | 「把重复动作变成脚本，把数据变成界面。」 |
-| 所有页面的 `mailto:you@example.com` | 替换成真实邮箱 |
 | 每个 `works/<slug>/index.html` 的源码位 | 有仓库 → `源码 · GitHub ↗` 指向真实地址（`target="_blank"`）；没有 → 保持 `源码暂不提供` 静态标签，别做成点了没反应的假按钮 |
 | 每个详情页的版本号与 `.toc__meta` | 换成真实版本与规模（2026-10 起已去掉「更新」一项，别再补回去） |
-| 所有页面的页脚 | 年份与署名 |
+| 所有页面的页脚 | 只有版权行：`© 2026 · 由 AI 生成 · 托管于 GitHub Pages`；年份可改，页脚导航（作品/关于/邮件）已删除，别再补回 |
 
 ## 部署到 GitHub Pages
 

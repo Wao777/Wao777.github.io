@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>n8n 日报流水线 · 个人作品集</title>
-<meta name="description" content="19 个 n8n 节点把 12 家新闻源压成一份报纸，再经校验、提交、上线送到 Pages。生成跑在本机，GitHub 只做接收端。">
+<meta name="description" content="21 个 n8n 节点把 12 家新闻源压成一份报纸，再经校验、提交、上线送到 Pages。生成跑在本机，GitHub 只做接收端。">
 <meta name="theme-color" content="#F6F4EF" media="(prefers-color-scheme: light)">
 <meta name="theme-color" content="#0F1116" media="(prefers-color-scheme: dark)">
 <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='8' fill='%231B4DFF'/%3E%3Crect x='8' y='8' width='16' height='16' rx='4' fill='%23FFD400'/%3E%3C/svg%3E">
@@ -40,7 +40,7 @@
   <div class="nav__inner container">
     <a class="brand" href="../../index.html">
       <span class="brand__mark" aria-hidden="true"></span>
-      <span>名字</span>
+      <span>Wao 的个人站点</span>
     </a>
     <button class="theme-toggle" data-theme-toggle aria-pressed="false" aria-label="切换主题">
       <svg width="17" height="17" aria-hidden="true"><use href="#i-moon"/></svg>
@@ -71,7 +71,7 @@
       <p class="toc__label">本页目录</p>
       <ol class="toc__list" data-toc-list><li><a href="#what">这是什么</a></li><li><a href="#flow-gen">生成链路</a></li><li><a href="#flow-pub">发布链路</a></li><li><a href="#why">几个取舍</a></li><li><a href="#publish">发布脚本</a></li><li><a href="#fail">失败会怎样</a></li><li><a href="#faq">常见问题</a></li><li><a href="#log">更新记录</a></li></ol>
       <dl class="toc__meta">
-        <div><dt>规模</dt><dd>19 节点 + 122 行脚本</dd></div>
+        <div><dt>规模</dt><dd>21 节点 + 122 行脚本</dd></div>
         <div><dt>许可</dt><dd>自用</dd></div>
       </dl>
     </aside>
@@ -133,7 +133,8 @@
   ↓
 上线（GitHub Pages 构建完成即可访问）</code></pre></div>
 <p>发布这一段是一条直链，没有分支，做的事只有「把这个文件送上线」。中间那层校验是关键：生成失败时上游经常仍然写出一个 200 字节的错误页，直接覆盖就会把首页那张卡指向一页报错信息。</p>
-<div class="tbl"><table><thead><tr><th>节点</th><th>关键设置</th></tr></thead><tbody><tr><td>Schedule Trigger</td><td>每天 07:00；工作流 Settings 时区必须选 <code>Asia/Shanghai</code></td></tr><tr><td>写入节点</td><td><code>Read/Write Files from Disk</code>，File Name 填绝对路径；1.x 才有这个名字，旧版叫 Write Binary File</td></tr><tr><td>IF</td><td>判断上游是否真产出了内容，失败就跳过后面所有步骤</td></tr><tr><td>Execute Command</td><td>调 <code>publish.py</code>；路径写死，不用 <code>{{ $json.xxx }}</code> 拼</td></tr></tbody></table></div>
+<p>写盘和推送现在接在<strong>同一条工作流的尾部</strong>：19 个生成节点跑完，接着写盘、调 <code>publish.py</code>，一条链走到底，不再需要单独配推送流程。</p>
+<div class="tbl"><table><thead><tr><th>节点</th><th>关键设置</th></tr></thead><tbody><tr><td>Schedule Trigger</td><td>每天 07:00；工作流 Settings 时区必须选 <code>Asia/Shanghai</code></td></tr><tr><td>写日报文件</td><td><code>Read/Write Files from Disk</code>，固定写 <code>D:\n8n\out\daily.html</code>；路径必须在写盘白名单里，否则报「Access to the file is not allowed」</td></tr><tr><td>推送上线</td><td><code>Execute Command</code> 调 <code>publish.py</code>；路径写死，不用 <code>{{ $json.xxx }}</code> 拼。n8n 2.x 默认封禁这个节点，要 <code>NODES_EXCLUDE=[]</code> 它才存在</td></tr><tr><td>发送邮件</td><td>原链路的收尾，可留可禁；单独验证链路时先禁掉，免得跑一次发一封</td></tr></tbody></table></div>
 
 <h2 id="why">几个取舍</h2>
 <ul>
@@ -186,12 +187,7 @@
 
 <footer class="foot">
   <div class="foot__inner container">
-    <p>© 2026 · 用 HTML 与 CSS 手写 · 托管于 GitHub Pages</p>
-    <nav class="foot__links" aria-label="页脚导航">
-      <a href="../../index.html#works">作品</a>
-      <a href="../../index.html#about">关于</a>
-      <a href="mailto:you@example.com">邮件</a>
-    </nav>
+    <p>© 2026 · 由 AI 生成 · 托管于 GitHub Pages</p>
   </div>
 </footer>
 
