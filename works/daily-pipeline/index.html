@@ -4,13 +4,23 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>n8n 日报流水线 · Wao 的个人站点</title>
-<meta name="description" content="21 个 n8n 节点把 12 家新闻源压成一份报纸，再经校验、提交、上线送到 Pages。生成跑在本机，GitHub 只做接收端。">
+<meta name="description" content="24 个 n8n 节点把 12 家新闻源压成一份报纸，再经校验、提交、上线送到 Pages。开机触发，一天只出一期。">
 <meta name="theme-color" content="#F6F4EF" media="(prefers-color-scheme: light)">
 <meta name="theme-color" content="#0F1116" media="(prefers-color-scheme: dark)">
-<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='8' fill='%231B4DFF'/%3E%3Crect x='8' y='8' width='16' height='16' rx='4' fill='%23FFD400'/%3E%3C/svg%3E">
+<link rel="icon" href="../../assets/img/favicon.svg" type="image/svg+xml">
+<link rel="icon" href="../../assets/img/favicon.ico" sizes="32x32">
+<link rel="apple-touch-icon" href="../../assets/img/apple-touch-icon.png">
 <link rel="stylesheet" href="../../assets/css/tokens.css">
 <link rel="stylesheet" href="../../assets/css/main.css">
 <link rel="stylesheet" href="../../assets/css/work.css">
+<link rel="canonical" href="https://wao777.top/works/daily-pipeline/">
+<meta property="og:url" content="https://wao777.top/works/daily-pipeline/">
+<meta property="og:site_name" content="Wao 的个人站点">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:type" content="article">
+<meta property="og:title" content="n8n 日报流水线 · Wao 的个人站点">
+<meta property="og:description" content="24 个 n8n 节点把 12 家新闻源压成一份报纸，再经校验、提交、上线送到 Pages。开机触发，一天只出一期。">
+<meta name="twitter:card" content="summary">
 </head>
 <body style="--c1:#FF4D2E; --c2:#FFD400">
 
@@ -71,7 +81,7 @@
       <p class="toc__label">本页目录</p>
       <ol class="toc__list" data-toc-list><li><a href="#what">这是什么</a></li><li><a href="#flow-gen">生成链路</a></li><li><a href="#flow-pub">发布链路</a></li><li><a href="#why">几个取舍</a></li><li><a href="#publish">发布脚本</a></li><li><a href="#fail">失败会怎样</a></li><li><a href="#faq">常见问题</a></li><li><a href="#log">更新记录</a></li></ol>
       <dl class="toc__meta">
-        <div><dt>规模</dt><dd>21 节点 + 122 行脚本</dd></div>
+        <div><dt>规模</dt><dd>24 节点 + 122 行脚本</dd></div>
         <div><dt>许可</dt><dd>自用</dd></div>
       </dl>
     </aside>
@@ -89,7 +99,7 @@
 
 <h2 id="flow-gen">一 · 生成链路</h2>
 <p>重点在这一段：19 个节点、两次 AI 调用，其余全是本地计算。难点不是抓取，而是<strong>取舍</strong>——哪条上头版、哪条当大稿、同一件事被五家报道时怎么只留一条。</p>
-<div class="code"><div class="code__bar"><span class="code__lang">text</span><button class="code__copy" type="button" data-copy>复制</button></div><pre><code>定时触发（Schedule Trigger）
+<div class="code"><div class="code__bar"><span class="code__lang">text</span><button class="code__copy" type="button" data-copy>复制</button></div><pre><code>开机触发（Webhook，由开机脚本调一次）
   ↓
 抓取源（12 家 RSS 并发）
   ↓
@@ -117,13 +127,13 @@
 <div class="callout callout--warn"><svg width="16" height="16" aria-hidden="true"><use href="#i-warn"/></svg><p><strong>每一环都有降级，宁可出残报也不出空</strong>：天气三源全挂就留空占位，AI 两步全挂就退回规则分与原始候选，概念组缺失就退化成单条通排。代价是<strong>失败不报错</strong>——判断质量只能看 <code>rankDegraded</code> / <code>degraded</code> 这类业务字段，不能看节点执行状态是不是绿色。</p></div>
 
 <h2 id="flow-pub">二 · 发布链路</h2>
-<div class="code"><div class="code__bar"><span class="code__lang">text</span><button class="code__copy" type="button" data-copy>复制</button></div><pre><code>07:00  触发（Schedule Trigger）
+<div class="code"><div class="code__bar"><span class="code__lang">text</span><button class="code__copy" type="button" data-copy>复制</button></div><pre><code>开机  触发（Webhook；守卫判今天没跑过才继续）
   ↓
 取数整理（n8n 节点：抓取 + 摘要）
   ↓
 排版（拼成自包含 HTML，样式内联、零外链）
   ↓
-写盘（_incoming/daily.html）
+写盘（<n8n 目录>\out\daily.html）
   ↓
 校验（存在 / 大小 / 是不是 HTML）
   ↓
@@ -133,8 +143,8 @@
   ↓
 上线（GitHub Pages 构建完成即可访问）</code></pre></div>
 <p>发布这一段是一条直链，没有分支，做的事只有「把这个文件送上线」。中间那层校验是关键：生成失败时上游经常仍然写出一个 200 字节的错误页，直接覆盖就会把首页那张卡指向一页报错信息。</p>
-<p>写盘和推送现在接在<strong>同一条工作流的尾部</strong>：19 个生成节点跑完，接着写盘、调 <code>publish.py</code>，一条链走到底，不再需要单独配推送流程。</p>
-<div class="tbl"><table><thead><tr><th>节点</th><th>关键设置</th></tr></thead><tbody><tr><td>Schedule Trigger</td><td>每天 07:00；工作流 Settings 时区必须选 <code>Asia/Shanghai</code></td></tr><tr><td>写日报文件</td><td><code>Read/Write Files from Disk</code>，固定写 <code>D:\n8n\out\daily.html</code>；路径必须在写盘白名单里，否则报「Access to the file is not allowed」</td></tr><tr><td>推送上线</td><td><code>Execute Command</code> 调 <code>publish.py</code>；路径写死，不用 <code>{{ $json.xxx }}</code> 拼。n8n 2.x 默认封禁这个节点，要 <code>NODES_EXCLUDE=[]</code> 它才存在</td></tr><tr><td>发送邮件</td><td>原链路的收尾，可留可禁；单独验证链路时先禁掉，免得跑一次发一封</td></tr></tbody></table></div>
+<p>写盘和推送现在接在<strong>同一条工作流的尾部</strong>：生成节点跑完，接着写盘、调 <code>publish.py</code>、写回当日日期，一条链走到底。</p>
+<div class="tbl"><table><thead><tr><th>节点</th><th>关键设置</th></tr></thead><tbody><tr><td>开机触发（Webhook）</td><td>POST <code>/webhook/daily-brief-run</code>，由开机脚本在 n8n 就绪后调一次；<code>responseMode</code> 用 onReceived，立即返回不等结果</td></tr><tr><td>查上次运行 / 今天跑过吗</td><td>读 <code>.last-run</code> 里的日期，等于今天就整链结束——零点几秒，不抓网也不调 AI。一天开几次机都只出一期</td></tr><tr><td>写日报文件</td><td><code>Read/Write Files from Disk</code>，固定写 <code><n8n 目录>\out\daily.html</code>；路径必须在写盘白名单里，否则报「Access to the file is not allowed」</td></tr><tr><td>推送上线</td><td><code>Execute Command</code> 调 <code>publish.py</code>；路径写死，不用 <code>{{ $json.xxx }}</code> 拼。n8n 2.x 默认封禁这个节点，要 <code>NODES_EXCLUDE=[]</code> 它才存在</td></tr><tr><td>记下今天</td><td>推送成功后才写日期。失败的那次不算「已跑」，下次开机自动重试</td></tr></tbody></table></div>
 
 <h2 id="why">几个取舍</h2>
 <ul>

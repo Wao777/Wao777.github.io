@@ -43,19 +43,31 @@ python -m http.server 8080
 
 首页 Hero 右侧那张卡固定在 `reports/latest.html`，**这个地址永不改变**，所以日报换新时首页一个字都不用改。
 
-链路（**一条工作流跑完，不再手工配节点**）：
+链路（**一条工作流跑完，不用手工配节点**）：
 
 ```
-n8n Schedule（每天 07:00，工作流时区 Asia/Shanghai）
-  → 生成链 19 节点：12 家 RSS → 解析合并 → 条数校验 → 天气 → AI 打分 → AI 整理 → 渲染 HTML
+开机 / 登录
+  → Windows 计划任务 n8n-autostart 跑 n8n-autostart.pyw
+      静默拉起 n8n → 等 healthz 就绪 → POST webhook
+  → 开机触发（Webhook，POST /webhook/daily-brief-run）
+  → 守卫 1：查上次运行，打印 <n8n 目录>\out\.last-run 里的日期
+  → 守卫 2：等于今天就整链结束（零点几秒，不抓网不调 AI）
+  → 生成链：12 家 RSS → 解析合并 → 条数校验 → 天气 → AI 打分 → AI 整理 → 渲染 HTML
   → 转 HTML 附件
-  → 写日报文件：写 D:\n8n\out\daily.html（白名单内，见下方环境变量）
+  → 写日报文件：写 <n8n 目录>\out\daily.html（白名单内，见下方环境变量）
   → 推送上线：执行 scripts/publish.py
   → 校验 → 覆盖 reports/latest.html → commit → push（SSH 443）
+  → 记下今天：把今天日期写回 <n8n 目录>\out\.last-run
   → GitHub Pages 约 1 分钟后发布
 ```
 
-整条链共 **21 个节点**（生成 19 + 写盘 1 + 推送 1）。**不需要在 GitHub 上建任何 Actions**。生成在你机器上，GitHub 只负责收和发。
+整条链共 **24 个节点**（原 19 节点生成链 + 写盘 / 推送 / 记账各 1 + 守卫 2）。
+
+**一天只跑一次**：没有定时任务，靠「开机叫醒 + 日期守卫」。`.last-run` 里存的是**上次成功发布**的日期，等于今天就整链结束。所以一天开几次机都只出一期；而失败的那次不算「已跑」，下次开机自动重试——宁可可重试，也不要因为一次抓取失败整天没报。
+
+**为什么不用定时触发**：n8n 没有「开机触发」这种东西，Schedule Trigger 只能按 cron 跑。7 点开机不现实，所以触发换成 Webhook，由开机脚本等 n8n 就绪后调一次。
+
+**开机脚本只对 404 重试**：n8n 刚起来时 webhook 还没注册，会返回 404，这时重试是安全的（工作流根本没开始跑）；一旦拿到任何响应就停止，绝不重复 POST——否则一次开机可能变成两次执行。
 
 **仓库里不放 n8n 的工作流 JSON**：这个仓库是站点本身（页面 + 图片 + `publish.py`）。工作流只活在 n8n 自己的库里，要公开存档另开仓库。
 
@@ -63,29 +75,32 @@ n8n Schedule（每天 07:00，工作流时区 Asia/Shanghai）
 
 1. 仓库 `Wao777.github.io` 已建，`main` 已首推，本地 `origin` 指向 `ssh://git@ssh.github.com:443/Wao777/Wao777.github.io.git`（22 端口在本机不通，必须走 443）。
 2. 推送走 SSH key，n8n 里那次 push 不需要交互式登录。
-3. `D:\n8n\start-n8n.bat` 已加 `set NODES_EXCLUDE=[]`——n8n 2.x 默认封禁 Execute Command 节点，不加这一行工作流会报「Unrecognized node type」。
+3. `<n8n 目录>\start-n8n.bat` 已加 `set NODES_EXCLUDE=[]`——n8n 2.x 默认封禁 Execute Command 节点，不加这一行工作流会报「Unrecognized node type」。
+4. 计划任务 `n8n-autostart`（登录触发）指向 `pythonw.exe <n8n 目录>\n8n-autostart.pyw`；它调的是无 `pause` 版本的 `<n8n 目录>\start-n8n-task.bat`，日志写到 `<n8n 目录>\out\n8n-service.log`（**这两个 bat 必须保持 CRLF**，LF 会让 cmd 漏掉环境变量，数据跑到 C: 盘）。
+5. `<n8n 目录>\mark-run.py` 与 `<n8n 目录>\read-last-run.py` 分别负责写、读 `.last-run`。
 
 ### 工作流需要的两个环境变量
 
 | 变量 | 值 | 为什么 |
 |---|---|---|
 | `NODES_EXCLUDE` | `[]` | n8n 2.0 起默认封禁 Execute Command 与 Local File Trigger，空数组才放开 |
-| `N8N_RESTRICT_FILE_ACCESS_TO` | `D:\n8n\out` | 写盘白名单。不在白名单里的路径会报「Access to the file is not allowed」，所以日报先落在 `D:\n8n\out` 再由脚本搬走 |
+| `N8N_RESTRICT_FILE_ACCESS_TO` | `<n8n 目录>\out` | 写盘白名单。不在白名单里的路径会报「Access to the file is not allowed」，所以日报先落在 `<n8n 目录>\out` 再由脚本搬走 |
 
 两个都已经写进 `start-n8n.bat`。**用命令行 `n8n execute` 测试时要自己带上这两个变量**，否则报的错跟工作流本身无关。
 
-### 尾部三个节点
+### 尾部四个节点
 
 | 节点 | 类型 | 配置 |
 |---|---|---|
 | 转 HTML 附件 | Convert to File | 转成 `text/html` 二进制，属性名 `data` |
-| 写日报文件 | Read/Write Files from Disk | Operation `write`，File Name `D:\n8n\out\daily.html` |
+| 写日报文件 | Read/Write Files from Disk | Operation `write`，File Name `<n8n 目录>\out\daily.html` |
 | 推送上线 | Execute Command | 见下方命令 |
+| 记下今天 | Execute Command | 跑 `mark-run.py`，写 `.last-run` |
 
 Execute Command 里把路径写死，别用 `{{ $json.xxx }}` 拼——经过二进制节点后路径经常丢：
 
 ```cmd
-%USERPROFILE%\AppData\Local\Programs\Python\Python314\python.exe "<站点目录>\scripts\publish.py" "D:\n8n\out\daily.html"
+%USERPROFILE%\AppData\Local\Programs\Python\Python314\python.exe "<站点目录>\scripts\publish.py" "<n8n 目录>\out\daily.html"
 ```
 
 路径含中文，如果 n8n 报「系统找不到指定的路径」，先确认引号没被吃掉；仍不行就把整个站点目录挪到纯英文路径下（GitHub Pages 不关心本地路径）。
@@ -177,7 +192,7 @@ python scripts\publish.py "路径\到\某个日报.html"
 <div class="card__cover">
   <span class="card__num">02</span>
   <div class="card__flow" aria-hidden="true">
-    <span class="flow__step"><b>07:00</b><i>定时触发</i></span>
+    <span class="flow__step"><b>开机</b><i>自动触发</i></span>
     <span class="flow__line"></span>
     <span class="flow__step"><b>n8n</b><i>取数排版</i></span>
     <span class="flow__line"></span>
