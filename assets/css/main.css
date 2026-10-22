@@ -61,6 +61,22 @@ button { font: inherit; color: inherit; border: 0; background: none; cursor: poi
   padding-inline: var(--gutter);
 }
 
+/* 2K / 超宽屏的容器宽度：
+   1280 封顶在 1920（1080p）上刚好吃满观感，到 2560 就只占屏宽一半、
+   两侧各剩 640px —— 边带装饰填得再满，内容本身没长大，整体还是缩在中间。
+   所以让容器越过 1920 之后跟着视口长：1280 → 1520 线性（每宽 100px 放 37.5px），
+   到 1600 封顶（≈2773 宽才够到，超宽屏不会无限拉长）。
+   1920 及以下完全不动，1080p 那一版一个像素都不变。
+   为什么挂在 body.page-home 而不是 :root：详情页共用 main.css，
+   它们要维持现有版心（`.doc__head` 56rem / 正文 48rem 是按 1280 配的），
+   用户也明确要求详情页先不动。变量写在 body 上，rail / pager 的
+   `calc((100vw - var(--w-max)) / 2 ...)` 会自动跟着走，不用另改公式。 */
+@media (min-width: 1920px) {
+  body.page-home {
+    --w-max: clamp(1280px, 1280px + (100vw - 1920px) * .375, 1600px);
+  }
+}
+
 .skip {
   position: absolute;
   left: -9999px;
@@ -153,8 +169,12 @@ body::before {
    现在反过来：把它放大到 300、**大部分藏到卡片后面**，露出来的是一段弧。
    遮挡本身就说明了前后关系，不再有"支点"可读。
    位置（贴内容边缘算，不改卡片高度就永远成立）：
-     左探 96px  → right = 内容右缘 -（卡片宽 384 - 右端盖住 204）= gutter + 180
+     左探 96px  → 环左缘 = 卡片左缘 - 96，于是环右缘距容器右缘
+                  = gutter + 卡片宽 - 204
      下探 80px  → hero 下内边距 104 - 80 = bottom 24
+   卡片宽不写死：hero 右列 = (w-max - 2·gutter - gap) / 2.92（1.92fr : 1fr），
+   写成 calc 后 2K 下容器放宽到 1520、卡片变到 466，左探仍是 96 —— 环不会
+   因为容器变宽而相对卡片漂走（写死 180px 的话会漂到 60 左右，露出来的弧就窄了）。
    环顶落在卡片上沿之下（不探到导航），环底也只到 hero 下内边距里，
    不会碰到下面「作品」那条分隔线。
    挂在 .hero 上而不是 .daily 上：卡片 hover 有 transform，会生成层叠上下文，
@@ -163,7 +183,7 @@ body::before {
   content: "";
   position: absolute;
   z-index: -1;
-  right: calc(var(--gutter) + 180px);
+  right: calc(var(--gutter) + (var(--w-max) - var(--gutter) * 2 - 64px) / 2.92 - 204px);
   bottom: 24px;
   width: 300px;
   height: 300px;
