@@ -5,10 +5,18 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>页面走丢了 · 404</title>
 <meta name="robots" content="noindex">
+<meta name="color-scheme" content="light dark">
 <style>
   :root {
+    color-scheme: light dark;
     --bg: #F6F4EF; --surface: #FFFFFF; --ink: #14161A; --ink-2: #50555F;
     --line: #E3DFD7; --brand: #1B4DFF; --pop-a: #FF4D2E; --pop-b: #FFD400;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --bg: #0F1116; --surface: #171A21; --ink: #EDEFF4; --ink-2: #A7AEBC;
+      --line: #262A33; --brand: #6C8CFF; --pop-a: #FF6A4D; --pop-b: #FFD84D;
+    }
   }
   * { box-sizing: border-box; }
   body {

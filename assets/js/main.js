@@ -35,6 +35,18 @@
   });
   syncToggle();
 
+  /* 未手动选过主题时，跟随系统偏好的实时变化 */
+  var mq = window.matchMedia('(prefers-color-scheme: dark)');
+  function onSchemeChange(e) {
+    var saved = null;
+    try { saved = localStorage.getItem(STORE_KEY); } catch (err) {}
+    if (saved === 'dark' || saved === 'light') return;
+    root.setAttribute('data-theme', e.matches ? 'dark' : 'light');
+    syncToggle();
+  }
+  if (mq.addEventListener) mq.addEventListener('change', onSchemeChange);
+  else if (mq.addListener) mq.addListener(onSchemeChange);
+
   /* ---------- 滚动入场 ---------- */
   var reveals = document.querySelectorAll('.reveal');
   if (!reveals.length) return;
