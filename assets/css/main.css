@@ -12,10 +12,22 @@ html {
 
 body {
   margin: 0;
-  background: var(--bg);
+  background-color: var(--bg);
+  /* 纸纹：24px 点阵，附着固定在视口 —— 滚动时纹不动，像纸背的肌理。
+     卡片自带白底，会把它盖住，所以纹理只从留白里透出来。 */
+  background-image: radial-gradient(circle,
+                    color-mix(in srgb, var(--ink) 13%, transparent) 1px,
+                    transparent 1.2px);
+  background-size: 24px 24px;
+  background-repeat: repeat;
+  background-attachment: fixed;
   color: var(--ink);
-  font-family: "Inter", "HarmonyOS Sans SC", "PingFang SC", "Hiragino Sans GB",
-               "Microsoft YaHei", "Noto Sans SC", system-ui, -apple-system, "Segoe UI", sans-serif;
+  /* 拉丁排在中文之前：Inter 并没有加载（无 @font-face、无外链），
+     若把它放首位，数字与英文会落到雅黑自带的拉丁字形上，几何感全丢。
+     Segoe UI 是 Windows 必有的一项，先让它接管西文，中文再落到雅黑。 */
+  font-family: "Segoe UI", "Inter", "HarmonyOS Sans SC", "PingFang SC",
+               "Hiragino Sans GB", "Microsoft YaHei", "Noto Sans SC",
+               system-ui, -apple-system, sans-serif;
   font-size: 16px;
   line-height: 1.65;
   letter-spacing: .005em;
@@ -62,11 +74,326 @@ button { font: inherit; color: inherit; border: 0; background: none; cursor: poi
 .skip:focus { left: 0; }
 
 .eyebrow {
-  font-size: .75rem;
+  font-size: var(--fs-xs);
   font-weight: 600;
   letter-spacing: .16em;
   text-transform: uppercase;
   color: var(--ink-3);
+}
+
+/* ---------- 背景装饰 ----------
+   页面留白多，纯色底显空。这里只在留白处补几笔「版式笔画」：
+   纸纹 + 顶部光雾（全局），刻尺 / 描边环 / 斜纹块 / 小方块（区块局部）。
+   三条规矩：
+   · 一律 z-index:-1 + pointer-events:none —— 衬在内容之下，不吃点击、不进 tab 序；
+   · 颜色全部由 --ink / --brand / --pop-* 混合，深色模式自动跟着翻，不另写一套；
+   · 不占文档流、不加元素，全部用伪元素画，正文一个字没动。 */
+
+/* 顶部一层极淡的品牌色光，把"平"的米白托出一点层次 */
+body::before {
+  content: "";
+  position: fixed;
+  inset: 0 0 auto;
+  height: 44vh;
+  z-index: -1;
+  pointer-events: none;
+  background: radial-gradient(72% 100% at 50% 0,
+              color-mix(in srgb, var(--brand) 4.5%, transparent),
+              transparent 70%);
+}
+
+/* 深色下点阵要收一号，否则亮点在近黑底上太抢 */
+[data-theme="dark"] body {
+  background-image: radial-gradient(circle,
+                    color-mix(in srgb, var(--ink) 7%, transparent) 1px,
+                    transparent 1.2px);
+}
+
+/* eyebrow 左侧一枚小色块（蓝底 + 橙偏移影，同导航栏 .brand__mark 的语言），
+   绝对定位挂在文字左外侧，不动原有缩进 */
+.eyebrow { position: relative; }
+
+.eyebrow::before {
+  content: "";
+  position: absolute;
+  left: -17px;
+  top: 50%;
+  width: 7px;
+  height: 7px;
+  margin-top: -3.5px;
+  border-radius: 2px;
+  background: var(--pop-a);
+  box-shadow: 5px 4px 0 -1.5px color-mix(in srgb, var(--brand) 55%, transparent);
+  pointer-events: none;
+}
+
+/* Hero 左下角一排刻尺；右下的描边环改成日报卡背后的一枚大环，见下 */
+.hero { position: relative; }
+
+.hero::before {
+  content: "";
+  position: absolute;
+  z-index: -1;
+  left: var(--gutter);
+  bottom: clamp(30px, 4.2vw, 54px);
+  width: 132px;
+  height: 9px;
+  pointer-events: none;
+  background: repeating-linear-gradient(90deg,
+              color-mix(in srgb, var(--ink) 34%, transparent) 0 1px,
+              transparent 1px 22px);
+  -webkit-mask-image: linear-gradient(to right, #000 0 62%, transparent 100%);
+  mask-image: linear-gradient(to right, #000 0 62%, transparent 100%);
+}
+
+/* 日报卡背后的大描边环（原先是 84px 小环窝在卡片右下角）。
+   小环的毛病是"顶在角点上"：黄底板下探到 hero 内容下沿之下 12px，环顶只比
+   底板低 4px，底板 22px 圆角的角点正好压在环的最高点 —— 读成"卡片踩着圆球
+   边缘、随时会滑下来"。缩小、下移、贴分隔线都试过，换来的只是"更小的球"。
+   现在反过来：把它放大到 300、**大部分藏到卡片后面**，露出来的是一段弧。
+   遮挡本身就说明了前后关系，不再有"支点"可读。
+   位置（贴内容边缘算，不改卡片高度就永远成立）：
+     左探 96px  → right = 内容右缘 -（卡片宽 384 - 右端盖住 204）= gutter + 180
+     下探 80px  → hero 下内边距 104 - 80 = bottom 24
+   环顶落在卡片上沿之下（不探到导航），环底也只到 hero 下内边距里，
+   不会碰到下面「作品」那条分隔线。
+   挂在 .hero 上而不是 .daily 上：卡片 hover 有 transform，会生成层叠上下文，
+   那时 z-index:-1 的伪元素会翻到卡面之上；挂 hero 则永远是背景。 */
+.hero::after {
+  content: "";
+  position: absolute;
+  z-index: -1;
+  right: calc(var(--gutter) + 180px);
+  bottom: 24px;
+  width: 300px;
+  height: 300px;
+  border-radius: 50%;
+  border: 13px solid color-mix(in srgb, var(--pop-c) 22%, transparent);
+  pointer-events: none;
+}
+
+/* 深色下同一档透明度会显得更沉，但 300px 的大弧一旦提亮就会抢卡片，
+   所以两套主题共用 22% —— 深色实测 26% 时已经像一条实心绿带。 */
+
+/* 一句话主张：右侧一枚大描边环 + 左下角一块斜纹，把这两处留白收住 */
+.statement { position: relative; }
+
+.statement::before {
+  content: "";
+  position: absolute;
+  z-index: -1;
+  right: var(--gutter);
+  top: 50%;
+  width: 240px;
+  height: 240px;
+  transform: translateY(-50%);
+  border-radius: 50%;
+  border: 16px solid color-mix(in srgb, var(--brand) 9%, transparent);
+  pointer-events: none;
+}
+
+.statement::after {
+  content: "";
+  position: absolute;
+  z-index: -1;
+  left: var(--gutter);
+  bottom: 26px;
+  width: 96px;
+  height: 96px;
+  pointer-events: none;
+  background: repeating-linear-gradient(45deg,
+              transparent 0 8px,
+              color-mix(in srgb, var(--pop-b) 34%, transparent) 8px 9px);
+  -webkit-mask-image: radial-gradient(closest-side, #000 6%, transparent 94%);
+  mask-image: radial-gradient(closest-side, #000 6%, transparent 94%);
+}
+
+/* ---------- 宽屏页框（≥1600px 才出现）----------
+   2560 这类 2K 屏上，容器封顶 1280 只占屏宽一半，两侧各剩 640px 纯背景 ——
+   光靠衬在内容下的纹理救不回来。这里把边带当杂志的页边注来用：
+   一条紧贴内容边缘的 1px 竖线 + 每 48px 一根短刻度（向外长）+ 竖排 mono 小字
+   + 两枚大描边环 + 两枚小色块。
+   位置全部相对「内容边缘」算，所以视口越宽环越往外走、越窄越先移出屏幕，
+   任何宽度都不会压到正文。窄于 1600px 时边带不足 160px，整组隐藏。 */
+.rail { display: none; }
+
+@media (min-width: 1600px) {
+
+  .rail {
+    position: fixed;
+    z-index: -1;
+    top: 0;
+    bottom: 0;
+    display: block;
+    width: 60px;
+    /* 竖线站在内侧（朝内容），刻度与文字往外侧长 */
+    left: calc((100vw - var(--w-max)) / 2 - 60px);
+    pointer-events: none;
+    background-image:
+      linear-gradient(to right,
+        color-mix(in srgb, var(--ink) 18%, transparent) 0 1px, transparent 1px),
+      repeating-linear-gradient(to bottom,
+        color-mix(in srgb, var(--ink) 12%, transparent) 0 1px, transparent 1px 48px);
+    background-size: 1px 100%, 11px 100%;
+    background-position: right top, right top;
+    background-repeat: no-repeat, repeat-y;
+  }
+
+  .rail--right {
+    left: auto;
+    right: calc((100vw - var(--w-max)) / 2 - 60px);
+    background-position: left top, left top;
+  }
+
+  .rail__label {
+    position: absolute;
+    top: 50%;
+    left: 7px;
+    transform: translateY(-50%);
+    writing-mode: vertical-rl;
+    font-family: var(--mono);
+    font-size: .6rem;
+    letter-spacing: .32em;
+    text-transform: uppercase;
+    color: color-mix(in srgb, var(--ink) 28%, transparent);
+    white-space: nowrap;
+    user-select: none;
+  }
+
+  .rail--right .rail__label { left: auto; right: 7px; }
+
+  /* 左：蓝描边大环，离内容 200px，整枚落在边带里 */
+  /* 左：竖线外侧挂一枚橙红小方块（同导航栏 .brand__mark 的语言） */
+  .rail--left::after {
+    content: "";
+    position: absolute;
+    top: 71%;
+    right: 20px;
+    width: 11px;
+    height: 11px;
+    border-radius: 3px;
+    background: var(--pop-a);
+    box-shadow: 8px 8px 0 -3px color-mix(in srgb, var(--brand) 50%, transparent);
+  }
+
+  /* 右：一枚绿点，呼应日报卡底部那个状态点 */
+  .rail--right::after {
+    content: "";
+    position: absolute;
+    top: 26%;
+    left: 24px;
+    width: 7px;
+    height: 7px;
+    border-radius: 50%;
+    background: var(--pop-c);
+    box-shadow: 0 0 0 4px color-mix(in srgb, var(--pop-c) 16%, transparent);
+  }
+}
+
+/* ---------- 页边色块（≥1600px）----------
+   三个大几何形贴着「内容区 / 边带」的交界线站，position:fixed 不动。
+   z-index:0 —— 和卡片同层但 DOM 在前，所以**永远在卡片后方**：
+   卡片滑动时会整块盖住它们，只从卡片之间的缝隙里露出来，
+   于是内容在动、形状不动，读作翻页。不遮任何卡片边缘，也就不挡内容。
+   位置公式：calc((100vw - var(--w-max)) / 2 + var(--gutter) + 越界量 - 宽度) */
+.pager { display: none; }
+
+@media (min-width: 1600px) {
+
+  .pager {
+    display: block;
+    position: fixed;
+    inset: 0;
+    z-index: 0;
+    pointer-events: none;
+  }
+
+  .pager span {
+    position: absolute;
+    display: block;
+  }
+
+  /* 构图重心（2560×1345 实测，三块的中心 y / 面积 / 不透明度）：
+     原来 24% / 61% / 78%，加权重心落在 49.7% —— 正好在中线上，
+     但视觉上却"头重、随时会滑下来"，原因有三条，都不是数值能看出来的：
+       ① 方块的 bbox 顶边离视口顶只有 19px，等于贴着天花板被切掉一块；
+       ② 左侧只有"高处一大块 + 脚下一根细条（只探出 130px）"，下半截是空的；
+       ③ 方块斜 12°、胶囊反倒斜 8°，两个反向倾角把画面撑成个"八"字。
+     现在：方块 520→470、-12°→-8°、顶边从 19 挪到 144（离导航 79px）；
+     圆下移 81px（510→592）并与方块共用「向内切 120px」的同一条内切线；
+     胶囊 150×430 → 200×400、+8°→+5°、上移下探（974→1390）撑住底角。
+     结果是加权重心从 49.7% 落到 57.8%（中线略偏下），横向 50.2%→52.7%（几乎居中），
+     顶部那片空白交还给标题 —— 背景不再替标题抢重心。 */
+
+  /* 左：大圆角方块，斜置 -8°，bbox 300–830 × 144–675，中心 (565, 410)。
+     仍是标题的底板，但从"压住标题上半"改成"托在标题下沿"。 */
+  .pager__square {
+    top: 13%;
+    left: calc((100vw - var(--w-max)) / 2 + var(--gutter) + 120px - 470px);
+    width: 470px;
+    height: 470px;
+    border-radius: 108px;
+    transform: rotate(-8deg);
+    background: color-mix(in srgb, var(--brand) 9%, transparent);
+  }
+
+  /* 右：大圆，1744–2364 × 592–1212，中心 (2054, 902)。
+     被卡片切成半个月牙；下移一档后与左块错开半个身位，
+     两者对画面中心近似中心对称（左上 ↔ 右下），互为配重。 */
+  .pager__disc {
+    top: 44%;
+    right: calc((100vw - var(--w-max)) / 2 + var(--gutter) + 120px - 620px);
+    width: 620px;
+    height: 620px;
+    border-radius: 50%;
+    background: color-mix(in srgb, var(--pop-b) 10%, transparent);
+  }
+
+  /* 左：细长胶囊，533–767 × 974–1390，中心 (650, 1182)。
+     原来 150×430、斜 8°，只从内容左边缘探出 130px，像根被截断的线头；
+     现在 200×400、斜 5°，探出 147px，成了能压住画面底角的第三块实形。
+     顶边避开页框那枚橙红小方块（955–966），底边仍在视口下沿之外，
+     读作"从画面下缘长出来"，不再是悬浮的小条。 */
+  .pager__pill {
+    top: 73%;
+    left: calc((100vw - var(--w-max)) / 2 + var(--gutter) + 70px - 200px);
+    width: 200px;
+    height: 400px;
+    border-radius: 999px;
+    transform: rotate(5deg);
+    background: color-mix(in srgb, var(--pop-c) 11%, transparent);
+  }
+
+  /* 深色底比米白暗得多，同百分比会更"亮"，等于把重量又压回头部。
+     按新的上轻下重改：方块 7%→6%，胶囊 9%→11%，圆不变。 */
+  [data-theme="dark"] .pager__square {
+    background: color-mix(in srgb, var(--brand) 6%, transparent);
+  }
+  [data-theme="dark"] .pager__disc {
+    background: color-mix(in srgb, var(--pop-b) 8%, transparent);
+  }
+  [data-theme="dark"] .pager__pill {
+    background: color-mix(in srgb, var(--pop-c) 11%, transparent);
+  }
+}
+
+/* ---------- 整屏电流（canvas）----------
+   由 assets/js/current.js 驱动：每条电流 = 一条随机 PCB 走线（0/45/90 折线）
+   + 一段沿走线流动的亮段，走出画面就换一条新的。
+   走线 1px、透明度 .09，真正看得见的是那条拖尾；整块衬在内容之下，
+   卡片白底会把它挡掉 —— 电流只从留白与卡片缝隙里穿过去。 */
+.current { display: none; }
+
+@media (min-width: 1600px) {
+  .current {
+    display: block;
+    position: fixed;
+    z-index: -1;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+  }
 }
 
 /* ---------- 导航 ---------- */
@@ -127,7 +454,10 @@ button { font: inherit; color: inherit; border: 0; background: none; cursor: poi
 
 .hero {
   display: grid;
-  grid-template-columns: minmax(0, 1.15fr) minmax(0, .85fr);
+  /* 右列 = 384px = 6 列网（184 + 16gap）里的 2 列整，占住第 5–6 列，
+     右缘贴容器；原 1.15/.85 得到 476px，比两列宽 92、比三列窄 108，落在网格之外。
+     （左列 736 保持宽容，给 66px 标题留出余量，不为了对齐去挤它） */
+  grid-template-columns: minmax(0, 1.92fr) minmax(0, 1fr);
   align-items: center;
   gap: clamp(32px, 4vw, 64px);
   padding-block: clamp(56px, 9vw, 120px) clamp(56px, 8vw, 104px);
@@ -137,8 +467,10 @@ button { font: inherit; color: inherit; border: 0; background: none; cursor: poi
 
 .hero h1 {
   font-size: clamp(2.35rem, 5.6vw, 4.15rem);
-  letter-spacing: -.042em;
-  line-height: 1.04;
+  /* 中文方块字本身侧边距就窄，-.042em 在 66px 下每字收 2.8px，换一段更长的文案就会撞行；
+     收到 -.03em 留余量。行高 1.04 → 1.08，两行之间才有呼吸 */
+  letter-spacing: -.03em;
+  line-height: 1.08;
   margin-top: 18px;
 }
 
@@ -202,15 +534,11 @@ button { font: inherit; color: inherit; border: 0; background: none; cursor: poi
   border-radius: inherit;
 }
 
-/* 顶部双色渐变条，与作品卡同一语言 */
-.daily::before {
-  content: "";
-  position: absolute;
-  inset: 0 0 auto;
-  height: 3px;
-  border-radius: var(--r-lg) var(--r-lg) 0 0;
-  background: linear-gradient(90deg, var(--brand), var(--pop-a));
-}
+/* 顶部双色渐变条已撤掉。
+   理由：①这张卡不是作品卡，借作品卡的"顶端色带"语言本来就勉强，它的身份由黄底板承担；
+        ② brand → pop-a 在 sRGB 里直插会经过一段发灰的黄绿，正是深色下最"刺眼"的一条；
+        ③同一张卡上已经有黄底板这个重手势，再叠一条彩带等于两个主音。
+   若日后觉得卡面"没头"，用 2px solid var(--brand) 的单色顶线替代，别恢复渐变。 */
 
 .daily__head {
   display: flex;
@@ -224,7 +552,7 @@ button { font: inherit; color: inherit; border: 0; background: none; cursor: poi
 
 .daily__kicker {
   margin: 0;
-  font-size: .78rem;
+  font-size: var(--fs-xs);
   font-weight: 700;
   letter-spacing: .1em;
   color: var(--ink);
@@ -232,7 +560,7 @@ button { font: inherit; color: inherit; border: 0; background: none; cursor: poi
 
 .daily__date {
   margin-left: auto;
-  font-size: .72rem;
+  font-size: var(--fs-xs);
   letter-spacing: .1em;
   color: var(--ink-3);
   font-variant-numeric: tabular-nums;
@@ -240,7 +568,7 @@ button { font: inherit; color: inherit; border: 0; background: none; cursor: poi
 
 .daily__lead {
   margin: 14px 0 0;
-  font-size: 1.22rem;
+  font-size: var(--fs-lg);
   font-weight: 800;
   line-height: 1.34;
   letter-spacing: -.022em;
@@ -306,13 +634,21 @@ button { font: inherit; color: inherit; border: 0; background: none; cursor: poi
   flex: none;
 }
 
+/* 深色下这块是硬编码的亮蓝 → 亮绿，压在近黑卡面上等于一块荧光板（用户点名的"刺眼"）。
+   改成跟 --brand / --pop-c 混深底：色相不变，亮度退到"缩略图"该在的位置。 */
+[data-theme="dark"] .daily__pic {
+  background: linear-gradient(135deg,
+              color-mix(in srgb, var(--brand) 48%, var(--surface)),
+              color-mix(in srgb, var(--pop-c) 36%, var(--surface)));
+}
+
 .daily__foot {
   display: flex;
   align-items: center;
   gap: 7px;
   padding-top: 12px;
   border-top: 1px solid var(--line);
-  font-size: .73rem;
+  font-size: var(--fs-xs);
   color: var(--ink-3);
 }
 
@@ -342,6 +678,26 @@ button { font: inherit; color: inherit; border: 0; background: none; cursor: poi
    改这里之前先算一遍 作品区(1 屏) 的总高。 */
 .works { padding-block: clamp(6px, 1.2vw, 12px) clamp(40px, 4.4vw, 56px); }
 
+/* 分区标签：作品区与小工具区共用一套（12px 小字 + 一条细线）。
+   原来只有「小工具」有标签、且排在作品之后，字号还比它管的条目名小 ——
+   层级倒挂。现在作品区有了开头，两组用同一种语言说话。 */
+.group-head {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  margin-bottom: 10px;
+}
+
+.group-title {
+  flex: none;
+  font-size: var(--fs-xs);
+  font-weight: 700;
+  letter-spacing: .14em;
+  color: var(--ink-3);
+}
+
+.group-rule { flex: 1; height: 1px; background: var(--line); }
+
 .grid {
   display: grid;
   grid-template-columns: repeat(6, 1fr);
@@ -365,7 +721,8 @@ button { font: inherit; color: inherit; border: 0; background: none; cursor: poi
   flex-direction: column;
   height: 100%;
   background: var(--surface);
-  border: 1px solid var(--line);
+  /* 纸底 #F6F4EF 与卡面明度差极小，描边必须比 --line 重一档才看得出边界 */
+  border: 1px solid var(--card-line);
   border-radius: var(--r-lg);
   overflow: hidden;
   transition: transform var(--dur) var(--ease),
@@ -404,9 +761,11 @@ button { font: inherit; color: inherit; border: 0; background: none; cursor: poi
   display: flex;
   flex-direction: column;
   padding: 44px 20px 18px;
+  /* 亮端原来只混到 26% 白（黄卡 ≈ #FFF4BD），明度与纸底 #F6F4EF 几乎相同，
+     卡片右半"没边"。提到 34% 后卡面自己立得住，不再靠边框撑 */
   background: linear-gradient(135deg,
-              color-mix(in srgb, var(--c1) 15%, var(--surface)),
-              color-mix(in srgb, var(--c2) 26%, var(--surface)));
+              color-mix(in srgb, var(--c1) 20%, var(--surface)),
+              color-mix(in srgb, var(--c2) 34%, var(--surface)));
 }
 
 /* 装饰：右上描边圆环 + 左下色块，hover 时轻微位移 */
@@ -447,6 +806,7 @@ button { font: inherit; color: inherit; border: 0; background: none; cursor: poi
   font-weight: 800;
   letter-spacing: -.05em;
   line-height: 1;
+  font-variant-numeric: tabular-nums;
   color: color-mix(in srgb, var(--c1) 34%, transparent);
   user-select: none;
 }
@@ -465,7 +825,7 @@ button { font: inherit; color: inherit; border: 0; background: none; cursor: poi
   display: block;
   color: var(--ink);
 }
-.cover__art .art-win   { fill: color-mix(in srgb, var(--ink) 92%, transparent); }
+.cover__art .art-win   { fill: color-mix(in srgb, var(--ink) 88%, var(--brand)); }
 .cover__art .art-win-2 { fill: color-mix(in srgb, var(--ink) 84%, transparent); }
 .cover__art .art-bar   { fill: color-mix(in srgb, var(--surface) 88%, transparent); }
 .cover__art .art-bar-2 { fill: color-mix(in srgb, var(--surface) 62%, transparent); }
@@ -502,7 +862,7 @@ button { font: inherit; color: inherit; border: 0; background: none; cursor: poi
 
 .flow__step b {
   font-family: var(--mono);
-  font-size: .71rem;
+  font-size: var(--fs-xs);
   font-weight: 600;
   letter-spacing: .01em;
   color: color-mix(in srgb, var(--ink) 84%, transparent);
@@ -511,7 +871,7 @@ button { font: inherit; color: inherit; border: 0; background: none; cursor: poi
 
 .flow__step i {
   font-style: normal;
-  font-size: .66rem;
+  font-size: var(--fs-2xs);
   letter-spacing: .02em;
   color: color-mix(in srgb, var(--ink) 54%, transparent);
   white-space: nowrap;
@@ -648,22 +1008,29 @@ button { font: inherit; color: inherit; border: 0; background: none; cursor: poi
   display: flex;
   align-items: center;
   gap: 8px;
-  font-size: .74rem;
+  font-size: var(--fs-xs);
   letter-spacing: .06em;
   color: var(--ink-3);
   text-transform: uppercase;
 }
+/* 类别色：把小圆点从"分隔符"升成"类别标记" —— 蓝=产品、橙=自动化，全站固定。
+   原先四个撞色只当装饰，读的人建立不起"颜色=类别"的对应关系；
+   现在颜色有一处是编码，其余仍是各卡自己的色。
+   方块而非圆点，跟 eyebrow 那枚 7px 小方块同一母题。 */
+[data-cat="产品"]   { --cat: var(--brand); }
+[data-cat="自动化"] { --cat: var(--pop-a); }
+
 .card__meta .dot {
   display: inline-block;
   flex: none;
-  width: 3px;
-  height: 3px;
-  border-radius: 50%;
-  background: currentColor;
+  width: 6px;
+  height: 6px;
+  border-radius: 2px;
+  background: var(--cat, var(--ink-3));
 }
 
 .card__title {
-  font-size: 1.06rem;
+  font-size: var(--fs-md);
   font-weight: 650;
   letter-spacing: -.022em;
   transition: color .22s;
@@ -672,7 +1039,7 @@ button { font: inherit; color: inherit; border: 0; background: none; cursor: poi
 [data-theme="dark"] .card:hover .card__title { color: var(--c2); }
 
 .card__desc {
-  font-size: .885rem;
+  font-size: var(--fs-sm);
   line-height: 1.62;
   color: var(--ink-2);
   display: -webkit-box;
@@ -692,7 +1059,7 @@ button { font: inherit; color: inherit; border: 0; background: none; cursor: poi
 .card--wide .card__desc { max-width: 64ch; }
 
 .tag {
-  font-size: .71rem;
+  font-size: var(--fs-xs);
   letter-spacing: .02em;
   padding: 3px 9px;
   border-radius: var(--r-pill);
@@ -701,23 +1068,29 @@ button { font: inherit; color: inherit; border: 0; background: none; cursor: poi
   white-space: nowrap;
 }
 
-.card__arrow {
+/* 常驻 CTA：原来右上角那枚圆圈箭头 opacity:0，只在 hover 时才出现 ——
+   静态一眼看过去首屏没有任何"这里能点"的暗示。换成卡内右下角一行小字：
+   常态低对比、hover 提亮并让箭头走一下。整卡仍是 .card__hit 的点击区，
+   这行不吃点击，只是提示。 */
+.card__go {
   position: absolute;
-  right: 16px;
-  top: 22px;
-  width: 26px;
-  height: 26px;
-  display: grid;
-  place-items: center;
-  border-radius: 50%;
-  background: var(--surface);
-  border: 1px solid var(--line);
+  right: 20px;
+  bottom: 19px;
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  font-size: var(--fs-xs);
+  letter-spacing: .06em;
   color: var(--ink-3);
-  opacity: 0;
-  transform: translate(-4px, 4px);
-  transition: all .3s var(--ease);
+  pointer-events: none;
+  transition: color .22s;
 }
-.card:hover .card__arrow { opacity: 1; transform: none; color: var(--ink); }
+.card__go i {
+  font-style: normal;
+  transition: transform .28s var(--ease);
+}
+.card:hover .card__go { color: var(--ink); }
+.card:hover .card__go i { transform: translate(2px, -2px); }
 
 .card.is-hidden { display: none; }
 
@@ -736,23 +1109,7 @@ button { font: inherit; color: inherit; border: 0; background: none; cursor: poi
 
 .tools { margin-top: clamp(24px, 2.4vw, 34px); }
 
-.tools__head {
-  display: flex;
-  align-items: center;
-  gap: 14px;
-  margin-bottom: 10px;
-}
-
-/* 小字标签 + 一条细线，起分区作用，不做大标题 */
-.tools__title {
-  flex: none;
-  font-size: .78rem;
-  font-weight: 700;
-  letter-spacing: .14em;
-  color: var(--ink-3);
-}
-
-.tools__rule { flex: 1; height: 1px; background: var(--line); }
+/* 分区标签已统一到 .group-head / .group-title / .group-rule（见「作品网格」上方） */
 
 .tools__row {
   display: flex;
@@ -768,7 +1125,7 @@ button { font: inherit; color: inherit; border: 0; background: none; cursor: poi
   gap: 6px;
   padding: 11px 16px 12px;
   background: var(--surface);
-  border: 1px solid var(--line);
+  border: 1px solid var(--card-line);
   border-radius: var(--r-md);
   transition: transform .25s var(--ease), border-color .25s, box-shadow .25s var(--ease);
 }
@@ -797,7 +1154,7 @@ button { font: inherit; color: inherit; border: 0; background: none; cursor: poi
   display: flex;
   align-items: center;
   gap: 8px;
-  font-size: .94rem;
+  font-size: var(--fs-md);
   font-weight: 650;
   letter-spacing: -.015em;
 }
@@ -817,7 +1174,7 @@ button { font: inherit; color: inherit; border: 0; background: none; cursor: poi
   padding: 1px 7px;
   border-radius: var(--r-pill);
   border: 1px solid var(--line);
-  font-size: .66rem;
+  font-size: var(--fs-2xs);
   letter-spacing: .04em;
   font-weight: 400;
   color: var(--ink-3);
@@ -825,7 +1182,7 @@ button { font: inherit; color: inherit; border: 0; background: none; cursor: poi
 }
 
 .tool__desc {
-  font-size: .8rem;
+  font-size: var(--fs-sm);
   line-height: 1.55;
   color: var(--ink-2);
 }
@@ -862,7 +1219,7 @@ button { font: inherit; color: inherit; border: 0; background: none; cursor: poi
   flex-wrap: wrap;
   align-items: center;
   gap: 14px;
-  font-size: .82rem;
+  font-size: var(--fs-xs);
   color: var(--ink-3);
 }
 
@@ -945,6 +1302,6 @@ button { font: inherit; color: inherit; border: 0; background: none; cursor: poi
 }
 
 @media print {
-  .nav, .theme-toggle, .card__arrow { display: none; }
+  .nav, .theme-toggle, .card__go { display: none; }
   body { background: #fff; }
 }

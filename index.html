@@ -27,6 +27,23 @@
 </head>
 <body>
 
+<!-- 宽屏页框：只在 ≥1600px 的视口出现，纯装饰（贴边竖线 + 刻度 + 竖排小字 + 大描边环）。
+     屏幕阅读器与点击都跳过；窄屏没有这条边带，整组自动不显示。 -->
+<div class="rail rail--left" aria-hidden="true"><span class="rail__label">Portfolio / 2026</span></div>
+<div class="rail rail--right" aria-hidden="true"><span class="rail__label">Desktop tools &amp; automation</span></div>
+
+<!-- 页边色块：压在「内容区 / 边带」交界线上，fixed 不动 —— 滚动时卡片从下面滑过 -->
+<div class="pager" aria-hidden="true">
+  <span class="pager__square"></span>
+  <span class="pager__disc"></span>
+  <span class="pager__pill"></span>
+</div>
+
+
+
+<!-- 整屏电流：随机 PCB 走线 + 沿走线流动的亮段（assets/js/current.js） -->
+<canvas class="current" aria-hidden="true"></canvas>
+
 <a class="skip" href="#works">跳到作品区</a>
 
 <!-- 图标集 -->
@@ -97,6 +114,12 @@
 
   <!-- ===== 作品 ===== -->
   <section class="works container" id="works">
+    <!-- 分区标签：和小工具区共用一套语言（12px 小字 + 细线） -->
+    <div class="group-head">
+      <h2 class="group-title">作品 · Selected</h2>
+      <span class="group-rule" aria-hidden="true"></span>
+    </div>
+
     <div class="grid" id="workGrid">
 
       <!-- 卡片模板：复制整段 <article>，改 class 尺寸（card--wide / --mid / --sm）、
@@ -137,15 +160,20 @@
               <rect class="art-bar-ink" x="76" y="276" width="38" height="5" rx="2.5" opacity=".6"/>
             </g>
 
-            <!-- 汇聚：四条弧线收进窗口左侧 -->
+            <!-- 汇聚：四条弧线收进窗口左侧
+                 终点跟着窗口缩放后的左边缘（x=297）与对应 y 走，否则线头会悬空 50 单位 -->
             <g class="art-line">
-              <path d="M148 80 Q204 84 246 172"/>
-              <path d="M148 144 Q204 152 246 182"/>
-              <path d="M148 208 Q204 196 246 198"/>
-              <path d="M148 272 Q204 244 246 212"/>
+              <path d="M148 80 Q204 84 297 175.5"/>
+              <path d="M148 144 Q204 152 297 183.9"/>
+              <path d="M148 208 Q204 196 297 197.4"/>
+              <path d="M148 272 Q204 244 297 209.1"/>
             </g>
 
-            <!-- 主窗口 -->
+            <!-- 主窗口
+                 整组绕自身中心 (564,194) 缩到 84%：这块深色是首屏面积最大的
+                 暗部（原占封面 55%），又正好压在视口几何中心，会把第一眼
+                 从标题上抢走。缩一档后四周留出粉彩边，读作"一帧截图"而不是黑洞。 -->
+            <g transform="translate(90.24 31.04) scale(0.84)">
             <rect class="art-win" x="246" y="46" width="636" height="296" rx="16"/>
             <g clip-path="url(#cvWin)">
               <rect class="art-win-2" x="246" y="46" width="636" height="34"/>
@@ -162,16 +190,17 @@
               <rect class="art-bar-2" x="258" y="154" width="28" height="16" rx="6" opacity=".4"/>
               <rect class="art-bar-2" x="258" y="182" width="28" height="16" rx="6" opacity=".3"/>
 
-              <!-- 内容卡一行 -->
-              <rect x="312" y="96" width="176" height="46" rx="8" fill="#1B4DFF" opacity=".26"/>
+              <!-- 内容卡一行。三块底色的不透明度比原来高一档：
+                   窗口由近黑改成深藏蓝后，原先的 .26/.24/.18 糊在底上认不出是"两张家卡" -->
+              <rect x="312" y="96" width="176" height="46" rx="8" fill="#1B4DFF" opacity=".38"/>
               <rect class="art-dur" x="464" y="126" width="22" height="8" rx="4"/>
               <rect class="art-bar-2" x="312" y="152" width="132" height="6" rx="3" opacity=".9"/>
               <rect class="art-bar-2" x="312" y="166" width="92" height="5" rx="2.5" opacity=".55"/>
-              <rect x="500" y="96" width="176" height="46" rx="8" fill="#12D6A0" opacity=".24"/>
+              <rect x="500" y="96" width="176" height="46" rx="8" fill="#12D6A0" opacity=".34"/>
               <rect class="art-dur" x="652" y="126" width="22" height="8" rx="4"/>
               <rect class="art-bar-2" x="500" y="152" width="118" height="6" rx="3" opacity=".9"/>
               <rect class="art-bar-2" x="500" y="166" width="104" height="5" rx="2.5" opacity=".55"/>
-              <rect x="688" y="96" width="176" height="46" rx="8" fill="#1B4DFF" opacity=".18"/>
+              <rect x="688" y="96" width="176" height="46" rx="8" fill="#1B4DFF" opacity=".28"/>
               <rect class="art-dur" x="840" y="126" width="22" height="8" rx="4"/>
               <rect class="art-bar-2" x="688" y="152" width="126" height="6" rx="3" opacity=".9"/>
               <rect class="art-bar-2" x="688" y="166" width="78" height="5" rx="2.5" opacity=".55"/>
@@ -187,15 +216,16 @@
               <rect x="350" y="308" width="270" height="6" rx="3" fill="url(#cvBar)"/>
               <circle class="art-bar" cx="620" cy="311" r="5"/>
             </g>
+            </g>
           </svg>
           <span class="card__num">01</span>
         </div>
-        <span class="card__arrow" aria-hidden="true">↗</span>
         <div class="card__body">
           <div class="card__meta"><span>2026</span><i class="dot"></i><span>产品</span></div>
           <h3 class="card__title">内容聚合</h3>
           <p class="card__desc">综合视频、长视频、短剧、电视直播合进一个窗口，一套界面、一套键位。</p>
           <ul class="card__tags"><li class="tag">桌面应用</li><li class="tag">资源整合</li><li class="tag">自建播放器</li></ul>
+          <span class="card__go" aria-hidden="true">查看详情 <i>↗</i></span>
         </div>
       </article>
 
@@ -218,12 +248,12 @@
             <img src="./works/daily-pipeline/img/report-peek.png" alt="" width="820" height="466" loading="lazy" decoding="async">
           </div>
         </div>
-        <span class="card__arrow" aria-hidden="true">↗</span>
         <div class="card__body">
           <div class="card__meta"><span>2026</span><i class="dot"></i><span>自动化</span></div>
           <h3 class="card__title">n8n 日报流水线</h3>
           <p class="card__desc">开机自动跑一遍：取数、排版、校验、提交上线，一天只出一期。</p>
           <ul class="card__tags"><li class="tag">n8n</li><li class="tag">自动化</li><li class="tag">GitHub Pages</li></ul>
+          <span class="card__go" aria-hidden="true">查看详情 <i>↗</i></span>
         </div>
       </article>
 
@@ -247,12 +277,12 @@
             <img src="./works/qingcheng/img/screen-home.jpg" alt="" width="600" height="1200" loading="lazy" decoding="async">
           </div>
         </div>
-        <span class="card__arrow" aria-hidden="true">↗</span>
         <div class="card__body">
           <div class="card__meta"><span>2026</span><i class="dot"></i><span>产品</span></div>
           <h3 class="card__title">青城山招生小程序</h3>
           <p class="card__desc">看完日程与名额就地报名：填表、传形象照、查审核状态，四页走完。</p>
           <ul class="card__tags"><li class="tag">微信小程序</li><li class="tag">云数据库</li><li class="tag">ComfyUI 出图</li></ul>
+          <span class="card__go" aria-hidden="true">查看详情 <i>↗</i></span>
         </div>
       </article>
 
@@ -262,9 +292,9 @@
          一行一件，不占大卡。加小工具只往 .tools__row 里追加一个 <li class="tool">，
          名称、标签、一句话即可，一行放得下几个就排几个。 -->
     <div class="tools" id="tools">
-      <div class="tools__head">
-        <h2 class="tools__title">小工具</h2>
-        <span class="tools__rule" aria-hidden="true"></span>
+      <div class="group-head">
+        <h2 class="group-title">小工具</h2>
+        <span class="group-rule" aria-hidden="true"></span>
       </div>
 
       <ul class="tools__row">
@@ -312,6 +342,7 @@
   </div>
 </footer>
 
+<script src="./assets/js/current.js" defer></script>
 <script src="./assets/js/main.js" defer></script>
 </body>
 </html>
