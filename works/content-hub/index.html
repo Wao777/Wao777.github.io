@@ -98,7 +98,7 @@
 <p>不同来源的内容各有一套浏览方式：同一件事要在几个页面之间翻，播放器、弹幕、评论区还各长各的。更麻烦的是它们的形态根本不一样——综合视频靠分区和榜单，剧集靠专辑和分集，短剧一集两分钟要连着往下看，电视直播则是另一套频道表。这个客户端把这些来源合到同一个窗口：一套界面、一个播放器、一套键位。</p>
 <p>界面也不套平台的网页：内容区由可增删的板块拼成，播放器、弹幕、评论、简介都是自己重写的控件，所以布局能改、能收、能关得干净。</p>
 <div class="callout"><svg width="16" height="16" aria-hidden="true"><use href="#i-info"/></svg><p>本页截图中的站点标识、封面、标题、画面与评论已整体打码；正文按内容形态介绍各个来源，理由见文末合规说明。</p></div>
-<figure class="shot shot--img"><img src="./img/01-main.png" alt="主界面：左侧导航栏、顶部工具条与板块卡内容区" width="1440" height="900" loading="lazy" decoding="async"><figcaption>主界面：左侧栏导航、顶部工具条、右侧板块卡内容区</figcaption></figure>
+<figure class="shot shot--img"><img src="./img/01-main.jpg" alt="主界面：左侧导航栏、顶部工具条与板块卡内容区" width="1440" height="900" loading="lazy" decoding="async"><figcaption>主界面：左侧栏导航、顶部工具条、右侧板块卡内容区</figcaption></figure>
 <h2 id="ui">界面布局</h2>
 <p>窗口分三段：最左一列窄侧栏做全局导航，竖向排内容源入口，当前项高亮，底部常驻一个添加按钮；顶部横栏左侧是当前源的分类切换（视频 / 直播），右侧依次是刷新、设置、主题、搜索、历史；剩下的整块是内容区，由若干板块卡纵向堆叠——卡头写板块名与刷新状态，卡身是 3～5 列自适应的内容卡（封面、标题、数据、时长），可单卡刷新、展开或收起。播放器不占新窗口，而是盖在内容区之上的一层，约占窗口八成。</p>
 <h2 id="mod">功能模块</h2>
@@ -107,11 +107,15 @@
 <h3>能看什么</h3>
 <div class="tbl"><table><thead><tr><th>来源</th><th>内容形态</th><th>在这个客户端里能做什么</th></tr></thead><tbody><tr><td>综合视频</td><td>分区视频、榜单、创作者投稿</td><td>分区与榜单浏览、创作者关注、多 P / 合集切集、弹幕、评论</td></tr><tr><td>长视频</td><td>剧集、电影、综艺</td><td>按专辑展开分集、选集连播、清晰度档位随账号可用范围给出</td></tr><tr><td>短剧</td><td>竖屏连载短剧</td><td>按剧集连续播放、自动下一集、按分类与标签翻</td></tr><tr><td>电视直播</td><td>频道直播</td><td>频道表浏览、多线路备用、起播失败自动换线、内嵌播放</td></tr><tr><td>小说</td><td>—</td><td>入口已留，尚未开放</td></tr></tbody></table></div>
 <div class="callout"><svg width="16" height="16" aria-hidden="true"><use href="#i-tip"/></svg><p>同一个「选集」在四种来源里是四种东西——分 P、专辑分集、剧集序号、频道线路，在这里被收成同一个侧栏面板；「关注」也一样，视频创作者与直播房间走同一份列表。这是聚合真正省事的地方：<strong>记一套操作，而不是记四套</strong>。</p></div>
+<p>下面三张是同一套界面在短剧、长视频、直播三个来源下的样子。</p>
+<figure class="shot shot--img"><img src="./img/04-shortdrama.jpg" alt="短剧：分类页签与竖版海报栅格" width="1440" height="900" loading="lazy"><figcaption>短剧：按标签翻的竖版连载，一格一集，点开即连播</figcaption></figure>
+<figure class="shot shot--img"><img src="./img/05-longvideo.jpg" alt="长视频：横向大海报与板块卡" width="1440" height="900" loading="lazy"><figcaption>长视频：横向海报占满一行，按专辑展开分集</figcaption></figure>
+<figure class="shot shot--img"><img src="./img/06-live.jpg" alt="电视直播：台标与频道名的频道表" width="1440" height="900" loading="lazy"><figcaption>电视直播：四列频道表，台标加频道名，多线路备用</figcaption></figure>
 <h3>自由的界面</h3>
 <p>内容区不是写死的模板，而是由可增删的板块拼起来：板块能排序、改名、改类型、改刷新周期，也能整块收起；卡片列数跟着窗口宽度走，宽屏多排、窄屏少排，不拉伸单卡。深浅两套主题共用一组颜色变量，切换即时生效。</p>
 <h3>自建播放器</h3>
 <p>不用平台的网页播放器：画面、控制条、进度条、音量、倍速、画质、选集、全屏全是自己写的控件，键位与交互全站一致。</p>
-<figure class="shot shot--img"><img src="./img/02-player.png" alt="播放器：标题栏、画面、控制条与评论页签" width="1440" height="900" loading="lazy"><figcaption>播放器：标题栏、画面、控制条与下方评论页签</figcaption></figure>
+<figure class="shot shot--img"><img src="./img/02-player.jpg" alt="播放器：标题栏、画面、控制条与评论页签" width="1440" height="900" loading="lazy"><figcaption>播放器：标题栏、画面、控制条与下方评论页签</figcaption></figure>
 <div class="tbl"><table><thead><tr><th>能力</th><th>说明</th></tr></thead><tbody><tr><td>内嵌播放</td><td>画面嵌在面板里，不开浏览器、不弹外部窗口</td></tr><tr><td>倍速</td><td>0.75 / 1 / 1.25 / 1.5 / 2 档，直播场景自动禁用</td></tr><tr><td>画质</td><td>只列源端实际能兑现的档位，拿不到会退回并提示，不静默降级</td></tr><tr><td>选集连播</td><td>多段内容与连载都有侧栏选集面板，支持上一集 / 下一集 / 自动连播</td></tr><tr><td>桌面浮窗</td><td>画面可交给独立顶层小窗，拖到桌面任意位置，主窗口最小化后仍在，锁 16:9</td></tr><tr><td>缓冲进度</td><td>进度条标出已缓冲区间，悬停显示时间点</td></tr><tr><td>失败重试</td><td>起播失败就地给重试按钮；起播超时自动换一次软解，避免黑屏</td></tr><tr><td>快捷键</td><td>空格播放暂停，左右 ±5 秒，上下音量，F 全屏，ESC 退出</td></tr></tbody></table></div>
 <h3>弹幕</h3>
 <p>弹幕不走平台的播放器，直接叠在自己的画面上随进度滚动，暂停即停。不透明度、字号、速度、显示区域、密度都能调，支持屏蔽词与一键开关，状态记忆。</p>
@@ -121,7 +125,7 @@
 <p>播放中每 10 秒落一次进度，关掉播放器或退出程序都不丢；顶栏「历史」列出最近观看，点开即续。只存本地，可逐条删除或整表清空。</p>
 <h3>设置与缓存</h3>
 <p>设置抽屉从右侧滑出，顶部页签按当前内容源动态显示：通用（功能开关）、板块、关注、标签、凭证、缓存，末尾还挂着功能与历史两页，窗口窄时需横向滚动。</p>
-<figure class="shot shot--img"><img src="./img/03-settings.png" alt="设置抽屉：页签与功能开关列表" width="1440" height="900" loading="lazy"><figcaption>设置抽屉：按内容源动态显示的页签与开关列表</figcaption></figure>
+<figure class="shot shot--img"><img src="./img/03-settings.jpg" alt="设置抽屉：页签与功能开关列表" width="1440" height="900" loading="lazy"><figcaption>设置抽屉：按内容源动态显示的页签与开关列表</figcaption></figure>
 <p>缓存页统一管理接口响应、封面、图标、弹幕、视频预缓存五类数据，各有配额，超出按 LRU 淘汰，正在播放的内容不会被误删。</p>
 <h3>外观与窗口</h3>
 <p>圆角窗体、深色标题栏、独立应用图标；重复启动会提示已有窗口，不会两个程序抢同一个端口。</p>
